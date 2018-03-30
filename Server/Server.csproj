@@ -51,6 +51,9 @@
   <ItemGroup>
     <Compile Include="DiginoteSystemContext.cs" />
     <Compile Include="models\Diginote.cs" />
+    <Compile Include="models\Order.cs" />
+    <Compile Include="models\Transaction.cs" />
+    <Compile Include="models\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
