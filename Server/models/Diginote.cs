@@ -15,7 +15,6 @@ namespace Server.models
         [Required]
         public float FacialValue { get; set; }
 
-        [Required]
         public Order Order { get; set; }
 
         [Required]
