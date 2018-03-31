@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialSkin.Controls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,11 +11,18 @@ using System.Windows.Forms;
 
 namespace diginote_exchange_system
 {
-    public partial class Form1 : Form
+    public partial class SystemForm : MaterialForm
     {
-        public Form1()
+        public SystemForm()
         {
             InitializeComponent();
+        }
+
+        private void signOutButton_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+
+            Close();
         }
     }
 }
