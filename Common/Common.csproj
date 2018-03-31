@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{84187E08-AF38-492C-B7A5-9E27C51EE4FF}</ProjectGuid>
+    <ProjectGuid>{DFC11B67-A13D-4F54-B3A4-FB0DFA2B8198}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Server</RootNamespace>
-    <AssemblyName>Server</AssemblyName>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>Common</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -49,12 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DiginoteSystemContext.cs" />
-    <Compile Include="models\Diginote.cs" />
-    <Compile Include="models\Order.cs" />
-    <Compile Include="models\Transaction.cs" />
-    <Compile Include="models\User.cs" />
-    <Compile Include="ServerLauncher.cs" />
+    <Compile Include="Interfaces\IServer.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
