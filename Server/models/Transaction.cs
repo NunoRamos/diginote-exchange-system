@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.models
 {
@@ -19,6 +15,6 @@ namespace Server.models
         public Order SellOrder { get; set; }
 
         [Required]
-        public Order BuyOrder { get; set; }
+        public Order PurchaseOrder { get; set; }
     }
 }
