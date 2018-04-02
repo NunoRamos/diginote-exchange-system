@@ -31,6 +31,8 @@ namespace Server
                 {
                     Console.WriteLine(item.FacialValue);
                 }
+
+                // Console.WriteLine(db.isNu);
                 
                 Server server = new Server(db);
                 SetupServer(server);

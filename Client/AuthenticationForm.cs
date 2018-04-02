@@ -29,7 +29,7 @@ namespace diginote_exchange_system
 
             // throw new NotImplementedException();
 
-            bool loggedIn = client.ServerObj.Login("teste", "teste");
+            bool loggedIn = client.serverObj.Login("teste", "teste");
 
             if(!loggedIn)
             {

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common;
 using Common.Interfaces;
 
 namespace Server
@@ -22,6 +18,16 @@ namespace Server
         public override bool Login(string nickname, string password)
         {
             Console.WriteLine("Login request");
+
+            var query = from user in diginoteDB.Users
+                        where user.Nickname == nickname && user.Password == password
+                        select user;
+
+            foreach (var item in query)
+            {
+                Console.WriteLine(item.Nickname);
+            }
+
             return true;
         }
     }

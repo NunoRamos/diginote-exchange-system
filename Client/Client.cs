@@ -5,13 +5,12 @@ namespace diginote_exchange_system
 {
     public class Client
     {
-        public IServer serverObj;
-
-        public IServer ServerObj { get => serverObj; set => serverObj = value; }
+        public IServer serverObj { get; set; }
+        
 
         public Client(IServer serverObj)
         {
-            this.ServerObj = serverObj;
+            this.serverObj = serverObj;
 
             Application.Run(new AuthenticationForm(this));
         }
