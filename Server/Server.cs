@@ -10,7 +10,7 @@ namespace Server
 {
     class Server : IServer
     {
-        public override bool Login(string nickname, string password, string ip, int port)
+        public override bool Login(string nickname, string password)
         {
             Console.WriteLine("Login request");
             return true;

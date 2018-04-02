@@ -8,6 +8,6 @@ namespace Common.Interfaces
 {
     public abstract class IServer: MarshalByRefObject
     {
-        public abstract bool Login(string nickname, string password, string ip, int port);
+        public abstract bool Login(string nickname, string password);
     }
 }

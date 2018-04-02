@@ -4,8 +4,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
-using System.Runtime.Serialization.Formatters;
-using System.Collections;
 using System.Runtime.Remoting.Channels.Tcp;
 
 namespace Server
@@ -42,16 +40,14 @@ namespace Server
 
         private static void SetupServer()
         {
-            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider
-            {
-                TypeFilterLevel = TypeFilterLevel.Full
-            };
-            IDictionary props = new Hashtable();
-            int port = 35994;
-            props["port"] = port;
-            TcpChannel channel = new TcpChannel(props, null, provider);
+            Int32 port = 8085;
+            TcpChannel chan = new TcpChannel(port);
+            ChannelServices.RegisterChannel(chan, false);
 
-            ChannelServices.RegisterChannel(channel, false);
+            RemotingConfiguration.RegisterWellKnownServiceType(
+                new Server().GetType(),
+                "tcp://localhost:8085/Diginote-Server/Server",
+                WellKnownObjectMode.Singleton);
 
             RemotingConfiguration.RegisterWellKnownServiceType(new Server().GetType(),
                 "Diginote-Server/Server", WellKnownObjectMode.Singleton);
