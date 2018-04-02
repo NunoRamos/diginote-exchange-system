@@ -10,6 +10,15 @@ namespace Server
 {
     class Server : IServer
     {
+        private DiginoteSystemContext diginoteDB;
+
+        public Server() { }
+
+        public Server(DiginoteSystemContext db)
+        {
+            this.diginoteDB = db;
+        }
+
         public override bool Login(string nickname, string password)
         {
             Console.WriteLine("Login request");

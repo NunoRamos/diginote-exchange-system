@@ -14,7 +14,7 @@ namespace Server
         {
             using (var db = new DiginoteSystemContext())
             {
-                // @FIXME Está a criar sempre este user!!
+                // @FIXME Está a criar sempre este user!! Pensar numa forma de utilizar uma bd já criada se existir
                 /*var user = new User {
                     Name = "Bernardo Belchior", Nickname = "bernardobelchior", Password = "password", Id = 1, Diginotes = new List<Diginote>(), Orders = new List<Order>() };
                
@@ -31,26 +31,22 @@ namespace Server
                 {
                     Console.WriteLine(item.FacialValue);
                 }
-
-                SetupServer();
+                
+                Server server = new Server(db);
+                SetupServer(server);
 
                 Console.ReadLine();
             }
 
         }
 
-        private static void SetupServer()
+        private static void SetupServer(Server server)
         {
             Int32 port = 8085;
             TcpChannel chan = new TcpChannel(port);
             ChannelServices.RegisterChannel(chan, false);
 
-            RemotingConfiguration.RegisterWellKnownServiceType(
-                new Server().GetType(),
-                "tcp://localhost:8085/Diginote-Server/Server",
-                WellKnownObjectMode.Singleton);
-
-            RemotingConfiguration.RegisterWellKnownServiceType(new Server().GetType(),
+            RemotingConfiguration.RegisterWellKnownServiceType(server.GetType(),
                 "Diginote-Server/Server", WellKnownObjectMode.Singleton);
             
             Console.WriteLine("Server started on port :" + port);

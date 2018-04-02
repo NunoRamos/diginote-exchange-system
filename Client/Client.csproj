@@ -62,13 +62,14 @@
     <Compile Include="AuthenticationForm.Designer.cs">
       <DependentUpon>AuthenticationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Client.cs" />
     <Compile Include="SystemForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SystemForm.Designer.cs">
       <DependentUpon>SystemForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="ClientLauncher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AuthenticationForm.resx">
       <DependentUpon>AuthenticationForm.cs</DependentUpon>

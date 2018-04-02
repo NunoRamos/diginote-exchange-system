@@ -8,8 +8,12 @@ namespace diginote_exchange_system
 {
     public partial class AuthenticationForm : MaterialForm
     {
-        public AuthenticationForm()
+        private Client client;
+
+        public AuthenticationForm(Client client)
         {
+            this.client = client;
+
             InitializeComponent();
 
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -23,9 +27,9 @@ namespace diginote_exchange_system
             String nickname = nicknameTextField.Text;
             String password = passwordTextField.Text;
 
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
 
-            bool loggedIn = true;
+            bool loggedIn = client.ServerObj.Login("teste", "teste");
 
             if(!loggedIn)
             {
