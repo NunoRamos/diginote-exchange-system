@@ -14,14 +14,15 @@ namespace Server
         {
             using (var db = new DiginoteSystemContext())
             {
-                var user = new User {
+                // @FIXME Está a criar sempre este user!!
+                /*var user = new User {
                     Name = "Bernardo Belchior", Nickname = "bernardobelchior", Password = "password", Id = 1, Diginotes = new List<Diginote>(), Orders = new List<Order>() };
-
+               
                 var diginote = new Diginote { Id = 0, FacialValue = 1.0f, Owner = user };
 
                 db.Users.Add(user);
                 db.Diginotes.Add(diginote);
-                db.SaveChanges();
+                db.SaveChanges();*/
 
                 var query = from d in db.Diginotes
                             select d;
