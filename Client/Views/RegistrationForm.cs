@@ -13,15 +13,47 @@ namespace diginote_exchange_system.Views
 {
     public partial class RegistrationForm : MaterialForm
     {
-        public RegistrationForm()
+        private Client client;
+
+        public RegistrationForm(Client client)
         {
+            this.client = client;
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            String name = nameTextField.Text;
+            String nickname = nicknameTextField.Text;
+            String password = passwordTextField.Text;
+            String repeatPassword = repeatPasswordTextField.Text;
+
+            if (name.Length == 0 || nickname.Length == 0 || password.Length == 0 || repeatPassword.Length == 0)
+            {
+                errorBoxLabel.Visible = true;
+                errorBoxLabel.Text = "All field's are required!";
+
+                return;
+            }
+
+            if (!password.Equals(repeatPassword))
+            {
+                errorBoxLabel.Visible = true;
+                errorBoxLabel.Text = "Passwords don't match!";
+                repeatPasswordTextField.Text = String.Empty;
+
+                return;
+            }
+
             // Create account function call
 
+            bool status = client.serverObj.Register(name, nickname, password);
+
+            if (status)
+            {
+                return;
+            }
+            
             var systemForm = new SystemForm();
             
             systemForm.Show();

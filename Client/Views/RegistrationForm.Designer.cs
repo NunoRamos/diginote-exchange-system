@@ -37,6 +37,7 @@
             this.passwordTextField = new System.Windows.Forms.TextBox();
             this.repeatPasswordTextField = new System.Windows.Forms.TextBox();
             this.createAccountButton = new System.Windows.Forms.Button();
+            this.errorBoxLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -81,6 +82,7 @@
             // 
             // nameTextField
             // 
+            this.nameTextField.BackColor = System.Drawing.SystemColors.Control;
             this.nameTextField.Location = new System.Drawing.Point(233, 116);
             this.nameTextField.Name = "nameTextField";
             this.nameTextField.Size = new System.Drawing.Size(231, 20);
@@ -88,6 +90,7 @@
             // 
             // nicknameTextField
             // 
+            this.nicknameTextField.BackColor = System.Drawing.SystemColors.Control;
             this.nicknameTextField.Location = new System.Drawing.Point(233, 163);
             this.nicknameTextField.Name = "nicknameTextField";
             this.nicknameTextField.Size = new System.Drawing.Size(231, 20);
@@ -95,6 +98,7 @@
             // 
             // passwordTextField
             // 
+            this.passwordTextField.BackColor = System.Drawing.SystemColors.Control;
             this.passwordTextField.Location = new System.Drawing.Point(233, 210);
             this.passwordTextField.Name = "passwordTextField";
             this.passwordTextField.Size = new System.Drawing.Size(231, 20);
@@ -102,6 +106,7 @@
             // 
             // repeatPasswordTextField
             // 
+            this.repeatPasswordTextField.BackColor = System.Drawing.SystemColors.Control;
             this.repeatPasswordTextField.Location = new System.Drawing.Point(233, 262);
             this.repeatPasswordTextField.Name = "repeatPasswordTextField";
             this.repeatPasswordTextField.Size = new System.Drawing.Size(231, 20);
@@ -110,7 +115,7 @@
             // createAccountButton
             // 
             this.createAccountButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.createAccountButton.Location = new System.Drawing.Point(233, 321);
+            this.createAccountButton.Location = new System.Drawing.Point(233, 344);
             this.createAccountButton.Name = "createAccountButton";
             this.createAccountButton.Size = new System.Drawing.Size(151, 29);
             this.createAccountButton.TabIndex = 8;
@@ -118,11 +123,22 @@
             this.createAccountButton.UseVisualStyleBackColor = true;
             this.createAccountButton.Click += new System.EventHandler(this.button1_Click);
             // 
+            // errorBoxLabel
+            // 
+            this.errorBoxLabel.AutoSize = true;
+            this.errorBoxLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.errorBoxLabel.Location = new System.Drawing.Point(233, 305);
+            this.errorBoxLabel.Name = "errorBoxLabel";
+            this.errorBoxLabel.Size = new System.Drawing.Size(0, 18);
+            this.errorBoxLabel.TabIndex = 10;
+            this.errorBoxLabel.Visible = false;
+            // 
             // RegistrationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 443);
+            this.Controls.Add(this.errorBoxLabel);
             this.Controls.Add(this.createAccountButton);
             this.Controls.Add(this.repeatPasswordTextField);
             this.Controls.Add(this.passwordTextField);
@@ -150,5 +166,6 @@
         private System.Windows.Forms.TextBox passwordTextField;
         private System.Windows.Forms.TextBox repeatPasswordTextField;
         private System.Windows.Forms.Button createAccountButton;
+        private System.Windows.Forms.Label errorBoxLabel;
     }
 }

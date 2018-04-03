@@ -51,7 +51,7 @@ namespace diginote_exchange_system
 
         private void signUpButton_Click(object sender, EventArgs e)
         {
-            var registrationForm = new RegistrationForm();
+            var registrationForm = new RegistrationForm(client);
 
             registrationForm.Show();
             Hide();
