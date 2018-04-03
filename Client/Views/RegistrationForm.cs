@@ -47,9 +47,9 @@ namespace diginote_exchange_system.Views
 
             // Create account function call
 
-            bool status = client.serverObj.Register(name, nickname, password);
+            bool success = client.serverObj.Register(name, nickname, password);
 
-            if (status)
+            if (!success)
             {
                 return;
             }
