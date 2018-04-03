@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.models
 {
@@ -13,7 +14,10 @@ namespace Server.models
         public String Name { get; set; }
 
         [Required]
+        [MaxLength(20)]
+        [Index(IsUnique = true)]
         public String Nickname { get; set; }
+
         public String Password { get; set; }
 
         [Required]
