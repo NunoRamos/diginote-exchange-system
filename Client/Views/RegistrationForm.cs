@@ -21,7 +21,7 @@ namespace diginote_exchange_system.Views
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void createAccountButton_Click(object sender, EventArgs e)
         {
             String name = nameTextField.Text;
             String nickname = nicknameTextField.Text;
@@ -31,7 +31,7 @@ namespace diginote_exchange_system.Views
             if (name.Length == 0 || nickname.Length == 0 || password.Length == 0 || repeatPassword.Length == 0)
             {
                 errorBoxLabel.Visible = true;
-                errorBoxLabel.Text = "All field's are required!";
+                errorBoxLabel.Text = "All fields are required!";
 
                 return;
             }
@@ -47,10 +47,12 @@ namespace diginote_exchange_system.Views
 
             // Create account function call
 
+            //TODO: Return error instead of boolean to show the user why something failed
             bool success = client.serverObj.Register(name, nickname, password);
 
             if (!success)
             {
+                MessageBox.Show("Sign up failed!");
                 return;
             }
             
