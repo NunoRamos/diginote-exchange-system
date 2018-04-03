@@ -35,5 +35,12 @@ namespace Server
 
             return true;
         }
+
+        public override bool Register(string name, string nickname, string password)
+        {
+
+
+            return true;
+        }
     }
 }

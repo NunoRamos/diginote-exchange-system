@@ -10,6 +10,6 @@ namespace Common.Interfaces
     {
         public abstract bool Login(string nickname, string password);
 
-        public abstract bool Register(string name, string nicknam, string password);
+        public abstract bool Register(string name, string nickname, string password);
     }
 }

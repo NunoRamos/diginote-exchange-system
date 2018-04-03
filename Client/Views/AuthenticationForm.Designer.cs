@@ -137,7 +137,7 @@
             this.passwordTextField.SelectionStart = 0;
             this.passwordTextField.Size = new System.Drawing.Size(112, 23);
             this.passwordTextField.TabIndex = 8;
-            this.passwordTextField.UseSystemPasswordChar = false;
+            this.passwordTextField.UseSystemPasswordChar = true;
             // 
             // AuthenticationForm
             // 

@@ -103,6 +103,7 @@
             this.passwordTextField.Name = "passwordTextField";
             this.passwordTextField.Size = new System.Drawing.Size(231, 20);
             this.passwordTextField.TabIndex = 6;
+            this.passwordTextField.UseSystemPasswordChar = true;
             // 
             // repeatPasswordTextField
             // 
@@ -111,6 +112,7 @@
             this.repeatPasswordTextField.Name = "repeatPasswordTextField";
             this.repeatPasswordTextField.Size = new System.Drawing.Size(231, 20);
             this.repeatPasswordTextField.TabIndex = 7;
+            this.repeatPasswordTextField.UseSystemPasswordChar = true;
             // 
             // createAccountButton
             // 
