@@ -3,6 +3,7 @@ using MaterialSkin.Controls;
 using System;
 using System.Windows.Forms;
 using System.Runtime.Remoting.Channels;
+using diginote_exchange_system.Views;
 
 namespace diginote_exchange_system
 {
@@ -50,7 +51,10 @@ namespace diginote_exchange_system
 
         private void signUpButton_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            var registrationForm = new RegistrationForm();
+
+            registrationForm.Show();
+            Hide();
         }
     }
 }
