@@ -27,13 +27,12 @@ namespace diginote_exchange_system
             String nickname = nicknameTextField.Text;
             String password = passwordTextField.Text;
 
-            // throw new NotImplementedException();
-
-            bool loggedIn = client.serverObj.Login("teste", "teste");
+            bool loggedIn = client.serverObj.Login(nickname, password);
 
             if(!loggedIn)
             {
                 MessageBox.Show("Invalid credentials. Please try again.");
+                passwordTextField.Text = String.Empty;
             } else
             {
                 var systemForm = new SystemForm();

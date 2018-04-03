@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Common.Interfaces;
+using System.Collections;
 
 namespace Server
 {
     class Server : IServer
     {
         static private DiginoteSystemContext diginoteDB;
+        static private ArrayList loggedInUsers = new ArrayList();
 
         public Server() { }
 
@@ -17,16 +19,19 @@ namespace Server
 
         public override bool Login(string nickname, string password)
         {
-            Console.WriteLine("Login request");
+            Console.WriteLine("SERVER: Login request by User with nickname: " + nickname);
 
             var query = from user in diginoteDB.Users
                         where user.Nickname == nickname && user.Password == password
                         select user;
 
-            foreach (var item in query)
+            // Can only return one result
+            if (query.ToArray().Length != 1)
             {
-                Console.WriteLine(item.Nickname);
+                return false;
             }
+            
+            loggedInUsers.Add(query.ToArray()[0]);
 
             return true;
         }
