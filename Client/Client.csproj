@@ -56,22 +56,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthenticationForm.cs">
+    <Compile Include="Views\AuthenticationForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AuthenticationForm.Designer.cs">
+    <Compile Include="Views\AuthenticationForm.Designer.cs">
       <DependentUpon>AuthenticationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Client.cs" />
-    <Compile Include="SystemForm.cs">
+    <Compile Include="Views\SystemForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SystemForm.Designer.cs">
+    <Compile Include="Views\SystemForm.Designer.cs">
       <DependentUpon>SystemForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ClientLauncher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AuthenticationForm.resx">
+    <EmbeddedResource Include="Views\AuthenticationForm.resx">
       <DependentUpon>AuthenticationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -83,7 +83,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SystemForm.resx">
+    <EmbeddedResource Include="Views\SystemForm.resx">
       <DependentUpon>SystemForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

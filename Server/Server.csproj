@@ -56,10 +56,10 @@
       <DependentUpon>201804031038194_UniqueUserNickName.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="models\Diginote.cs" />
-    <Compile Include="models\Order.cs" />
-    <Compile Include="models\Transaction.cs" />
-    <Compile Include="models\User.cs" />
+    <Compile Include="Models\Diginote.cs" />
+    <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\Transaction.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerLauncher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
