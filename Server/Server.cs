@@ -2,6 +2,8 @@
 using System.Linq;
 using Common.Interfaces;
 using System.Collections;
+using Server.models;
+using System.Collections.Generic;
 
 namespace Server
 {
@@ -38,7 +40,30 @@ namespace Server
 
         public override bool Register(string name, string nickname, string password)
         {
+            Console.WriteLine("SERVER: Register request by user with name: " + name + " and nickname " + nickname);
 
+            var user = new User
+            {
+                Name = name,
+                Nickname = nickname,
+                Password = password,
+                Diginotes = new List<Diginote>(),
+                Orders = new List<Order>()
+            };
+
+            var diginote = new Diginote { FacialValue = 0.0f, Owner = user };
+
+            diginoteDB.Users.Add(user);
+            diginoteDB.Diginotes.Add(diginote);
+            try
+            {
+                diginoteDB.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+                return false;
+            }
 
             return true;
         }

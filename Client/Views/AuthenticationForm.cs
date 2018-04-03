@@ -34,7 +34,8 @@ namespace diginote_exchange_system
             {
                 MessageBox.Show("Invalid credentials. Please try again.");
                 passwordTextField.Text = String.Empty;
-            } else
+            }
+            else
             {
                 var systemForm = new SystemForm();
 
