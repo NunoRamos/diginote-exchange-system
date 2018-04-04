@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormManager.cs" />
+    <Compile Include="StateManager.cs" />
     <Compile Include="Views\AuthenticationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -64,6 +65,12 @@
       <DependentUpon>AuthenticationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Client.cs" />
+    <Compile Include="Views\CreateSellOrderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\CreateSellOrderForm.Designer.cs">
+      <DependentUpon>CreateSellOrderForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\RegistrationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +97,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\CreateSellOrderForm.resx">
+      <DependentUpon>CreateSellOrderForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\RegistrationForm.resx">
       <DependentUpon>RegistrationForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -16,29 +16,8 @@ namespace diginote_exchange_system
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Client client = new Client(ConnectToServer());
+            Client client = new Client();
         }
 
-        static IServer ConnectToServer()
-        {
-            TcpChannel chan = new TcpChannel(8086);
-            ChannelServices.RegisterChannel(chan, false);
-
-            IServer serverOjb;
-
-            serverOjb = (IServer)Activator.GetObject(
-            typeof(IServer),
-            "tcp://localhost:8085/Diginote-Server/Server");
-
-            if (serverOjb == null)
-            {
-                Console.WriteLine("Could not locate server");
-                return null;
-            }
-
-            Console.WriteLine("Connected!");
-            
-            return serverOjb;
-        }
     }
 }

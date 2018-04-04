@@ -25,5 +25,10 @@ namespace diginote_exchange_system
         {
             throw new NotImplementedException();
         }
+
+        private void CreateSellOrderButton_Click(object sender, EventArgs e)
+        {
+            formManager.CreateSellOrderForm.ShowDialog(this);
+        }
     }
 }

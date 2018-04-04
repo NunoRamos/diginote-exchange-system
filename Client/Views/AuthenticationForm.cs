@@ -30,8 +30,8 @@ namespace diginote_exchange_system
             String nickname = nicknameTextField.Text;
             String password = passwordTextField.Text;
 
-            Tuple<int?, Exception> result = client.Server.Login(nickname, password);
-            int? clientId = result.Item1;
+            Tuple<string, Exception> result = StateManager.getInstance().Server.Login(nickname, password);
+            string token = result.Item1;
             Exception exception = result.Item2;
 
             if (exception != null)
@@ -41,6 +41,7 @@ namespace diginote_exchange_system
             }
             else
             {
+                StateManager.getInstance().Token = token;
                 formManager.SystemForm.Show();
                 Hide();
             }

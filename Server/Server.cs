@@ -3,13 +3,15 @@ using System.Linq;
 using Common.Interfaces;
 using Server.models;
 using System.Collections.Generic;
+using Common;
+using System.Data.Entity;
 
 namespace Server
 {
     class Server : IServer
     {
         static private DiginoteSystemContext diginoteDB;
-        static private Dictionary<int, User> loggedInUsers = new Dictionary<int, User>();
+        static private Dictionary<string, User> loggedInUsers = new Dictionary<string, User>();
 
         public Server()
         {
@@ -32,7 +34,9 @@ namespace Server
             db.SaveChangesAsync();
         }
 
-        public override Tuple<int?, Exception> Login(string nickname, string password)
+        #region SessionManagement
+
+        public override Tuple<string, Exception> Login(string nickname, string password)
         {
             Console.WriteLine("SERVER: Login request by User with nickname: " + nickname);
 
@@ -43,20 +47,22 @@ namespace Server
             // Can only return one result
             if (query.ToArray().Length != 1)
             {
-                return Tuple.Create<int?, Exception>(null, new Exception("Invalid credentials."));
+                return Tuple.Create<string, Exception>(null, new Exception("Invalid credentials."));
             }
 
             User userObj = query.ToArray()[0];
-            loggedInUsers.Add(userObj.Id, userObj);
+            string token = Utils.generateToken();
 
-            return Tuple.Create<int?, Exception>(userObj.Id, null);
+            loggedInUsers.Add(token, userObj);
+
+            return Tuple.Create<string, Exception>(token, null);
         }
 
-        public override Exception Logout(int id)
+        public override Exception Logout(string token)
         {
-            if(loggedInUsers.ContainsKey(id))
+            if (loggedInUsers.ContainsKey(token))
             {
-            loggedInUsers.Remove(id);
+                loggedInUsers.Remove(token);
                 return null;
             }
             else
@@ -65,7 +71,7 @@ namespace Server
             }
         }
 
-        public override Tuple<int?, Exception> Register(string name, string nickname, string password)
+        public override Tuple<string, Exception> Register(string name, string nickname, string password)
         {
             Console.WriteLine("SERVER: Register request by user with name: " + name + " and nickname " + nickname);
 
@@ -79,16 +85,71 @@ namespace Server
             };
 
             diginoteDB.Users.Add(user);
+
             try
             {
                 diginoteDB.SaveChanges();
             }
             catch (Exception e)
             {
-                return Tuple.Create<int?, Exception>(null, e);
+                return Tuple.Create<string, Exception>(null, e);
             }
 
-            return Tuple.Create<int?, Exception>(user.Id, null);
+            string token = Utils.generateToken();
+            loggedInUsers.Add(token, user);
+
+            return Tuple.Create<string, Exception>(token, null);
+        }
+
+        #endregion
+
+        public override Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value)
+        {
+            User user = loggedInUsers[token];
+            DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
+
+            var query = from purchaseOrders in diginoteDB.Orders
+                        where purchaseOrders.Status == OrderStatus.Active && purchaseOrders.Type == OrderType.Purchase && purchaseOrders.Quote <= value
+                        orderby purchaseOrders.CreatedAt ascending
+                        select purchaseOrders;
+
+
+            int numSellOrdersCreated = 0;
+            foreach (Order order in query)
+            {
+                Order sellOrder = new Order
+                {
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = user,
+                    Status = OrderStatus.Complete,
+                    Type = OrderType.Sell,
+                    Diginote = user.Diginotes.Last(),
+                    Quote = value
+                };
+
+                numSellOrdersCreated++;
+                user.Diginotes.RemoveAt(user.Diginotes.Count - 1);
+                diginoteDB.Orders.Add(sellOrder);
+
+
+                Transaction transaction = new Transaction
+                {
+                    CreatedAt = DateTime.Now,
+                    PurchaseOrder = order,
+                    SellOrder = sellOrder
+                };
+
+                diginoteDB.Transaction.Add(transaction);
+            }
+
+            dbTransaction.Commit();
+
+            if (numSellOrdersCreated < quantity)
+            {
+                return Tuple.Create<Exception, OrderNotSatisfiedException>(null, new OrderNotSatisfiedException("Order not satisfied", quantity - numSellOrdersCreated, value));
+            }
+
+            return Tuple.Create<Exception, OrderNotSatisfiedException>(null, null);
         }
     }
 }

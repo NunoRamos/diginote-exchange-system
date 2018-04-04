@@ -5,14 +5,10 @@ namespace diginote_exchange_system
 {
     public class Client
     {
-        public IServer Server { get; set; }
-
         private FormManager FormManager;
 
-        public Client(IServer server)
+        public Client()
         {
-            Server = server;
-
             FormManager = new FormManager(this);
             
             Application.Run(FormManager.AuthenticationForm);

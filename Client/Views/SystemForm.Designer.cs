@@ -33,6 +33,7 @@
             this.currentQuoteTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialSingleLineTextField1 = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
+            this.CreateSellOrderButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.SuspendLayout();
             // 
             // signOutButton
@@ -111,11 +112,28 @@
             this.materialLabel1.TabIndex = 3;
             this.materialLabel1.Text = "Diginotes:";
             // 
+            // CreateSellOrderButton
+            // 
+            this.CreateSellOrderButton.AutoSize = true;
+            this.CreateSellOrderButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.CreateSellOrderButton.Depth = 0;
+            this.CreateSellOrderButton.Location = new System.Drawing.Point(16, 399);
+            this.CreateSellOrderButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.CreateSellOrderButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.CreateSellOrderButton.Name = "CreateSellOrderButton";
+            this.CreateSellOrderButton.Primary = false;
+            this.CreateSellOrderButton.Size = new System.Drawing.Size(144, 36);
+            this.CreateSellOrderButton.TabIndex = 5;
+            this.CreateSellOrderButton.Text = "Create Sell Order";
+            this.CreateSellOrderButton.UseVisualStyleBackColor = true;
+            this.CreateSellOrderButton.Click += new System.EventHandler(this.CreateSellOrderButton_Click);
+            // 
             // SystemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.CreateSellOrderButton);
             this.Controls.Add(this.materialSingleLineTextField1);
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.currentQuoteTextField);
@@ -135,5 +153,6 @@
         private MaterialSkin.Controls.MaterialSingleLineTextField currentQuoteTextField;
         private MaterialSkin.Controls.MaterialSingleLineTextField materialSingleLineTextField1;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
+        private MaterialSkin.Controls.MaterialFlatButton CreateSellOrderButton;
     }
 }

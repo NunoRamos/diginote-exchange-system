@@ -9,11 +9,14 @@ namespace diginote_exchange_system
         public RegistrationForm RegistrationForm { get; }
         public SystemForm SystemForm { get; }
 
+        public CreateSellOrderForm CreateSellOrderForm { get; }
+
         public FormManager(Client client)
         {
             AuthenticationForm = new AuthenticationForm(this, client);
             RegistrationForm = new RegistrationForm(this, client);
             SystemForm = new SystemForm(this);
+            CreateSellOrderForm = new CreateSellOrderForm(this);
 
             AuthenticationForm.FormClosing += (s, e) => { Application.Exit(); };
             RegistrationForm.FormClosing += (s, e) => { Application.Exit(); };

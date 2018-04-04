@@ -50,14 +50,17 @@ namespace diginote_exchange_system.Views
             // Create account function call
 
             //TODO: Return error instead of boolean to show the user why something failed
-            Tuple<int?, Exception> result = client.Server.Register(name, nickname, password);
-            int? clientId = result.Item1;
+            Tuple<string, Exception> result = StateManager.getInstance().Server.Register(name, nickname, password);
+            string token = result.Item1;
             Exception exception = result.Item2;
 
             if (exception != null)
             {
                 MessageBox.Show("Sign up failed!\n" + exception.ToString());
                 return;
+            } else
+            {
+                StateManager.getInstance().Token = token;
             }
 
             formManager.SystemForm.Show();
