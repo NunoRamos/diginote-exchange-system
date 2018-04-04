@@ -13,10 +13,12 @@ namespace diginote_exchange_system.Views
 {
     public partial class RegistrationForm : MaterialForm
     {
-        private Client client;
+        private readonly Client client;
+        private readonly FormManager formManager;
 
-        public RegistrationForm(Client client)
+        public RegistrationForm(FormManager formManager, Client client)
         {
+            this.formManager = formManager;
             this.client = client;
             InitializeComponent();
         }
@@ -48,17 +50,21 @@ namespace diginote_exchange_system.Views
             // Create account function call
 
             //TODO: Return error instead of boolean to show the user why something failed
-            bool success = client.serverObj.Register(name, nickname, password);
+            Tuple<int?, Exception> result = client.Server.Register(name, nickname, password);
 
-            if (!success)
+            if (result.Item2 != null)
             {
-                MessageBox.Show("Sign up failed!");
+                MessageBox.Show("Sign up failed!\n" + result.Item2.ToString());
                 return;
             }
-            
-            var systemForm = new SystemForm();
-            
-            systemForm.Show();
+
+            formManager.SystemForm.Show();
+            Hide();
+        }
+
+        private void backButton_Click(object sender, EventArgs e)
+        {
+            formManager.AuthenticationForm.Show();
             Hide();
         }
     }

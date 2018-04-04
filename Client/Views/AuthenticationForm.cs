@@ -2,17 +2,19 @@
 using MaterialSkin.Controls;
 using System;
 using System.Windows.Forms;
-using System.Runtime.Remoting.Channels;
 using diginote_exchange_system.Views;
 
 namespace diginote_exchange_system
 {
     public partial class AuthenticationForm : MaterialForm
     {
-        private Client client;
+        private readonly FormManager formManager;
 
-        public AuthenticationForm(Client client)
+        private readonly Client client;
+
+        public AuthenticationForm(FormManager formManager, Client client)
         {
+            this.formManager = formManager;
             this.client = client;
 
             InitializeComponent();
@@ -28,33 +30,23 @@ namespace diginote_exchange_system
             String nickname = nicknameTextField.Text;
             String password = passwordTextField.Text;
 
-            bool loggedIn = client.serverObj.Login(nickname, password);
+            bool loggedIn = client.Server.Login(nickname, password);
 
-            if(!loggedIn)
+            if (!loggedIn)
             {
                 MessageBox.Show("Invalid credentials. Please try again.");
                 passwordTextField.Text = String.Empty;
             }
             else
             {
-                var systemForm = new SystemForm();
-
-                systemForm.FormClosed += SystemForm_FormClosed;
-                systemForm.Show();
+                formManager.SystemForm.Show();
                 Hide();
             }
         }
 
-        private void SystemForm_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            Show();
-        }
-
         private void signUpButton_Click(object sender, EventArgs e)
         {
-            var registrationForm = new RegistrationForm(client);
-
-            registrationForm.Show();
+            formManager.RegistrationForm.Show();
             Hide();
         }
     }

@@ -13,16 +13,17 @@ namespace diginote_exchange_system
 {
     public partial class SystemForm : MaterialForm
     {
-        public SystemForm()
+        private readonly FormManager formManager;
+
+        public SystemForm(FormManager formManager)
         {
+            this.formManager = formManager;
             InitializeComponent();
         }
 
         private void signOutButton_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
-
-            Close();
         }
     }
 }

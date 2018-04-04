@@ -38,6 +38,7 @@
             this.passwordTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.repeatPasswordTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.createAccountButton = new MaterialSkin.Controls.MaterialFlatButton();
+            this.backButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.SuspendLayout();
             // 
             // errorBoxLabel
@@ -114,7 +115,7 @@
             this.nameTextField.SelectionLength = 0;
             this.nameTextField.SelectionStart = 0;
             this.nameTextField.Size = new System.Drawing.Size(231, 23);
-            this.nameTextField.TabIndex = 15;
+            this.nameTextField.TabIndex = 0;
             this.nameTextField.UseSystemPasswordChar = false;
             // 
             // nicknameTextField
@@ -129,7 +130,7 @@
             this.nicknameTextField.SelectionLength = 0;
             this.nicknameTextField.SelectionStart = 0;
             this.nicknameTextField.Size = new System.Drawing.Size(231, 23);
-            this.nicknameTextField.TabIndex = 16;
+            this.nicknameTextField.TabIndex = 1;
             this.nicknameTextField.UseSystemPasswordChar = false;
             // 
             // passwordTextField
@@ -144,7 +145,7 @@
             this.passwordTextField.SelectionLength = 0;
             this.passwordTextField.SelectionStart = 0;
             this.passwordTextField.Size = new System.Drawing.Size(231, 23);
-            this.passwordTextField.TabIndex = 17;
+            this.passwordTextField.TabIndex = 2;
             this.passwordTextField.UseSystemPasswordChar = true;
             // 
             // repeatPasswordTextField
@@ -159,7 +160,7 @@
             this.repeatPasswordTextField.SelectionLength = 0;
             this.repeatPasswordTextField.SelectionStart = 0;
             this.repeatPasswordTextField.Size = new System.Drawing.Size(231, 23);
-            this.repeatPasswordTextField.TabIndex = 18;
+            this.repeatPasswordTextField.TabIndex = 3;
             this.repeatPasswordTextField.UseSystemPasswordChar = true;
             // 
             // createAccountButton
@@ -167,22 +168,39 @@
             this.createAccountButton.AutoSize = true;
             this.createAccountButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.createAccountButton.Depth = 0;
-            this.createAccountButton.Location = new System.Drawing.Point(263, 343);
+            this.createAccountButton.Location = new System.Drawing.Point(204, 342);
             this.createAccountButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.createAccountButton.MouseState = MaterialSkin.MouseState.HOVER;
             this.createAccountButton.Name = "createAccountButton";
             this.createAccountButton.Primary = false;
             this.createAccountButton.Size = new System.Drawing.Size(64, 36);
-            this.createAccountButton.TabIndex = 19;
+            this.createAccountButton.TabIndex = 4;
             this.createAccountButton.Text = "Sign Up";
             this.createAccountButton.UseVisualStyleBackColor = true;
             this.createAccountButton.Click += new System.EventHandler(this.createAccountButton_Click);
+            // 
+            // backButton
+            // 
+            this.backButton.AutoSize = true;
+            this.backButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.backButton.Depth = 0;
+            this.backButton.Location = new System.Drawing.Point(306, 342);
+            this.backButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.backButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.backButton.Name = "backButton";
+            this.backButton.Primary = false;
+            this.backButton.Size = new System.Drawing.Size(47, 36);
+            this.backButton.TabIndex = 5;
+            this.backButton.Text = "Back";
+            this.backButton.UseVisualStyleBackColor = true;
+            this.backButton.Click += new System.EventHandler(this.backButton_Click);
             // 
             // RegistrationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(548, 443);
+            this.Controls.Add(this.backButton);
             this.Controls.Add(this.createAccountButton);
             this.Controls.Add(this.repeatPasswordTextField);
             this.Controls.Add(this.passwordTextField);
@@ -211,5 +229,6 @@
         private MaterialSkin.Controls.MaterialSingleLineTextField passwordTextField;
         private MaterialSkin.Controls.MaterialSingleLineTextField repeatPasswordTextField;
         private MaterialSkin.Controls.MaterialFlatButton createAccountButton;
+        private MaterialSkin.Controls.MaterialFlatButton backButton;
     }
 }

@@ -4,6 +4,7 @@ using Common.Interfaces;
 using System.Collections;
 using Server.models;
 using System.Collections.Generic;
+using Common.Interfaces;
 
 namespace Server
 {
@@ -38,7 +39,7 @@ namespace Server
             return true;
         }
 
-        public override bool Register(string name, string nickname, string password)
+        public override Tuple<int?, Exception> Register(string name, string nickname, string password)
         {
             Console.WriteLine("SERVER: Register request by user with name: " + name + " and nickname " + nickname);
 
@@ -51,21 +52,17 @@ namespace Server
                 Orders = new List<Order>()
             };
 
-            var diginote = new Diginote { FacialValue = 0.0f, Owner = user };
-
             diginoteDB.Users.Add(user);
-            diginoteDB.Diginotes.Add(diginote);
             try
             {
                 diginoteDB.SaveChanges();
             }
             catch (Exception e)
             {
-
-                return false;
+                return Tuple.Create<int?, Exception>(null, e);
             }
 
-            return true;
+            return Tuple.Create<int?, Exception>(user.Id, null);
         }
     }
 }
