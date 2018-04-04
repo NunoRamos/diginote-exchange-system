@@ -30,11 +30,13 @@ namespace diginote_exchange_system
             String nickname = nicknameTextField.Text;
             String password = passwordTextField.Text;
 
-            bool loggedIn = client.Server.Login(nickname, password);
+            Tuple<int?, Exception> result = client.Server.Login(nickname, password);
+            int? clientId = result.Item1;
+            Exception exception = result.Item2;
 
-            if (!loggedIn)
+            if (exception != null)
             {
-                MessageBox.Show("Invalid credentials. Please try again.");
+                MessageBox.Show(exception.Message, "Sign in failed");
                 passwordTextField.Text = String.Empty;
             }
             else

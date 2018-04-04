@@ -51,10 +51,12 @@ namespace diginote_exchange_system.Views
 
             //TODO: Return error instead of boolean to show the user why something failed
             Tuple<int?, Exception> result = client.Server.Register(name, nickname, password);
+            int? clientId = result.Item1;
+            Exception exception = result.Item2;
 
-            if (result.Item2 != null)
+            if (exception != null)
             {
-                MessageBox.Show("Sign up failed!\n" + result.Item2.ToString());
+                MessageBox.Show("Sign up failed!\n" + exception.ToString());
                 return;
             }
 

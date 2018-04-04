@@ -1,4 +1,5 @@
 ﻿using Server.models;
+using System;
 using System.Data.Entity;
 
 namespace Server
@@ -9,6 +10,9 @@ namespace Server
         public DbSet<Order> Orders { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
         public DbSet<User> Users { get; set; }
+
+        public DiginoteSystemContext() : base(Environment.GetEnvironmentVariable("DATABASE_URL")) {
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

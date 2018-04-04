@@ -8,10 +8,11 @@ using System.Runtime.Remoting.Channels.Tcp;
 
 namespace Server
 {
-    class ServerLauncher
+    public class ServerLauncher
     {
         static void Main(string[] args)
         {
+            DotNetEnv.Env.Load("../../.env");
             using (var db = new DiginoteSystemContext())
             {   
                 Server server = new Server(db);

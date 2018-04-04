@@ -1,26 +1,38 @@
 ﻿using System;
 using System.Linq;
 using Common.Interfaces;
-using System.Collections;
 using Server.models;
 using System.Collections.Generic;
-using Common.Interfaces;
 
 namespace Server
 {
     class Server : IServer
     {
         static private DiginoteSystemContext diginoteDB;
-        static private ArrayList loggedInUsers = new ArrayList();
+        static private Dictionary<int, User> loggedInUsers = new Dictionary<int, User>();
 
-        public Server() { }
+        public Server()
+        {
+
+        }
 
         public Server(DiginoteSystemContext db)
         {
             diginoteDB = db;
+
+            db.Users.Add(new User
+            {
+                Diginotes = new List<Diginote>(),
+                Name = "admin",
+                Nickname = "admin",
+                Orders = new List<Order>(),
+                Password = "admin"
+            });
+
+            db.SaveChangesAsync();
         }
 
-        public override bool Login(string nickname, string password)
+        public override Tuple<int?, Exception> Login(string nickname, string password)
         {
             Console.WriteLine("SERVER: Login request by User with nickname: " + nickname);
 
@@ -31,12 +43,26 @@ namespace Server
             // Can only return one result
             if (query.ToArray().Length != 1)
             {
-                return false;
+                return Tuple.Create<int?, Exception>(null, new Exception("Invalid credentials."));
             }
-            
-            loggedInUsers.Add(query.ToArray()[0]);
 
-            return true;
+            User userObj = query.ToArray()[0];
+            loggedInUsers.Add(userObj.Id, userObj);
+
+            return Tuple.Create<int?, Exception>(userObj.Id, null);
+        }
+
+        public override Exception Logout(int id)
+        {
+            if(loggedInUsers.ContainsKey(id))
+            {
+            loggedInUsers.Remove(id);
+                return null;
+            }
+            else
+            {
+                return new Exception("Invalid User Id.");
+            }
         }
 
         public override Tuple<int?, Exception> Register(string name, string nickname, string password)

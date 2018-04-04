@@ -62,7 +62,7 @@
             this.signInButton.Name = "signInButton";
             this.signInButton.Primary = false;
             this.signInButton.Size = new System.Drawing.Size(60, 36);
-            this.signInButton.TabIndex = 4;
+            this.signInButton.TabIndex = 3;
             this.signInButton.Text = "Sign In";
             this.signInButton.UseVisualStyleBackColor = true;
             this.signInButton.Click += new System.EventHandler(this.signInButton_Click);
@@ -78,7 +78,7 @@
             this.signUpButton.Name = "signUpButton";
             this.signUpButton.Primary = false;
             this.signUpButton.Size = new System.Drawing.Size(64, 36);
-            this.signUpButton.TabIndex = 5;
+            this.signUpButton.TabIndex = 4;
             this.signUpButton.Text = "Sign Up";
             this.signUpButton.UseVisualStyleBackColor = true;
             this.signUpButton.Click += new System.EventHandler(this.signUpButton_Click);
@@ -95,7 +95,7 @@
             this.nicknameTextField.SelectionLength = 0;
             this.nicknameTextField.SelectionStart = 0;
             this.nicknameTextField.Size = new System.Drawing.Size(112, 23);
-            this.nicknameTextField.TabIndex = 6;
+            this.nicknameTextField.TabIndex = 1;
             this.nicknameTextField.UseSystemPasswordChar = false;
             // 
             // nicknameLabel
@@ -136,7 +136,7 @@
             this.passwordTextField.SelectionLength = 0;
             this.passwordTextField.SelectionStart = 0;
             this.passwordTextField.Size = new System.Drawing.Size(112, 23);
-            this.passwordTextField.TabIndex = 8;
+            this.passwordTextField.TabIndex = 2;
             this.passwordTextField.UseSystemPasswordChar = true;
             // 
             // AuthenticationForm
