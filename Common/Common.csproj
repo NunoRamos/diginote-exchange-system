@@ -52,7 +52,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IClient.cs" />
     <Compile Include="Interfaces\IServer.cs" />
     <Compile Include="OrderNotSatisfiedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
