@@ -2,6 +2,7 @@
 using Common.Interfaces;
 using System;
 using System.Collections;
+using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Serialization.Formatters;
@@ -47,30 +48,12 @@ namespace diginote_exchange_system
 
         private static IServer ConnectToServer()
         {
-            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
-            provider.TypeFilterLevel = TypeFilterLevel.Full;
-            IDictionary props = new Hashtable();
-            int port = 8086;
-            props["port"] = port;
-
-            TcpChannel chan = new TcpChannel(props, null, provider);
-            // TcpChannel chan = new TcpChannel(8086);
-            ChannelServices.RegisterChannel(chan, false);
-
-            string SERVER_ADDR = "tcp://localhost:8085/Diginote-Server/Server";
-
-            IServer serverObj;
-
-            serverObj = (IServer)Activator.GetObject(typeof(IServer), SERVER_ADDR);
-
-            if (serverObj == null)
-            {
-                throw new Exception("Could not locate server on: \"" + SERVER_ADDR + "\"");
-            }
+            RemotingConfiguration.Configure("diginote-exchange-system.exe.config", false);
+            var iServer = (IServer)Activator.GetObject(typeof(IServer), "tcp://localhost:9000/Server/Server");
 
             Console.WriteLine("Connection successfully established!");
 
-            return serverObj;
+            return iServer;
         }
 
         public Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(int quantity, float value)

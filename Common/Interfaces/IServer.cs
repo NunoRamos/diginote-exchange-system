@@ -2,6 +2,7 @@
 
 namespace Common.Interfaces
 {
+    [Serializable]
     public delegate void QuoteUpdated(float? newQuote);
 
     public interface IServer
@@ -19,6 +20,7 @@ namespace Common.Interfaces
         float? GetCurrentQuote();
     }
     
+    [Serializable]
     public class EventRepeater: MarshalByRefObject
     {
         public event QuoteUpdated QuoteUpdated;

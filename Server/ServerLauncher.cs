@@ -16,7 +16,7 @@ namespace Server
         {
             DotNetEnv.Env.Load("../../.env");
             using (var db = new DiginoteSystemContext())
-            {   
+            {
                 Server server = new Server(db);
                 SetupServer(server);
 
@@ -27,19 +27,8 @@ namespace Server
 
         private static void SetupServer(Server server)
         {
-            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
-            provider.TypeFilterLevel = TypeFilterLevel.Full;
-            IDictionary props = new Hashtable();
-            int port = 8085;
-            props["port"] = port;
-            TcpChannel chan = new TcpChannel(props, null, provider);
-
-            ChannelServices.RegisterChannel(chan, false);
-
-            RemotingConfiguration.RegisterWellKnownServiceType(server.GetType(),
-                "Diginote-Server/Server", WellKnownObjectMode.Singleton);
-            
-            Console.WriteLine("Server started on port :" + port);
+            RemotingConfiguration.Configure("Server.exe.config", false);
+            Console.WriteLine("Server started on port: 9000");
         }
     }
 }
