@@ -13,7 +13,7 @@ namespace Server
         static private DiginoteSystemContext diginoteDB;
         static private Dictionary<string, User> loggedInUsers = new Dictionary<string, User>();
 
-        event EventHandler<float> OnQuoteUpdated;
+        public event EventHandler<float?> OnQuoteUpdated;
 
         public Server()
         {

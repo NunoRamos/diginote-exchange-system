@@ -24,7 +24,7 @@ namespace diginote_exchange_system
             Server.OnQuoteUpdated += OnQuoteUpdated;
         }
 
-        private void OnQuoteUpdated(object sender, float newQuote)
+        private void OnQuoteUpdated(object sender, float? newQuote)
         {
             CurrentQuote = newQuote;
         }
@@ -34,8 +34,8 @@ namespace diginote_exchange_system
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            FormManager = new FormManager();
             StateManager = new Client();
+            FormManager = new FormManager();
             Application.Run(FormManager.AuthenticationForm);
         }
 

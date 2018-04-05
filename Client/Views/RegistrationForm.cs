@@ -1,21 +1,11 @@
 ﻿using MaterialSkin.Controls;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace diginote_exchange_system.Views
 {
     public partial class RegistrationForm : MaterialForm
     {
-        private readonly Client client;
-        private readonly FormManager formManager;
-
         public RegistrationForm()
         {
             InitializeComponent();
@@ -61,13 +51,13 @@ namespace diginote_exchange_system.Views
                 Client.StateManager.Token = token;
             }
 
-            formManager.SystemForm.Show();
+            Client.FormManager.SystemForm.Show();
             Hide();
         }
 
         private void backButton_Click(object sender, EventArgs e)
         {
-            formManager.AuthenticationForm.Show();
+            Client.FormManager.AuthenticationForm.Show();
             Hide();
         }
     }

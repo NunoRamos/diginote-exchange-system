@@ -13,8 +13,6 @@ namespace diginote_exchange_system
 {
     public partial class SystemForm : MaterialForm
     {
-        private readonly FormManager formManager;
-
         public SystemForm()
         {
             InitializeComponent();
