@@ -31,7 +31,7 @@
             this.signOutButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.currentQuoteLabel = new MaterialSkin.Controls.MaterialLabel();
             this.CurrentQuoteTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
-            this.materialSingleLineTextField1 = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.DiginotesTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.CreateSellOrderButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.SuspendLayout();
@@ -82,22 +82,22 @@
             this.CurrentQuoteTextField.Text = "N/A";
             this.CurrentQuoteTextField.UseSystemPasswordChar = false;
             // 
-            // materialSingleLineTextField1
+            // DiginotesTextField
             // 
-            this.materialSingleLineTextField1.Depth = 0;
-            this.materialSingleLineTextField1.Enabled = false;
-            this.materialSingleLineTextField1.Hint = "";
-            this.materialSingleLineTextField1.Location = new System.Drawing.Point(124, 90);
-            this.materialSingleLineTextField1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialSingleLineTextField1.Name = "materialSingleLineTextField1";
-            this.materialSingleLineTextField1.PasswordChar = '\0';
-            this.materialSingleLineTextField1.SelectedText = "";
-            this.materialSingleLineTextField1.SelectionLength = 0;
-            this.materialSingleLineTextField1.SelectionStart = 0;
-            this.materialSingleLineTextField1.Size = new System.Drawing.Size(53, 23);
-            this.materialSingleLineTextField1.TabIndex = 4;
-            this.materialSingleLineTextField1.Text = "12";
-            this.materialSingleLineTextField1.UseSystemPasswordChar = false;
+            this.DiginotesTextField.Depth = 0;
+            this.DiginotesTextField.Enabled = false;
+            this.DiginotesTextField.Hint = "";
+            this.DiginotesTextField.Location = new System.Drawing.Point(124, 90);
+            this.DiginotesTextField.MouseState = MaterialSkin.MouseState.HOVER;
+            this.DiginotesTextField.Name = "DiginotesTextField";
+            this.DiginotesTextField.PasswordChar = '\0';
+            this.DiginotesTextField.SelectedText = "";
+            this.DiginotesTextField.SelectionLength = 0;
+            this.DiginotesTextField.SelectionStart = 0;
+            this.DiginotesTextField.Size = new System.Drawing.Size(53, 23);
+            this.DiginotesTextField.TabIndex = 4;
+            this.DiginotesTextField.Text = "12";
+            this.DiginotesTextField.UseSystemPasswordChar = false;
             // 
             // materialLabel1
             // 
@@ -134,13 +134,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.CreateSellOrderButton);
-            this.Controls.Add(this.materialSingleLineTextField1);
+            this.Controls.Add(this.DiginotesTextField);
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.CurrentQuoteTextField);
             this.Controls.Add(this.currentQuoteLabel);
             this.Controls.Add(this.signOutButton);
             this.Name = "SystemForm";
             this.Text = "Diginote Exchange System";
+            this.Shown += new System.EventHandler(this.SystemForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -151,7 +152,7 @@
         private MaterialSkin.Controls.MaterialFlatButton signOutButton;
         private MaterialSkin.Controls.MaterialLabel currentQuoteLabel;
         private MaterialSkin.Controls.MaterialSingleLineTextField CurrentQuoteTextField;
-        private MaterialSkin.Controls.MaterialSingleLineTextField materialSingleLineTextField1;
+        private MaterialSkin.Controls.MaterialSingleLineTextField DiginotesTextField;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialFlatButton CreateSellOrderButton;
     }

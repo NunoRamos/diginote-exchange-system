@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.models
 {
@@ -31,11 +32,14 @@ namespace Server.models
         public OrderType Type { get; set; }
 
         [Required]
+        [ForeignKey("Id")]
         public Diginote Diginote { get; set; }
 
         [Required]
+        [ForeignKey("Id")]
         public User CreatedBy { get; set; }
 
+        [ForeignKey("Id")]
         public Transaction Transaction { get; set; }
     }
 }

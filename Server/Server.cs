@@ -24,14 +24,26 @@ namespace Server
         {
             diginoteDB = db;
 
-            db.Users.Add(new User
+            User user = new User
             {
-                Diginotes = new List<Diginote>(),
                 Name = "admin",
                 Nickname = "admin",
-                Orders = new List<Order>(),
-                Password = "admin"
-            });
+                Password = "admin",
+                Diginotes = new List<Diginote>(),
+                Orders = new List<Order>()
+            };
+
+            db.Users.Add(user);
+
+            for (int i = 0; i < 10; i++)
+            {
+                db.Diginotes.Add(new Diginote
+                {
+                    FacialValue = 1.0f,
+                    Owner = user,
+                    Order = null
+                });
+            }
 
             db.SaveChangesAsync();
         }
@@ -130,7 +142,7 @@ namespace Server
                 };
 
                 numSellOrdersCreated++;
-                user.Diginotes.RemoveAt(user.Diginotes.Count - 1);
+                user.Diginotes.Remove(user.Diginotes.Last());
                 diginoteDB.Orders.Add(sellOrder);
 
 
@@ -173,6 +185,11 @@ namespace Server
         public void UpdateCurrentQuote(float? newQuote)
         {
             QuoteUpdated(newQuote);
+        }
+
+        public int GetDiginotes(string token)
+        {
+            return loggedInUsers[token].Diginotes.Count;
         }
     }
 }

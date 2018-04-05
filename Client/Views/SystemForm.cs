@@ -19,6 +19,7 @@ namespace diginote_exchange_system
             Client.StateManager.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
         }
 
+
         private void OnQuoteUpdated(float? newQuote)
         {
             CurrentQuoteTextField.Text = newQuote == null ? "N/A" : newQuote.ToString();
@@ -32,6 +33,11 @@ namespace diginote_exchange_system
         private void CreateSellOrderButton_Click(object sender, EventArgs e)
         {
             Client.FormManager.CreateSellOrderForm.ShowDialog(this);
+        }
+
+        private void SystemForm_Shown(object sender, EventArgs e)
+        {
+            DiginotesTextField.Text = Client.StateManager.Server.GetDiginotes(Client.StateManager.Token).ToString();
         }
     }
 }

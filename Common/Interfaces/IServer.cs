@@ -18,6 +18,8 @@ namespace Common.Interfaces
         Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value);
 
         float? GetCurrentQuote();
+
+        int GetDiginotes(string token);
     }
     
     [Serializable]

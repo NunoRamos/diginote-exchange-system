@@ -28,6 +28,7 @@ namespace diginote_exchange_system
             Server = ConnectToServer();
             Server.QuoteUpdated += EvntRepeater.FireQuoteUpdated;
             EvntRepeater.QuoteUpdated += OnQuoteUpdated;
+            OnQuoteUpdated(Server.GetCurrentQuote());
         }
 
         private void OnQuoteUpdated(float? newQuote)

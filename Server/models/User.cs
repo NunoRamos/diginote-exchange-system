@@ -20,10 +20,8 @@ namespace Server.models
 
         public String Password { get; set; }
 
-        [Required]
-        public List<Diginote> Diginotes { get; set; }
+        public virtual ICollection<Diginote> Diginotes { get; set; }
 
-        [Required]
-        public List<Order> Orders { get; set; }
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }
