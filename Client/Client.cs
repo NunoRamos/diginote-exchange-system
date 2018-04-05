@@ -1,8 +1,10 @@
 ﻿using Common;
 using Common.Interfaces;
 using System;
+using System.Collections;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Serialization.Formatters;
 using System.Windows.Forms;
 
 namespace diginote_exchange_system
@@ -18,13 +20,16 @@ namespace diginote_exchange_system
 
         public IServer Server { get; }
 
+        public EventRepeater EvntRepeater = new EventRepeater();
+
         public Client()
         {
             Server = ConnectToServer();
-            Server.OnQuoteUpdated += OnQuoteUpdated;
+            Server.QuoteUpdated += EvntRepeater.FireQuoteUpdated;
+            EvntRepeater.QuoteUpdated += OnQuoteUpdated;
         }
 
-        private void OnQuoteUpdated(object sender, float? newQuote)
+        private void OnQuoteUpdated(float? newQuote)
         {
             CurrentQuote = newQuote;
         }
@@ -42,9 +47,17 @@ namespace diginote_exchange_system
 
         private static IServer ConnectToServer()
         {
-            string SERVER_ADDR = "tcp://localhost:8085/Diginote-Server/Server";
-            TcpChannel chan = new TcpChannel(8086);
+            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
+            provider.TypeFilterLevel = TypeFilterLevel.Full;
+            IDictionary props = new Hashtable();
+            int port = 8086;
+            props["port"] = port;
+
+            TcpChannel chan = new TcpChannel(props, null, provider);
+            // TcpChannel chan = new TcpChannel(8086);
             ChannelServices.RegisterChannel(chan, false);
+
+            string SERVER_ADDR = "tcp://localhost:8085/Diginote-Server/Server";
 
             IServer serverObj;
 

@@ -8,12 +8,12 @@ using System.Data.Entity;
 
 namespace Server
 {
-    class Server : IServer
+    class Server : MarshalByRefObject, IServer
     {
         static private DiginoteSystemContext diginoteDB;
         static private Dictionary<string, User> loggedInUsers = new Dictionary<string, User>();
 
-        public event EventHandler<float?> OnQuoteUpdated;
+        public event QuoteUpdated QuoteUpdated;
 
         public Server()
         {
@@ -38,7 +38,7 @@ namespace Server
 
         #region SessionManagement
 
-        public override Tuple<string, Exception> Login(string nickname, string password)
+        public Tuple<string, Exception> Login(string nickname, string password)
         {
             Console.WriteLine("SERVER: Login request by User with nickname: " + nickname);
 
@@ -60,7 +60,7 @@ namespace Server
             return Tuple.Create<string, Exception>(token, null);
         }
 
-        public override Exception Logout(string token)
+        public Exception Logout(string token)
         {
             if (loggedInUsers.ContainsKey(token))
             {
@@ -73,7 +73,7 @@ namespace Server
             }
         }
 
-        public override Tuple<string, Exception> Register(string name, string nickname, string password)
+        public Tuple<string, Exception> Register(string name, string nickname, string password)
         {
             Console.WriteLine("SERVER: Register request by user with name: " + name + " and nickname " + nickname);
 
@@ -105,7 +105,7 @@ namespace Server
 
         #endregion
 
-        public override Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value)
+        public Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value)
         {
             User user = loggedInUsers[token];
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
@@ -154,7 +154,7 @@ namespace Server
             return Tuple.Create<Exception, OrderNotSatisfiedException>(null, null);
         }
 
-        public override float? GetCurrentQuote()
+        public float? GetCurrentQuote()
         {
             var query = from lastOrder in diginoteDB.Orders
                         orderby lastOrder.CreatedAt descending
@@ -170,9 +170,9 @@ namespace Server
             }
         }
 
-        public void PublishUpdatedQuote(float newQuote)
+        public void UpdateCurrentQuote(float? newQuote)
         {
-            OnQuoteUpdated.Invoke(this, newQuote);
+            QuoteUpdated(newQuote);
         }
     }
 }

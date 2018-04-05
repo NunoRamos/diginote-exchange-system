@@ -7,10 +7,10 @@ namespace diginote_exchange_system.Views
         public SellOrderNotSatisfiedForm()
         {
             InitializeComponent();
-            Client.StateManager.Server.OnQuoteUpdated += OnQuoteUpdated;
+            Client.StateManager.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
         }
 
-        private void OnQuoteUpdated(object sender, float? newQuote)
+        private void OnQuoteUpdated(float? newQuote)
         {
             CurrentQuoteTextField.Text = newQuote == null ? "N/A" : newQuote.ToString();
         }

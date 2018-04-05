@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Serialization.Formatters;
+using System.Collections;
 
 namespace Server
 {
@@ -25,8 +27,13 @@ namespace Server
 
         private static void SetupServer(Server server)
         {
-            Int32 port = 8085;
-            TcpChannel chan = new TcpChannel(port);
+            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
+            provider.TypeFilterLevel = TypeFilterLevel.Full;
+            IDictionary props = new Hashtable();
+            int port = 8085;
+            props["port"] = port;
+            TcpChannel chan = new TcpChannel(props, null, provider);
+
             ChannelServices.RegisterChannel(chan, false);
 
             RemotingConfiguration.RegisterWellKnownServiceType(server.GetType(),

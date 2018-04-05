@@ -2,18 +2,30 @@
 
 namespace Common.Interfaces
 {
-    public abstract class IServer : MarshalByRefObject
+    public delegate void QuoteUpdated(float? newQuote);
+
+    public interface IServer
     {
-        public event EventHandler<float?> OnQuoteUpdated;
+        event QuoteUpdated QuoteUpdated;
 
-        public abstract Tuple<string, Exception> Login(string nickname, string password);
+        Tuple<string, Exception> Login(string nickname, string password);
 
-        public abstract Tuple<string, Exception> Register(string name, string nickname, string password);
+        Tuple<string, Exception> Register(string name, string nickname, string password);
 
-        public abstract Exception Logout(string token);
+        Exception Logout(string token);
 
-        public abstract Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value);
+        Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value);
 
-        public abstract float? GetCurrentQuote();
+        float? GetCurrentQuote();
+    }
+    
+    public class EventRepeater: MarshalByRefObject
+    {
+        public event QuoteUpdated QuoteUpdated;
+
+        public void FireQuoteUpdated(float? newQuote)
+        {
+            QuoteUpdated(newQuote);
+        }
     }
 }
