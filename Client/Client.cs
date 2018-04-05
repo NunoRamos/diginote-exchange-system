@@ -9,8 +9,8 @@ namespace diginote_exchange_system
 {
     public class Client : IClient
     {
-        public static FormManager FormManager { get; } = new FormManager();
-        public static Client StateManager { get; } = new Client();
+        public static FormManager FormManager { get; private set; } 
+        public static Client StateManager { get; private set; }
 
         public float CurrentQuote { get; set; } = 0.01f;
 
@@ -21,6 +21,15 @@ namespace diginote_exchange_system
         public Client()
         {
             Server = ConnectToServer();
+        }
+
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            FormManager = new FormManager();
+            StateManager = new Client();
             Application.Run(FormManager.AuthenticationForm);
         }
 
