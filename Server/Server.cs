@@ -13,6 +13,8 @@ namespace Server
         static private DiginoteSystemContext diginoteDB;
         static private Dictionary<string, User> loggedInUsers = new Dictionary<string, User>();
 
+        event EventHandler<float> OnQuoteUpdated;
+
         public Server()
         {
 
@@ -152,7 +154,7 @@ namespace Server
             return Tuple.Create<Exception, OrderNotSatisfiedException>(null, null);
         }
 
-        public override float GetCurrentQuote()
+        public override float? GetCurrentQuote()
         {
             var query = from lastOrder in diginoteDB.Orders
                         orderby lastOrder.CreatedAt descending
@@ -164,8 +166,13 @@ namespace Server
             }
             catch (InvalidOperationException)
             {
-                return 0.01f;
+                return null;
             }
+        }
+
+        public void PublishUpdatedQuote(float newQuote)
+        {
+            OnQuoteUpdated.Invoke(this, newQuote);
         }
     }
 }

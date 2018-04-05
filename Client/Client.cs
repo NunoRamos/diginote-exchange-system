@@ -7,12 +7,12 @@ using System.Windows.Forms;
 
 namespace diginote_exchange_system
 {
-    public class Client : IClient
+    public class Client
     {
-        public static FormManager FormManager { get; private set; } 
+        public static FormManager FormManager { get; private set; }
         public static Client StateManager { get; private set; }
 
-        public float CurrentQuote { get; set; } = 0.01f;
+        public float? CurrentQuote { get; set; }
 
         public string Token { get; set; }
 
@@ -21,6 +21,12 @@ namespace diginote_exchange_system
         public Client()
         {
             Server = ConnectToServer();
+            Server.OnQuoteUpdated += OnQuoteUpdated;
+        }
+
+        private void OnQuoteUpdated(object sender, float newQuote)
+        {
+            CurrentQuote = newQuote;
         }
 
         [STAThread]
@@ -52,11 +58,6 @@ namespace diginote_exchange_system
             Console.WriteLine("Connection successfully established!");
 
             return serverObj;
-        }
-
-        public override void UpdateQuote(float newValue)
-        {
-            CurrentQuote = newValue;
         }
 
         public Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(int quantity, float value)

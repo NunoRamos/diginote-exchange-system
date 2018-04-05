@@ -30,7 +30,7 @@
         {
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
-            this.currentQuoteTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.CurrentQuoteTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.ValueTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             this.DiginotesLeftTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
@@ -64,22 +64,22 @@
             this.materialLabel2.TabIndex = 1;
             this.materialLabel2.Text = "Value:";
             // 
-            // currentQuoteTextField
+            // CurrentQuoteTextField
             // 
-            this.currentQuoteTextField.Depth = 0;
-            this.currentQuoteTextField.Enabled = false;
-            this.currentQuoteTextField.Hint = "";
-            this.currentQuoteTextField.Location = new System.Drawing.Point(153, 165);
-            this.currentQuoteTextField.MouseState = MaterialSkin.MouseState.HOVER;
-            this.currentQuoteTextField.Name = "currentQuoteTextField";
-            this.currentQuoteTextField.PasswordChar = '\0';
-            this.currentQuoteTextField.SelectedText = "";
-            this.currentQuoteTextField.SelectionLength = 0;
-            this.currentQuoteTextField.SelectionStart = 0;
-            this.currentQuoteTextField.Size = new System.Drawing.Size(75, 23);
-            this.currentQuoteTextField.TabIndex = 2;
-            this.currentQuoteTextField.TabStop = false;
-            this.currentQuoteTextField.UseSystemPasswordChar = false;
+            this.CurrentQuoteTextField.Depth = 0;
+            this.CurrentQuoteTextField.Enabled = false;
+            this.CurrentQuoteTextField.Hint = "";
+            this.CurrentQuoteTextField.Location = new System.Drawing.Point(153, 165);
+            this.CurrentQuoteTextField.MouseState = MaterialSkin.MouseState.HOVER;
+            this.CurrentQuoteTextField.Name = "CurrentQuoteTextField";
+            this.CurrentQuoteTextField.PasswordChar = '\0';
+            this.CurrentQuoteTextField.SelectedText = "";
+            this.CurrentQuoteTextField.SelectionLength = 0;
+            this.CurrentQuoteTextField.SelectionStart = 0;
+            this.CurrentQuoteTextField.Size = new System.Drawing.Size(75, 23);
+            this.CurrentQuoteTextField.TabIndex = 2;
+            this.CurrentQuoteTextField.TabStop = false;
+            this.CurrentQuoteTextField.UseSystemPasswordChar = false;
             // 
             // ValueTextField
             // 
@@ -167,7 +167,7 @@
             this.Controls.Add(this.DiginotesLeftTextField);
             this.Controls.Add(this.materialLabel3);
             this.Controls.Add(this.ValueTextField);
-            this.Controls.Add(this.currentQuoteTextField);
+            this.Controls.Add(this.CurrentQuoteTextField);
             this.Controls.Add(this.materialLabel2);
             this.Controls.Add(this.materialLabel1);
             this.Name = "SellOrderNotSatisfiedForm";
@@ -181,7 +181,7 @@
 
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
-        private MaterialSkin.Controls.MaterialSingleLineTextField currentQuoteTextField;
+        private MaterialSkin.Controls.MaterialSingleLineTextField CurrentQuoteTextField;
         private MaterialSkin.Controls.MaterialSingleLineTextField ValueTextField;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
         private MaterialSkin.Controls.MaterialSingleLineTextField DiginotesLeftTextField;

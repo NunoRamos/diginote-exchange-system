@@ -30,7 +30,7 @@
         {
             this.signOutButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.currentQuoteLabel = new MaterialSkin.Controls.MaterialLabel();
-            this.currentQuoteTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.CurrentQuoteTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialSingleLineTextField1 = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.CreateSellOrderButton = new MaterialSkin.Controls.MaterialFlatButton();
@@ -65,22 +65,22 @@
             this.currentQuoteLabel.TabIndex = 1;
             this.currentQuoteLabel.Text = "Current Quote:";
             // 
-            // currentQuoteTextField
+            // CurrentQuoteTextField
             // 
-            this.currentQuoteTextField.Depth = 0;
-            this.currentQuoteTextField.Enabled = false;
-            this.currentQuoteTextField.Hint = "";
-            this.currentQuoteTextField.Location = new System.Drawing.Point(124, 122);
-            this.currentQuoteTextField.MouseState = MaterialSkin.MouseState.HOVER;
-            this.currentQuoteTextField.Name = "currentQuoteTextField";
-            this.currentQuoteTextField.PasswordChar = '\0';
-            this.currentQuoteTextField.SelectedText = "";
-            this.currentQuoteTextField.SelectionLength = 0;
-            this.currentQuoteTextField.SelectionStart = 0;
-            this.currentQuoteTextField.Size = new System.Drawing.Size(53, 23);
-            this.currentQuoteTextField.TabIndex = 2;
-            this.currentQuoteTextField.Text = "1.00";
-            this.currentQuoteTextField.UseSystemPasswordChar = false;
+            this.CurrentQuoteTextField.Depth = 0;
+            this.CurrentQuoteTextField.Enabled = false;
+            this.CurrentQuoteTextField.Hint = "";
+            this.CurrentQuoteTextField.Location = new System.Drawing.Point(124, 122);
+            this.CurrentQuoteTextField.MouseState = MaterialSkin.MouseState.HOVER;
+            this.CurrentQuoteTextField.Name = "CurrentQuoteTextField";
+            this.CurrentQuoteTextField.PasswordChar = '\0';
+            this.CurrentQuoteTextField.SelectedText = "";
+            this.CurrentQuoteTextField.SelectionLength = 0;
+            this.CurrentQuoteTextField.SelectionStart = 0;
+            this.CurrentQuoteTextField.Size = new System.Drawing.Size(53, 23);
+            this.CurrentQuoteTextField.TabIndex = 2;
+            this.CurrentQuoteTextField.Text = "N/A";
+            this.CurrentQuoteTextField.UseSystemPasswordChar = false;
             // 
             // materialSingleLineTextField1
             // 
@@ -136,7 +136,7 @@
             this.Controls.Add(this.CreateSellOrderButton);
             this.Controls.Add(this.materialSingleLineTextField1);
             this.Controls.Add(this.materialLabel1);
-            this.Controls.Add(this.currentQuoteTextField);
+            this.Controls.Add(this.CurrentQuoteTextField);
             this.Controls.Add(this.currentQuoteLabel);
             this.Controls.Add(this.signOutButton);
             this.Name = "SystemForm";
@@ -150,7 +150,7 @@
 
         private MaterialSkin.Controls.MaterialFlatButton signOutButton;
         private MaterialSkin.Controls.MaterialLabel currentQuoteLabel;
-        private MaterialSkin.Controls.MaterialSingleLineTextField currentQuoteTextField;
+        private MaterialSkin.Controls.MaterialSingleLineTextField CurrentQuoteTextField;
         private MaterialSkin.Controls.MaterialSingleLineTextField materialSingleLineTextField1;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialFlatButton CreateSellOrderButton;
