@@ -11,12 +11,15 @@ namespace diginote_exchange_system
 
         public CreateSellOrderForm CreateSellOrderForm { get; }
 
-        public FormManager(Client client)
+        public SellOrderNotSatisfiedForm SellOrderNotSatisfiedForm { get; }
+
+        public FormManager()
         {
-            AuthenticationForm = new AuthenticationForm(this, client);
-            RegistrationForm = new RegistrationForm(this, client);
-            SystemForm = new SystemForm(this);
-            CreateSellOrderForm = new CreateSellOrderForm(this);
+            AuthenticationForm = new AuthenticationForm();
+            RegistrationForm = new RegistrationForm();
+            SystemForm = new SystemForm();
+            CreateSellOrderForm = new CreateSellOrderForm();
+            SellOrderNotSatisfiedForm = new SellOrderNotSatisfiedForm();
 
             AuthenticationForm.FormClosing += (s, e) => { Application.Exit(); };
             RegistrationForm.FormClosing += (s, e) => { Application.Exit(); };

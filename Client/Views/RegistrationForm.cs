@@ -16,10 +16,8 @@ namespace diginote_exchange_system.Views
         private readonly Client client;
         private readonly FormManager formManager;
 
-        public RegistrationForm(FormManager formManager, Client client)
+        public RegistrationForm()
         {
-            this.formManager = formManager;
-            this.client = client;
             InitializeComponent();
         }
 
@@ -50,7 +48,7 @@ namespace diginote_exchange_system.Views
             // Create account function call
 
             //TODO: Return error instead of boolean to show the user why something failed
-            Tuple<string, Exception> result = StateManager.getInstance().Server.Register(name, nickname, password);
+            Tuple<string, Exception> result = Client.StateManager.Server.Register(name, nickname, password);
             string token = result.Item1;
             Exception exception = result.Item2;
 
@@ -60,7 +58,7 @@ namespace diginote_exchange_system.Views
                 return;
             } else
             {
-                StateManager.getInstance().Token = token;
+                Client.StateManager.Token = token;
             }
 
             formManager.SystemForm.Show();

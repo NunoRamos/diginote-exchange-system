@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormManager.cs" />
-    <Compile Include="StateManager.cs" />
     <Compile Include="Views\AuthenticationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +75,12 @@
     </Compile>
     <Compile Include="Views\RegistrationForm.Designer.cs">
       <DependentUpon>RegistrationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SellOrderNotSatisfiedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\SellOrderNotSatisfiedForm.Designer.cs">
+      <DependentUpon>SellOrderNotSatisfiedForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\SystemForm.cs">
       <SubType>Form</SubType>
@@ -102,6 +107,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\RegistrationForm.resx">
       <DependentUpon>RegistrationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\SellOrderNotSatisfiedForm.resx">
+      <DependentUpon>SellOrderNotSatisfiedForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SystemForm.resx">
       <DependentUpon>SystemForm.cs</DependentUpon>

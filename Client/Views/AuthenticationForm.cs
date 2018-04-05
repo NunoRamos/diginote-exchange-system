@@ -8,15 +8,8 @@ namespace diginote_exchange_system
 {
     public partial class AuthenticationForm : MaterialForm
     {
-        private readonly FormManager formManager;
-
-        private readonly Client client;
-
-        public AuthenticationForm(FormManager formManager, Client client)
+        public AuthenticationForm()
         {
-            this.formManager = formManager;
-            this.client = client;
-
             InitializeComponent();
 
             var materialSkinManager = MaterialSkinManager.Instance;
@@ -30,7 +23,7 @@ namespace diginote_exchange_system
             String nickname = nicknameTextField.Text;
             String password = passwordTextField.Text;
 
-            Tuple<string, Exception> result = StateManager.getInstance().Server.Login(nickname, password);
+            Tuple<string, Exception> result = Client.StateManager.Server.Login(nickname, password);
             string token = result.Item1;
             Exception exception = result.Item2;
 
@@ -41,15 +34,15 @@ namespace diginote_exchange_system
             }
             else
             {
-                StateManager.getInstance().Token = token;
-                formManager.SystemForm.Show();
+                Client.StateManager.Token = token;
+                Client.FormManager.SystemForm.Show();
                 Hide();
             }
         }
 
         private void signUpButton_Click(object sender, EventArgs e)
         {
-            formManager.RegistrationForm.Show();
+            Client.FormManager.RegistrationForm.Show();
             Hide();
         }
     }

@@ -151,5 +151,21 @@ namespace Server
 
             return Tuple.Create<Exception, OrderNotSatisfiedException>(null, null);
         }
+
+        public override float GetCurrentQuote()
+        {
+            var query = from lastOrder in diginoteDB.Orders
+                        orderby lastOrder.CreatedAt descending
+                        select lastOrder;
+
+            try
+            {
+                return query.First().Quote;
+            }
+            catch (InvalidOperationException)
+            {
+                return 0.01f;
+            }
+        }
     }
 }

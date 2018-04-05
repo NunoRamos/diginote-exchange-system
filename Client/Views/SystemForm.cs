@@ -15,9 +15,8 @@ namespace diginote_exchange_system
     {
         private readonly FormManager formManager;
 
-        public SystemForm(FormManager formManager)
+        public SystemForm()
         {
-            this.formManager = formManager;
             InitializeComponent();
         }
 
@@ -28,7 +27,7 @@ namespace diginote_exchange_system
 
         private void CreateSellOrderButton_Click(object sender, EventArgs e)
         {
-            formManager.CreateSellOrderForm.ShowDialog(this);
+            Client.FormManager.CreateSellOrderForm.ShowDialog(this);
         }
     }
 }

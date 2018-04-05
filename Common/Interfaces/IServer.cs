@@ -11,5 +11,7 @@ namespace Common.Interfaces
         public abstract Exception Logout(string token);
 
         public abstract Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value);
+
+        public abstract float GetCurrentQuote();
     }
 }
