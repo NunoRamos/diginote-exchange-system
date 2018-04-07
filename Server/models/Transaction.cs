@@ -12,13 +12,15 @@ namespace Server.models
         [Required]
         public DateTime CreatedAt { get; set; }
 
+        [Required]
+        public int SellOrderId { get; set; }
 
         [Required]
-        [ForeignKey("Id")]
-        public Order SellOrder { get; set; }
+        public int PurchaseOrderId { get; set; }
 
-        [Required]
-        [ForeignKey("Id")]
-        public Order PurchaseOrder { get; set; }
+        [ForeignKey("SellOrderId")]
+        public virtual Order SellOrder { get; set; }
+        [ForeignKey("PurchaseOrderId")]
+        public virtual Order PurchaseOrder { get; set; }
     }
 }

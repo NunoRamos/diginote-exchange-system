@@ -8,10 +8,12 @@ namespace Server
     {
         public DbSet<Diginote> Diginotes { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Transaction> Transaction { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public DiginoteSystemContext() : base(Environment.GetEnvironmentVariable("DATABASE_URL")) {
+        public DiginoteSystemContext() : base("diginotes")
+        {
+            Database.CreateIfNotExists();
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -25,6 +27,10 @@ namespace Server
                 .HasRequired(c => c.SellOrder)
                 .WithMany()
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Order>()
+                .HasRequired(o => o.Diginote)
+                .WithOptional(o => o.Order);
         }
     }
 }

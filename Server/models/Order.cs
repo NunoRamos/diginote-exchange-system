@@ -32,14 +32,15 @@ namespace Server.models
         public OrderType Type { get; set; }
 
         [Required]
-        [ForeignKey("Id")]
-        public Diginote Diginote { get; set; }
+        public int CreatedById { get; set; }
 
         [Required]
-        [ForeignKey("Id")]
-        public User CreatedBy { get; set; }
+        public int DiginoteId { get; set; }
 
-        [ForeignKey("Id")]
-        public Transaction Transaction { get; set; }
+        [ForeignKey("CreatedById")]
+        public virtual User CreatedBy { get; set; }
+        public virtual Transaction Transaction { get; set; }
+        [ForeignKey("DiginoteId")]
+        public virtual Diginote Diginote { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.models
@@ -7,18 +8,16 @@ namespace Server.models
     {
         [Key]
         public int Id { get; set; }
-
         [Required]
         public float FacialValue { get; set; }
-
-        [ForeignKey("Id")]
-        public Order Order { get; set; }
-
+        public int? OrderId { get; set; }
         [Required]
         public int OwnerId { get; set; }
 
-        [Required]
+        [ForeignKey("Id")]
+        public virtual Order Order { get; set; }
+
         [ForeignKey("OwnerId")]
-        public User Owner { get; set; }
+        public virtual User Owner { get; set; }
     }
 }

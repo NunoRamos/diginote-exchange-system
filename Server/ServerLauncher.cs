@@ -14,7 +14,6 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            DotNetEnv.Env.Load("../../.env");
             using (var db = new DiginoteSystemContext())
             {
                 Server server = new Server(db);

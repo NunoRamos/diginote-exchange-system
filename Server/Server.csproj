@@ -123,10 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiginoteSystemContext.cs" />
-    <Compile Include="Migrations\201804031038194_UniqueUserNickName.cs" />
-    <Compile Include="Migrations\201804031038194_UniqueUserNickName.Designer.cs">
-      <DependentUpon>201804031038194_UniqueUserNickName.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Diginote.cs" />
     <Compile Include="Models\Order.cs" />
@@ -143,7 +139,6 @@
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".env" />
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -156,11 +151,6 @@
       <Project>{dfc11b67-a13d-4f54-b3a4-fb0dfa2b8198}</Project>
       <Name>Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201804031038194_UniqueUserNickName.resx">
-      <DependentUpon>201804031038194_UniqueUserNickName.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

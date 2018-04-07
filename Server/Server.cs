@@ -5,6 +5,7 @@ using Server.models;
 using System.Collections.Generic;
 using Common;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 
 namespace Server
 {
@@ -23,29 +24,6 @@ namespace Server
         public Server(DiginoteSystemContext db)
         {
             diginoteDB = db;
-
-            User user = new User
-            {
-                Name = "admin",
-                Nickname = "admin",
-                Password = "admin",
-                Diginotes = new List<Diginote>(),
-                Orders = new List<Order>()
-            };
-
-            db.Users.Add(user);
-
-            for (int i = 0; i < 10; i++)
-            {
-                db.Diginotes.Add(new Diginote
-                {
-                    FacialValue = 1.0f,
-                    Owner = user,
-                    Order = null
-                });
-            }
-
-            db.SaveChangesAsync();
         }
 
         #region SessionManagement
@@ -153,7 +131,7 @@ namespace Server
                     SellOrder = sellOrder
                 };
 
-                diginoteDB.Transaction.Add(transaction);
+                diginoteDB.Transactions.Add(transaction);
             }
 
             dbTransaction.Commit();

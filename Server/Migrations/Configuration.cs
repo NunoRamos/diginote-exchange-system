@@ -2,7 +2,6 @@ namespace Server.Migrations
 {
     using global::Server.models;
     using System;
-    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -11,31 +10,29 @@ namespace Server.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(DiginoteSystemContext db)
+        protected override void Seed(DiginoteSystemContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data.
-            var user = new User
+            User user = new User
             {
-                Name = "Administrador",
+                Name = "admin",
                 Nickname = "admin",
                 Password = "admin",
-                Id = 1,
-                Diginotes = new List<Diginote>(),
-                Orders = new List<Order>()
             };
 
-            var diginote = new Diginote { Id = 0, FacialValue = 1.0f, Owner = user };
+            context.Users.AddOrUpdate(user);
 
-            db.Users.Add(user);
-            db.Diginotes.Add(diginote);
-            db.SaveChanges();
-
+            for (int i = 1; i <= 10000; i++)
+            {
+                context.Diginotes.AddOrUpdate(new Diginote
+                {
+                    FacialValue = 1.0f,
+                    Owner = user,
+                    Order = null
+                });
+            }
         }
     }
 }

@@ -7,6 +7,12 @@ namespace Server.models
 {
     class User
     {
+        public User()
+        {
+            Diginotes = new HashSet<Diginote>();
+            Orders = new HashSet<Order>();
+        }
+
         [Key]
         public int Id { get; set; }
 
