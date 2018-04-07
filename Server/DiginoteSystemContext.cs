@@ -11,9 +11,6 @@ namespace Server
         public DbSet<Transaction> Transaction { get; set; }
         public DbSet<User> Users { get; set; }
 
-        public DiginoteSystemContext() : base(Environment.GetEnvironmentVariable("DATABASE_URL")) {
-        }
-
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Transaction>()

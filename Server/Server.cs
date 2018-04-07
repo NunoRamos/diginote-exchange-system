@@ -24,7 +24,7 @@ namespace Server
         {
             diginoteDB = db;
 
-            db.Users.Add(new User
+           /* db.Users.Add(new User
             {
                 Diginotes = new List<Diginote>(),
                 Name = "admin",
@@ -33,7 +33,7 @@ namespace Server
                 Password = "admin"
             });
 
-            db.SaveChangesAsync();
+            db.SaveChangesAsync();*/
         }
 
         #region SessionManagement
