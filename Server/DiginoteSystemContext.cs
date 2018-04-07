@@ -1,5 +1,4 @@
-﻿using Server.models;
-using System;
+﻿using System;
 using System.Data.Entity;
 
 namespace Server

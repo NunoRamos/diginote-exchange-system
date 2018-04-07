@@ -1,12 +1,6 @@
-﻿using Server.models;
-using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System;
 using System.Runtime.Remoting;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Remoting.Channels.Tcp;
-using System.Runtime.Serialization.Formatters;
-using System.Collections;
+using System.Data.Entity;
 
 namespace Server
 {
@@ -15,6 +9,7 @@ namespace Server
         static void Main(string[] args)
         {
             DotNetEnv.Env.Load("../../.env");
+            Database.SetInitializer<DiginoteSystemContext>(null);
             using (var db = new DiginoteSystemContext())
             {
                 Server server = new Server(db);

@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="masterModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="masterModelStoreContainer">
+    <EntitySet Name="Diginotes" EntityType="masterModel.Store.Diginotes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Orders" EntityType="masterModel.Store.Orders" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Transactions" EntityType="masterModel.Store.Transactions" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="masterModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_dbo_Diginotes_dbo_Users_Owner_Id" Association="masterModel.Store.FK_dbo_Diginotes_dbo_Users_Owner_Id">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Diginotes" EntitySet="Diginotes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Orders_dbo_Diginotes_Id" Association="masterModel.Store.FK_dbo_Orders_dbo_Diginotes_Id">
+      <End Role="Diginotes" EntitySet="Diginotes" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Orders_dbo_Users_CreatedBy_Id" Association="masterModel.Store.FK_dbo_Orders_dbo_Users_CreatedBy_Id">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="TransactionOrder" Association="masterModel.Store.TransactionOrder">
+      <End Role="Transaction" EntitySet="Transactions" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="TransactionOrder1" Association="masterModel.Store.TransactionOrder1">
+      <End Role="Transaction" EntitySet="Transactions" />
+      <End Role="Order" EntitySet="Orders" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Diginotes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FacialValue" Type="real" Nullable="false" />
+    <Property Name="OwnerId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Quote" Type="real" Nullable="false" />
+    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="CreatedBy_Id" Type="int" Nullable="false" />
+    <Property Name="Transaction_Id" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Transactions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+    <Property Name="PurchaseOrder_Id" Type="int" Nullable="false" />
+    <Property Name="SellOrder_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Nickname" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Password" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <Association Name="FK_dbo_Diginotes_dbo_Users_Owner_Id">
+    <End Role="Users" Type="masterModel.Store.Users" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Diginotes" Type="masterModel.Store.Diginotes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Diginotes">
+        <PropertyRef Name="OwnerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Orders_dbo_Diginotes_Id">
+    <End Role="Diginotes" Type="masterModel.Store.Diginotes" Multiplicity="1" />
+    <End Role="Orders" Type="masterModel.Store.Orders" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Diginotes">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Orders_dbo_Users_CreatedBy_Id">
+    <End Role="Users" Type="masterModel.Store.Users" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Orders" Type="masterModel.Store.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="CreatedBy_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TransactionOrder">
+    <End Role="Transaction" Type="masterModel.Store.Transactions" Multiplicity="*" />
+    <End Role="Order" Type="masterModel.Store.Orders" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Transaction">
+        <PropertyRef Name="PurchaseOrder_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TransactionOrder1">
+    <End Role="Transaction" Type="masterModel.Store.Transactions" Multiplicity="*" />
+    <End Role="Order" Type="masterModel.Store.Orders" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Transaction">
+        <PropertyRef Name="SellOrder_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="masterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Diginote">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FacialValue" Type="Single" Nullable="false" />
+          <Property Name="OwnerId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Owner" Relationship="Self.FK_dbo_Diginotes_dbo_Users_Owner_Id" FromRole="Diginotes" ToRole="Users" />
+          <NavigationProperty Name="Order" Relationship="masterModel.OrderDiginote" FromRole="Diginote" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Quote" Type="Single" Nullable="false" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Nullable="false" Type="masterModel.OrderStatus" />
+          <Property Name="Type" Type="masterModel.OrderType" Nullable="false" />
+          <Property Name="CreatedById" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CreatedBy" Relationship="Self.FK_dbo_Orders_dbo_Users_CreatedBy_Id" FromRole="Orders" ToRole="Users" />
+          <NavigationProperty Name="SellTransaction" Relationship="masterModel.TransactionOrder1" FromRole="Order" ToRole="Transaction" />
+          <NavigationProperty Name="Diginote" Relationship="masterModel.OrderDiginote" FromRole="Order" ToRole="Diginote" />
+          <NavigationProperty Name="PurchaseTransaction" Relationship="masterModel.TransactionOrder" FromRole="Order" ToRole="Transaction" />
+          <Property Name="DiginoteId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="SellOrder" Relationship="masterModel.TransactionOrder1" FromRole="Transaction" ToRole="Order" />
+          <Property Name="PurchaseOrderId" Type="Int32" Nullable="false" />
+          <Property Name="SellOrderId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="masterModel.TransactionOrder" FromRole="Transaction" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nickname" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Diginotes" Relationship="Self.FK_dbo_Diginotes_dbo_Users_Owner_Id" FromRole="Users" ToRole="Diginotes" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_dbo_Orders_dbo_Users_CreatedBy_Id" FromRole="Users" ToRole="Orders" />
+        </EntityType>
+        <Association Name="FK_dbo_Diginotes_dbo_Users_Owner_Id">
+          <End Role="Users" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Diginotes" Type="Self.Diginote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Diginotes">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_Orders_dbo_Users_CreatedBy_Id">
+          <End Role="Users" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CreatedById" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="masterEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Diginotes" EntityType="Self.Diginote" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="Transactions" EntityType="Self.Transaction" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_dbo_Diginotes_dbo_Users_Owner_Id" Association="Self.FK_dbo_Diginotes_dbo_Users_Owner_Id">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Diginotes" EntitySet="Diginotes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_Orders_dbo_Users_CreatedBy_Id" Association="Self.FK_dbo_Orders_dbo_Users_CreatedBy_Id">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="PurchaseTransactionOrder" Association="masterModel.TransactionOrder">
+            <End Role="Transaction" EntitySet="Transactions" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="SellTransactionOrder" Association="masterModel.TransactionOrder1">
+            <End Role="Transaction" EntitySet="Transactions" />
+            <End Role="Order" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="OrderDiginote" Association="masterModel.OrderDiginote">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="Diginote" EntitySet="Diginotes" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="TransactionOrder">
+          <End Type="masterModel.Transaction" Role="Transaction" Multiplicity="0..1" />
+          <End Type="masterModel.Order" Role="Order" Multiplicity="1" >
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="PurchaseOrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TransactionOrder1">
+          <End Type="masterModel.Transaction" Role="Transaction" Multiplicity="0..1" />
+          <End Type="masterModel.Order" Role="Order" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transaction">
+              <PropertyRef Name="SellOrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EnumType Name="OrderStatus">
+          <Member Name="Active" />
+          <Member Name="Suspended" />
+          <Member Name="Complete" />
+        </EnumType>
+        <EnumType Name="OrderType" UnderlyingType="Byte">
+          <Member Name="Sell" />
+          <Member Name="Purchase" />
+        </EnumType>
+        <Association Name="OrderDiginote">
+          <End Type="masterModel.Order" Role="Order" Multiplicity="0..1" />
+          <End Type="masterModel.Diginote" Role="Diginote" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Diginote">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="DiginoteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="masterModelStoreContainer" CdmEntityContainer="masterEntities">
+    <EntitySetMapping Name="Diginotes">
+      <EntityTypeMapping TypeName="IsTypeOf(masterModel.Diginote)">
+        <MappingFragment StoreEntitySet="Diginotes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FacialValue" ColumnName="FacialValue" />
+          <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="IsTypeOf(masterModel.Order)">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Quote" ColumnName="Quote" />
+          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="CreatedById" ColumnName="CreatedBy_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Transactions">
+      <EntityTypeMapping TypeName="IsTypeOf(masterModel.Transaction)">
+        <MappingFragment StoreEntitySet="Transactions">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(masterModel.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="PurchaseTransactionOrder" TypeName="masterModel.TransactionOrder" StoreEntitySet="Transactions">
+      <EndProperty Name="Order">
+        <ScalarProperty Name="Id" ColumnName="PurchaseOrder_Id" />
+      </EndProperty>
+      <EndProperty Name="Transaction">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SellTransactionOrder" TypeName="masterModel.TransactionOrder1" StoreEntitySet="Transactions">
+      <EndProperty Name="Order">
+        <ScalarProperty Name="Id" ColumnName="SellOrder_Id" />
+      </EndProperty>
+      <EndProperty Name="Transaction">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Common.Interfaces;
-using Server.models;
 using System.Collections.Generic;
 using Common;
 using System.Data.Entity;
@@ -45,7 +44,7 @@ namespace Server
                 });
             }
 
-            db.SaveChangesAsync();
+            db.SaveChanges();
         }
 
         #region SessionManagement
