@@ -167,7 +167,13 @@ namespace Server
 
         public int GetDiginotes(string token)
         {
-            return loggedInUsers[token].Diginotes.Count;
+            int id = loggedInUsers[token].Id;
+
+            var query = from d in diginoteDB.Diginotes
+                        where d.OwnerId == id
+                        select d;
+
+            return query.Count();
         }
     }
 }

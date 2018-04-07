@@ -96,7 +96,7 @@
             this.DiginotesTextField.SelectionStart = 0;
             this.DiginotesTextField.Size = new System.Drawing.Size(53, 23);
             this.DiginotesTextField.TabIndex = 4;
-            this.DiginotesTextField.Text = "12";
+            this.DiginotesTextField.Text = "0";
             this.DiginotesTextField.UseSystemPasswordChar = false;
             // 
             // materialLabel1
