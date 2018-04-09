@@ -11,8 +11,10 @@ namespace Server
 {
     class Server : MarshalByRefObject, IServer
     {
+        private readonly int REGISTER_DIGINOTE_BONUS = 100;
+
         static private DiginoteSystemContext diginoteDB;
-        static private Dictionary<string, User> loggedInUsers = new Dictionary<string, User>();
+        static private Dictionary<string, int> loggedInUsers = new Dictionary<string, int>();
 
         public event QuoteUpdated QuoteUpdated;
 
@@ -24,6 +26,14 @@ namespace Server
         public Server(DiginoteSystemContext db)
         {
             diginoteDB = db;
+        }
+
+        private User GetLoggedInUser(string token)
+        {
+            int userId = loggedInUsers[token];
+            return (from u in diginoteDB.Users
+                    where u.Id == userId
+                    select u).First();
         }
 
         #region SessionManagement
@@ -45,10 +55,11 @@ namespace Server
             User userObj = query.ToArray()[0];
             string token = Utils.generateToken();
 
-            loggedInUsers.Add(token, userObj);
+            loggedInUsers.Add(token, userObj.Id);
 
             return Tuple.Create<string, Exception>(token, null);
         }
+
 
         public Exception Logout(string token)
         {
@@ -59,7 +70,7 @@ namespace Server
             }
             else
             {
-                return new Exception("Invalid User Id.");
+                return new Exception("Invalid user token.");
             }
         }
 
@@ -76,7 +87,16 @@ namespace Server
                 Orders = new List<Order>()
             };
 
-            diginoteDB.Users.Add(user);
+            user = diginoteDB.Users.Add(user);
+
+            for (int i = 0; i < REGISTER_DIGINOTE_BONUS; i++)
+            {
+                diginoteDB.Diginotes.Add(new Diginote
+                {
+                    FacialValue = 1,
+                    OwnerId = user.Id
+                });
+            }
 
             try
             {
@@ -88,7 +108,7 @@ namespace Server
             }
 
             string token = Utils.generateToken();
-            loggedInUsers.Add(token, user);
+            loggedInUsers.Add(token, user.Id);
 
             return Tuple.Create<string, Exception>(token, null);
         }
@@ -97,11 +117,11 @@ namespace Server
 
         public Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value)
         {
-            User user = loggedInUsers[token];
+            User user = GetLoggedInUser(token);
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
 
             var query = from purchaseOrders in diginoteDB.Orders
-                        where purchaseOrders.Status == OrderStatus.Active && purchaseOrders.Type == OrderType.Purchase && purchaseOrders.Quote <= value
+                        where purchaseOrders.Status == OrderStatus.Active && purchaseOrders.Type == OrderType.Purchase && purchaseOrders.Quote >= value
                         orderby purchaseOrders.CreatedAt ascending
                         select purchaseOrders;
 
@@ -128,7 +148,8 @@ namespace Server
                 {
                     CreatedAt = DateTime.Now,
                     PurchaseOrder = order,
-                    SellOrder = sellOrder
+                    SellOrder = sellOrder,
+                    Quote = value
                 };
 
                 diginoteDB.Transactions.Add(transaction);
@@ -146,7 +167,7 @@ namespace Server
 
         public Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(string token, int quantity, float value)
         {
-            User user = loggedInUsers[token];
+            User user = GetLoggedInUser(token);
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
 
             var query = from sellOrders in diginoteDB.Orders
@@ -172,13 +193,14 @@ namespace Server
                 user.Diginotes.Add(ownerOfOrder.Diginotes.Last());
                 ownerOfOrder.Diginotes.Remove(ownerOfOrder.Diginotes.Last());
                 diginoteDB.Orders.Add(purchaseOrder);
-                
+
 
                 Transaction transaction = new Transaction
                 {
                     CreatedAt = DateTime.Now,
                     PurchaseOrder = purchaseOrder,
-                    SellOrder = order
+                    SellOrder = order,
+                    Quote = value
                 };
 
                 diginoteDB.Transactions.Add(transaction);
@@ -194,7 +216,7 @@ namespace Server
             return Tuple.Create<Exception, OrderNotSatisfiedException>(null, null);
         }
 
-        public float? GetCurrentQuote()
+        public float GetCurrentQuote()
         {
             var query = from lastOrder in diginoteDB.Orders
                         orderby lastOrder.CreatedAt descending
@@ -206,7 +228,7 @@ namespace Server
             }
             catch (InvalidOperationException)
             {
-                return null;
+                return 1;
             }
         }
 
@@ -217,7 +239,7 @@ namespace Server
 
         public int GetDiginotes(string token)
         {
-            int id = loggedInUsers[token].Id;
+            int id = loggedInUsers[token];
 
             var query = from d in diginoteDB.Diginotes
                         where d.OwnerId == id
@@ -225,5 +247,58 @@ namespace Server
 
             return query.Count();
         }
+
+        public Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value)
+        {
+            var dbTransaction = diginoteDB.Database.BeginTransaction();
+            var OwnerId = loggedInUsers[token];
+
+            var diginotes = (from d in diginoteDB.Diginotes
+                             where d.OwnerId == OwnerId
+                             select d).Take(diginotesLeft).ToArray();
+
+            for (int i = 0; i < diginotesLeft; i++)
+            {
+                diginoteDB.Orders.Add(new Order
+                {
+                    CreatedAt = DateTime.Now,
+                    CreatedById = loggedInUsers[token],
+                    DiginoteId = diginotes[i].Id,
+                    Quote = value,
+                    Status = OrderStatus.Active,
+                    Type = OrderType.Purchase,
+                });
+            }
+
+            dbTransaction.Commit();
+            return null;
+        }
+        public Exception ConfirmSellOrder(string token, int diginotesLeft, float value)
+        {
+            var dbTransaction = diginoteDB.Database.BeginTransaction();
+            var OwnerId = loggedInUsers[token];
+
+            var diginotes = (from d in diginoteDB.Diginotes
+                             where d.OwnerId == OwnerId
+                             select d).Take(diginotesLeft).ToArray();
+
+            for (int i = 0; i < diginotesLeft; i++)
+            {
+                diginoteDB.Orders.Add(new Order
+                {
+                    CreatedAt = DateTime.Now,
+                    CreatedById = loggedInUsers[token],
+                    DiginoteId = diginotes[i].Id,
+                    Quote = value,
+                    Status = OrderStatus.Active,
+                    Type = OrderType.Sell,
+                });
+            }
+
+            dbTransaction.Commit();
+
+            return null;
+        }
+
     }
 }

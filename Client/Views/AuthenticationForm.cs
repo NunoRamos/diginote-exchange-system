@@ -23,7 +23,7 @@ namespace diginote_exchange_system
             String nickname = nicknameTextField.Text;
             String password = passwordTextField.Text;
 
-            Tuple<string, Exception> result = Client.StateManager.Server.Login(nickname, password);
+            Tuple<string, Exception> result = Client.State.Server.Login(nickname, password);
             string token = result.Item1;
             Exception exception = result.Item2;
 
@@ -34,16 +34,21 @@ namespace diginote_exchange_system
             }
             else
             {
-                Client.StateManager.Token = token;
-                Client.FormManager.SystemForm.Show();
+                Client.State.Token = token;
+                Client.Forms.SystemForm.Show();
                 Hide();
             }
         }
 
         private void signUpButton_Click(object sender, EventArgs e)
         {
-            Client.FormManager.RegistrationForm.Show();
+            Client.Forms.RegistrationForm.Show();
             Hide();
+        }
+
+        private void AuthenticationForm_Load(object sender, EventArgs e)
+        {
+            nicknameTextField.Focus();
         }
     }
 }

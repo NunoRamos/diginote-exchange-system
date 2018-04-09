@@ -19,9 +19,12 @@ namespace Common.Interfaces
 
         Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(string token, int quantity, float value);
 
-        float? GetCurrentQuote();
+        float GetCurrentQuote();
 
         int GetDiginotes(string token);
+        Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value);
+
+        Exception ConfirmSellOrder(string token, int diginotesLeft, float value);
     }
     
     [Serializable]

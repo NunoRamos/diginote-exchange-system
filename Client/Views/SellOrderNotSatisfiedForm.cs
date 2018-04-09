@@ -1,4 +1,6 @@
 ﻿using MaterialSkin.Controls;
+using System;
+using System.Windows.Forms;
 
 namespace diginote_exchange_system.Views
 {
@@ -7,7 +9,8 @@ namespace diginote_exchange_system.Views
         public SellOrderNotSatisfiedForm()
         {
             InitializeComponent();
-            Client.StateManager.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
+            CurrentQuoteTextField.Text = Client.State.CurrentQuote.ToString();
+            Client.State.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
         }
 
         public void UpdateDiginotesLeft(int diginotesLeft)
@@ -17,7 +20,7 @@ namespace diginote_exchange_system.Views
 
         private void OnQuoteUpdated(float? newQuote)
         {
-            CurrentQuoteTextField.Text = newQuote == null ? "N/A" : newQuote.ToString();
+            CurrentQuoteTextField.Text = newQuote.ToString();
         }
 
         private void BackButton_Click(object sender, System.EventArgs e)
@@ -28,7 +31,17 @@ namespace diginote_exchange_system.Views
         private void ConfirmButton_Click(object sender, System.EventArgs e)
         {
             float value = float.Parse(ValueTextField.Text);
+            int diginotesLeft = int.Parse(DiginotesLeftTextField.Text);
+            Exception exception = Client.State.Server.ConfirmSellOrder(Client.State.Token, diginotesLeft, value);
 
+            if (exception != null)
+            {
+                MessageBox.Show(exception.ToString());
+            }
+            else
+            {
+                MessageBox.Show("Sell order successfully placed.");
+            }
         }
     }
 }

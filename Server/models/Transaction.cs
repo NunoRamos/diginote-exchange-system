@@ -13,6 +13,9 @@ namespace Server.models
         public DateTime CreatedAt { get; set; }
 
         [Required]
+        public float Quote { get; set; }
+
+        [Required]
         public int SellOrderId { get; set; }
 
         [Required]

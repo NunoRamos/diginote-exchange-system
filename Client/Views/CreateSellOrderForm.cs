@@ -19,14 +19,14 @@ namespace diginote_exchange_system.Views
 
         private void ConfirmButton_Click(object sender, EventArgs e)
         {
-            Tuple<Exception, OrderNotSatisfiedException> result = Client.StateManager.CreateSellOrder(int.Parse(QuantityTextField.Text), float.Parse(ValueTextField.Text));
+            Tuple<Exception, OrderNotSatisfiedException> result = Client.State.CreateSellOrder(int.Parse(QuantityTextField.Text), float.Parse(ValueTextField.Text));
 
             MessageBox.Show(result.ToString());
 
             if (result.Item2 != null)
             {
-                Client.FormManager.SellOrderNotSatisfiedForm.UpdateDiginotesLeft(result.Item2.Quantity);
-                Client.FormManager.SellOrderNotSatisfiedForm.ShowDialog(this);
+                Client.Forms.SellOrderNotSatisfiedForm.UpdateDiginotesLeft(result.Item2.Quantity);
+                Client.Forms.SellOrderNotSatisfiedForm.ShowDialog(this);
             }
         }
     }

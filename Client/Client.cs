@@ -12,8 +12,8 @@ namespace diginote_exchange_system
 {
     public class Client
     {
-        public static FormManager FormManager { get; private set; }
-        public static Client StateManager { get; private set; }
+        public static FormManager Forms { get; private set; }
+        public static Client State { get; private set; }
 
         public float? CurrentQuote { get; set; }
 
@@ -31,6 +31,11 @@ namespace diginote_exchange_system
             OnQuoteUpdated(Server.GetCurrentQuote());
         }
 
+        internal void SignOut()
+        {
+            Server.Logout(Token);
+        }
+
         private void OnQuoteUpdated(float? newQuote)
         {
             CurrentQuote = newQuote;
@@ -41,9 +46,9 @@ namespace diginote_exchange_system
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            StateManager = new Client();
-            FormManager = new FormManager();
-            Application.Run(FormManager.AuthenticationForm);
+            State = new Client();
+            Forms = new FormManager();
+            Application.Run(Forms.AuthenticationForm);
         }
 
 

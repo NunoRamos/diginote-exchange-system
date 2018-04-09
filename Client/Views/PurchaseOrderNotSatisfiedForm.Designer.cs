@@ -172,7 +172,6 @@
             this.Controls.Add(this.materialLabel1);
             this.Name = "PurchaseOrderNotSatisfiedForm";
             this.Text = "PurchaseOrderNotSatisfiedForm";
-            this.Load += new System.EventHandler(this.PurchaseOrderNotSatisfiedForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

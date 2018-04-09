@@ -20,10 +20,10 @@ namespace Server.models
         public int Id { get; set; }
 
         [Required]
-        public float Quote { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         [Required]
-        public DateTime CreatedAt { get; set; }
+        public float Quote { get; set; }
 
         [Required]
         public OrderStatus Status { get; set; }

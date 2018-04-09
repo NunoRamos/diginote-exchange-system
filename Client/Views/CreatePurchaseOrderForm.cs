@@ -21,14 +21,14 @@ namespace diginote_exchange_system.Views
 
         private void ConfirmButton_Click(object sender, EventArgs e)
         {
-            Tuple<Exception, OrderNotSatisfiedException> result = Client.StateManager.CreatePurchaseOrder(int.Parse(QuantityTextField.Text), float.Parse(ValueTextField.Text));
+            Tuple<Exception, OrderNotSatisfiedException> result = Client.State.CreatePurchaseOrder(int.Parse(QuantityTextField.Text), float.Parse(ValueTextField.Text));
 
             MessageBox.Show(result.ToString());
 
            if (result.Item2 != null)
             {
-                Client.FormManager.PurchaseOrderNotSatisfiedForm.UpdateDiginotesLeft(result.Item2.Quantity);
-                Client.FormManager.PurchaseOrderNotSatisfiedForm.ShowDialog(this);
+                Client.Forms.PurchaseOrderNotSatisfiedForm.UpdateDiginotesLeft(result.Item2.Quantity);
+                Client.Forms.PurchaseOrderNotSatisfiedForm.ShowDialog(this);
             }
                 
         }

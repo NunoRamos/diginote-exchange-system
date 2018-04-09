@@ -153,6 +153,7 @@
             this.Controls.Add(this.signInButton);
             this.Name = "AuthenticationForm";
             this.Text = "Diginote Exchange System";
+            this.Load += new System.EventHandler(this.AuthenticationForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

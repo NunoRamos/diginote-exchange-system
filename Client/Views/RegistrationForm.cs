@@ -38,7 +38,7 @@ namespace diginote_exchange_system.Views
             // Create account function call
 
             //TODO: Return error instead of boolean to show the user why something failed
-            Tuple<string, Exception> result = Client.StateManager.Server.Register(name, nickname, password);
+            Tuple<string, Exception> result = Client.State.Server.Register(name, nickname, password);
             string token = result.Item1;
             Exception exception = result.Item2;
 
@@ -48,16 +48,16 @@ namespace diginote_exchange_system.Views
                 return;
             } else
             {
-                Client.StateManager.Token = token;
+                Client.State.Token = token;
             }
 
-            Client.FormManager.SystemForm.Show();
+            Client.Forms.SystemForm.Show();
             Hide();
         }
 
         private void backButton_Click(object sender, EventArgs e)
         {
-            Client.FormManager.AuthenticationForm.Show();
+            Client.Forms.AuthenticationForm.Show();
             Hide();
         }
     }
