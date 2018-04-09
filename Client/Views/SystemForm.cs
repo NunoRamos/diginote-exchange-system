@@ -39,5 +39,10 @@ namespace diginote_exchange_system
         {
             DiginotesTextField.Text = Client.StateManager.Server.GetDiginotes(Client.StateManager.Token).ToString();
         }
+
+        private void CreatePurchaseOrderButton_Click_1(object sender, EventArgs e)
+        {
+            Client.FormManager.CreatePurchaseOrderForm.ShowDialog(this);
+        }
     }
 }

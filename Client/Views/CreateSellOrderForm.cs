@@ -12,8 +12,6 @@ namespace diginote_exchange_system.Views
             InitializeComponent();
         }
 
-        public FormManager FormManager { get; }
-
         private void BackButton_Click(object sender, EventArgs e)
         {
             Close();
@@ -26,7 +24,7 @@ namespace diginote_exchange_system.Views
             MessageBox.Show(result.ToString());
 
             if (result.Item2 != null)
-                FormManager.SellOrderNotSatisfiedForm.ShowDialog(this);
+                Client.FormManager.SellOrderNotSatisfiedForm.ShowDialog(this);
         }
     }
 }

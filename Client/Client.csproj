@@ -67,11 +67,23 @@
       <DependentUpon>AuthenticationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Client.cs" />
+    <Compile Include="Views\CreatePurchaseOrderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\CreatePurchaseOrderForm.Designer.cs">
+      <DependentUpon>CreatePurchaseOrderForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreateSellOrderForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Views\CreateSellOrderForm.Designer.cs">
       <DependentUpon>CreateSellOrderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PurchaseOrderNotSatisfiedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\PurchaseOrderNotSatisfiedForm.Designer.cs">
+      <DependentUpon>PurchaseOrderNotSatisfiedForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\RegistrationForm.cs">
       <SubType>Form</SubType>
@@ -104,8 +116,14 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Views\CreatePurchaseOrderForm.resx">
+      <DependentUpon>CreatePurchaseOrderForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\CreateSellOrderForm.resx">
       <DependentUpon>CreateSellOrderForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\PurchaseOrderNotSatisfiedForm.resx">
+      <DependentUpon>PurchaseOrderNotSatisfiedForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\RegistrationForm.resx">
       <DependentUpon>RegistrationForm.cs</DependentUpon>

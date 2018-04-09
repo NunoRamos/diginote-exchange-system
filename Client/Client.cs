@@ -61,5 +61,10 @@ namespace diginote_exchange_system
         {
             return Server.CreateSellOrder(Token, quantity, value);
         }
+
+        internal Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(int quantity, float value)
+        {
+            return Server.CreatePurchaseOrder(Token, quantity, value);
+        }
     }
 }

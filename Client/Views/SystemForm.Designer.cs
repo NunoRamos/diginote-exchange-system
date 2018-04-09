@@ -34,6 +34,7 @@
             this.DiginotesTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.CreateSellOrderButton = new MaterialSkin.Controls.MaterialFlatButton();
+            this.CreatePurchaseOrderButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.SuspendLayout();
             // 
             // signOutButton
@@ -128,11 +129,28 @@
             this.CreateSellOrderButton.UseVisualStyleBackColor = true;
             this.CreateSellOrderButton.Click += new System.EventHandler(this.CreateSellOrderButton_Click);
             // 
+            // CreatePurchaseOrderButton
+            // 
+            this.CreatePurchaseOrderButton.AutoSize = true;
+            this.CreatePurchaseOrderButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.CreatePurchaseOrderButton.Depth = 0;
+            this.CreatePurchaseOrderButton.Location = new System.Drawing.Point(202, 399);
+            this.CreatePurchaseOrderButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.CreatePurchaseOrderButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.CreatePurchaseOrderButton.Name = "CreatePurchaseOrderButton";
+            this.CreatePurchaseOrderButton.Primary = false;
+            this.CreatePurchaseOrderButton.Size = new System.Drawing.Size(183, 36);
+            this.CreatePurchaseOrderButton.TabIndex = 6;
+            this.CreatePurchaseOrderButton.Text = "Create Purchase Order";
+            this.CreatePurchaseOrderButton.UseVisualStyleBackColor = true;
+            this.CreatePurchaseOrderButton.Click += new System.EventHandler(this.CreatePurchaseOrderButton_Click_1);
+            // 
             // SystemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.CreatePurchaseOrderButton);
             this.Controls.Add(this.CreateSellOrderButton);
             this.Controls.Add(this.DiginotesTextField);
             this.Controls.Add(this.materialLabel1);
@@ -155,5 +173,6 @@
         private MaterialSkin.Controls.MaterialSingleLineTextField DiginotesTextField;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialFlatButton CreateSellOrderButton;
+        private MaterialSkin.Controls.MaterialFlatButton CreatePurchaseOrderButton;
     }
 }

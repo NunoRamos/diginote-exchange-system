@@ -144,6 +144,56 @@ namespace Server
             return Tuple.Create<Exception, OrderNotSatisfiedException>(null, null);
         }
 
+        public Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(string token, int quantity, float value)
+        {
+            User user = loggedInUsers[token];
+            DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
+
+            var query = from sellOrders in diginoteDB.Orders
+                        where sellOrders.Status == OrderStatus.Active && sellOrders.Type == OrderType.Sell && sellOrders.Quote <= value
+                        orderby sellOrders.CreatedAt ascending
+                        select sellOrders;
+
+            int numPurchaseOrdersCreated = 0;
+            foreach (Order order in query)
+            {
+                User ownerOfOrder = order.CreatedBy;
+
+                Order purchaseOrder = new Order
+                {
+                    CreatedAt = DateTime.Now,
+                    CreatedBy = user,
+                    Status = OrderStatus.Complete,
+                    Type = OrderType.Purchase,
+                    Quote = value
+                };
+
+                numPurchaseOrdersCreated++;
+                user.Diginotes.Add(ownerOfOrder.Diginotes.Last());
+                ownerOfOrder.Diginotes.Remove(ownerOfOrder.Diginotes.Last());
+                diginoteDB.Orders.Add(purchaseOrder);
+                
+
+                Transaction transaction = new Transaction
+                {
+                    CreatedAt = DateTime.Now,
+                    PurchaseOrder = purchaseOrder,
+                    SellOrder = order
+                };
+
+                diginoteDB.Transactions.Add(transaction);
+            }
+
+            dbTransaction.Commit();
+
+            if (numPurchaseOrdersCreated < quantity)
+            {
+                return Tuple.Create<Exception, OrderNotSatisfiedException>(null, new OrderNotSatisfiedException("Order not satisfied", quantity - numPurchaseOrdersCreated, value));
+            }
+
+            return Tuple.Create<Exception, OrderNotSatisfiedException>(null, null);
+        }
+
         public float? GetCurrentQuote()
         {
             var query = from lastOrder in diginoteDB.Orders
