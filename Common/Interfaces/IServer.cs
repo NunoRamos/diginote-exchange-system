@@ -22,9 +22,9 @@ namespace Common.Interfaces
         float GetCurrentQuote();
 
         int GetDiginotes(string token);
-        Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value);
+        Exception ConfirmPurchaseOrder(string token, int diginotesLeft);
 
-        Exception ConfirmSellOrder(string token, int diginotesLeft, float value);
+        Exception ConfirmSellOrder(string token, int diginotesLeft);
     }
     
     [Serializable]

@@ -124,10 +124,6 @@
   <ItemGroup>
     <Compile Include="DiginoteSystemContext.cs" />
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Diginote.cs" />
-    <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\Transaction.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

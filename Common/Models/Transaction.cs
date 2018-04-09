@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Server.models
+namespace Common.Models
 {
-    class Transaction
+    public class Transaction
     {
         [Key]
         public int Id { get; set; }

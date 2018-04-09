@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Server.models
+namespace Common.Models
 {
     public enum OrderStatus
     {
@@ -14,7 +14,7 @@ namespace Server.models
         Sell, Purchase
     }
 
-    class Order
+    public class Order
     {
         [Key]
         public int Id { get; set; }

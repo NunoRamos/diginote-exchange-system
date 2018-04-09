@@ -37,9 +37,8 @@ namespace diginote_exchange_system.Views
 
         private void ConfirmButton_Click(object sender, EventArgs e)
         {
-            float value = float.Parse(ValueTextField.Text);
             int diginotesLeft = int.Parse(DiginotesLeftTextField.Text);
-            Exception exception = Client.State.Server.ConfirmPurchaseOrder(Client.State.Token, diginotesLeft, value);
+            Exception exception = Client.State.Server.ConfirmPurchaseOrder(Client.State.Token, diginotesLeft);
 
             if (exception != null)
             {
@@ -48,6 +47,7 @@ namespace diginote_exchange_system.Views
             else
             {
                 MessageBox.Show("Purchase Order successfully placed.");
+                Close();
             }
         }
     }

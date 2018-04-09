@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Common.Interfaces;
-using Server.models;
 using System.Collections.Generic;
 using Common;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using Common.Models;
 
 namespace Server
 {
@@ -115,8 +115,9 @@ namespace Server
 
         #endregion
 
-        public Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value)
+        public Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity)
         {
+            float value = GetCurrentQuote();
             User user = GetLoggedInUser(token);
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
 
@@ -165,8 +166,9 @@ namespace Server
             return Tuple.Create<Exception, OrderNotSatisfiedException>(null, null);
         }
 
-        public Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(string token, int quantity, float value)
+        public Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(string token, int quantity)
         {
+            float value = GetCurrentQuote();
             User user = GetLoggedInUser(token);
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
 

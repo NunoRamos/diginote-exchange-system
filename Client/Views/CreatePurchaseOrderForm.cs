@@ -32,5 +32,10 @@ namespace diginote_exchange_system.Views
             }
                 
         }
+
+        private void BackButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
