@@ -24,7 +24,10 @@ namespace diginote_exchange_system.Views
             MessageBox.Show(result.ToString());
 
             if (result.Item2 != null)
+            {
+                Client.FormManager.SellOrderNotSatisfiedForm.UpdateDiginotesLeft(result.Item2.Quantity);
                 Client.FormManager.SellOrderNotSatisfiedForm.ShowDialog(this);
+            }
         }
     }
 }

@@ -10,6 +10,11 @@ namespace diginote_exchange_system.Views
             Client.StateManager.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
         }
 
+        public void UpdateDiginotesLeft(int diginotesLeft)
+        {
+            DiginotesLeftTextField.Text = "" + diginotesLeft;
+        }
+
         private void OnQuoteUpdated(float? newQuote)
         {
             CurrentQuoteTextField.Text = newQuote == null ? "N/A" : newQuote.ToString();
