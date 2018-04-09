@@ -52,6 +52,7 @@
             this.BackButton.TabIndex = 13;
             this.BackButton.Text = "Back";
             this.BackButton.UseVisualStyleBackColor = true;
+            this.BackButton.Click += new System.EventHandler(this.BackButton_Click);
             // 
             // ConfirmButton
             // 
@@ -67,6 +68,7 @@
             this.ConfirmButton.TabIndex = 12;
             this.ConfirmButton.Text = "Confirm";
             this.ConfirmButton.UseVisualStyleBackColor = true;
+            this.ConfirmButton.Click += new System.EventHandler(this.ConfirmButton_Click);
             // 
             // DiginotesLeftTextField
             // 
@@ -170,6 +172,7 @@
             this.Controls.Add(this.materialLabel1);
             this.Name = "PurchaseOrderNotSatisfiedForm";
             this.Text = "PurchaseOrderNotSatisfiedForm";
+            this.Load += new System.EventHandler(this.PurchaseOrderNotSatisfiedForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

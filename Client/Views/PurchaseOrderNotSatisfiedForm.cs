@@ -17,5 +17,25 @@ namespace diginote_exchange_system.Views
         {
             InitializeComponent();
         }
+
+        public void UpdateDiginotesLeft(int diginotesLeft)
+        {
+            DiginotesLeftTextField.Text = "" + diginotesLeft;
+        }
+
+        private void PurchaseOrderNotSatisfiedForm_Load(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void BackButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void ConfirmButton_Click(object sender, EventArgs e)
+        {
+            // Do some stuff
+        }
     }
 }
