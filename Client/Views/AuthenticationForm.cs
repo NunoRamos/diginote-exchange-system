@@ -23,9 +23,7 @@ namespace diginote_exchange_system
             String nickname = nicknameTextField.Text;
             String password = passwordTextField.Text;
 
-            Tuple<string, Exception> result = Client.State.Server.Login(nickname, password);
-            string token = result.Item1;
-            Exception exception = result.Item2;
+            Exception exception = Client.State.Login(nickname, password);
 
             if (exception != null)
             {
@@ -34,7 +32,6 @@ namespace diginote_exchange_system
             }
             else
             {
-                Client.State.Token = token;
                 Client.Forms.SystemForm.Show();
                 Hide();
             }

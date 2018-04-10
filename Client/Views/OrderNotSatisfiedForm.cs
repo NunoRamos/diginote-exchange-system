@@ -22,13 +22,14 @@ namespace diginote_exchange_system.Views
             InitializeComponent();
 
             CurrentQuoteTextField.Text = Client.State.CurrentQuote.ToString();
+            ValueTextField.Text = Client.State.CurrentQuote.ToString();
             Text = orderType == OrderType.Purchase ? "Purchase" : "Sell";
             Text += " Order Not Satisfied";
             Client.State.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
             DiginotesLeftTextField.Text = diginotesLeft.ToString();
         }
 
-        private void OnQuoteUpdated(float? newQuote)
+        private void OnQuoteUpdated(float newQuote)
         {
             CurrentQuoteTextField.Text = newQuote.ToString();
         }
@@ -41,10 +42,12 @@ namespace diginote_exchange_system.Views
         private void ConfirmButton_Click(object sender, EventArgs e)
         {
             int diginotesLeft = int.Parse(DiginotesLeftTextField.Text);
+            float value = float.Parse(ValueTextField.Text);
+
             Exception exception =
                 orderType == OrderType.Purchase
-                ? Client.State.Server.ConfirmPurchaseOrder(Client.State.Token, diginotesLeft, float.Parse(ValueTextField.Text))
-                : Client.State.Server.ConfirmSellOrder(Client.State.Token, diginotesLeft, float.Parse(ValueTextField.Text));
+                ? Client.State.ConfirmPurchaseOrder(diginotesLeft, value)
+                : Client.State.ConfirmSellOrder(diginotesLeft, value);
 
             if (exception != null)
             {

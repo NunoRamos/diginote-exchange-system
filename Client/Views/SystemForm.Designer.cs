@@ -37,10 +37,12 @@
             this.SellRadioButton = new System.Windows.Forms.RadioButton();
             this.PurchaseRadioButton = new System.Windows.Forms.RadioButton();
             this.CreateOrderGroupBox = new System.Windows.Forms.GroupBox();
-            this.DiginoteNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
             this.PlaceOrderButton = new MaterialSkin.Controls.MaterialFlatButton();
+            this.label1 = new System.Windows.Forms.Label();
+            this.DiginoteNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.PurchaseOrdersGridView = new System.Windows.Forms.DataGridView();
+            this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
+            this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             ((System.ComponentModel.ISupportInitialize)(this.SellOrdersGridView)).BeginInit();
             this.CreateOrderGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DiginoteNumberNumericUpDown)).BeginInit();
@@ -126,9 +128,9 @@
             // SellOrdersGridView
             // 
             this.SellOrdersGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.SellOrdersGridView.Location = new System.Drawing.Point(16, 256);
+            this.SellOrdersGridView.Location = new System.Drawing.Point(12, 217);
             this.SellOrdersGridView.Name = "SellOrdersGridView";
-            this.SellOrdersGridView.Size = new System.Drawing.Size(240, 150);
+            this.SellOrdersGridView.Size = new System.Drawing.Size(384, 298);
             this.SellOrdersGridView.TabIndex = 7;
             // 
             // SellRadioButton
@@ -167,27 +169,6 @@
             this.CreateOrderGroupBox.TabStop = false;
             this.CreateOrderGroupBox.Text = "Create Order";
             // 
-            // DiginoteNumberNumericUpDown
-            // 
-            this.DiginoteNumberNumericUpDown.Location = new System.Drawing.Point(179, 29);
-            this.DiginoteNumberNumericUpDown.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.DiginoteNumberNumericUpDown.Name = "DiginoteNumberNumericUpDown";
-            this.DiginoteNumberNumericUpDown.Size = new System.Drawing.Size(57, 20);
-            this.DiginoteNumberNumericUpDown.TabIndex = 10;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(87, 31);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 13);
-            this.label1.TabIndex = 11;
-            this.label1.Text = "No. of Diginotes:";
-            // 
             // PlaceOrderButton
             // 
             this.PlaceOrderButton.AutoSize = true;
@@ -204,19 +185,78 @@
             this.PlaceOrderButton.UseVisualStyleBackColor = true;
             this.PlaceOrderButton.Click += new System.EventHandler(this.PlaceOrderButton_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(87, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(86, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "No. of Diginotes:";
+            // 
+            // DiginoteNumberNumericUpDown
+            // 
+            this.DiginoteNumberNumericUpDown.Location = new System.Drawing.Point(179, 29);
+            this.DiginoteNumberNumericUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.DiginoteNumberNumericUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.DiginoteNumberNumericUpDown.Name = "DiginoteNumberNumericUpDown";
+            this.DiginoteNumberNumericUpDown.Size = new System.Drawing.Size(57, 20);
+            this.DiginoteNumberNumericUpDown.TabIndex = 10;
+            this.DiginoteNumberNumericUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // PurchaseOrdersGridView
             // 
             this.PurchaseOrdersGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.PurchaseOrdersGridView.Location = new System.Drawing.Point(292, 256);
+            this.PurchaseOrdersGridView.Location = new System.Drawing.Point(414, 217);
             this.PurchaseOrdersGridView.Name = "PurchaseOrdersGridView";
-            this.PurchaseOrdersGridView.Size = new System.Drawing.Size(240, 150);
+            this.PurchaseOrdersGridView.Size = new System.Drawing.Size(374, 298);
             this.PurchaseOrdersGridView.TabIndex = 11;
+            // 
+            // materialLabel2
+            // 
+            this.materialLabel2.AutoSize = true;
+            this.materialLabel2.Depth = 0;
+            this.materialLabel2.Font = new System.Drawing.Font("Roboto", 11F);
+            this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel2.Location = new System.Drawing.Point(132, 195);
+            this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel2.Name = "materialLabel2";
+            this.materialLabel2.Size = new System.Drawing.Size(117, 19);
+            this.materialLabel2.TabIndex = 12;
+            this.materialLabel2.Text = "Your Sell Orders";
+            // 
+            // materialLabel3
+            // 
+            this.materialLabel3.AutoSize = true;
+            this.materialLabel3.Depth = 0;
+            this.materialLabel3.Font = new System.Drawing.Font("Roboto", 11F);
+            this.materialLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel3.Location = new System.Drawing.Point(525, 195);
+            this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel3.Name = "materialLabel3";
+            this.materialLabel3.Size = new System.Drawing.Size(154, 19);
+            this.materialLabel3.TabIndex = 13;
+            this.materialLabel3.Text = "Your Purchase Orders";
             // 
             // SystemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 527);
+            this.Controls.Add(this.materialLabel3);
+            this.Controls.Add(this.materialLabel2);
             this.Controls.Add(this.PurchaseOrdersGridView);
             this.Controls.Add(this.CreateOrderGroupBox);
             this.Controls.Add(this.SellOrdersGridView);
@@ -227,7 +267,6 @@
             this.Controls.Add(this.signOutButton);
             this.Name = "SystemForm";
             this.Text = "Diginote Exchange System";
-            this.Load += new System.EventHandler(this.SystemForm_Load);
             this.Shown += new System.EventHandler(this.SystemForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.SellOrdersGridView)).EndInit();
             this.CreateOrderGroupBox.ResumeLayout(false);
@@ -254,5 +293,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown DiginoteNumberNumericUpDown;
         private System.Windows.Forms.DataGridView PurchaseOrdersGridView;
+        private MaterialSkin.Controls.MaterialLabel materialLabel2;
+        private MaterialSkin.Controls.MaterialLabel materialLabel3;
     }
 }

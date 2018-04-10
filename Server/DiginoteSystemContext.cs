@@ -29,7 +29,12 @@ namespace Server
 
             modelBuilder.Entity<Order>()
                 .HasRequired(o => o.Diginote)
-                .WithOptional(o => o.Order);
+                .WithRequiredDependent()
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Order>()
+                .HasRequired(o => o.Diginote)
+                .WithMany(d => d.Orders);
         }
     }
 }

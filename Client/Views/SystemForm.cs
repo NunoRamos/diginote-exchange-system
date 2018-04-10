@@ -33,7 +33,7 @@ namespace diginote_exchange_system
         }
 
 
-        private void OnQuoteUpdated(float? newQuote)
+        private void OnQuoteUpdated(float newQuote)
         {
             CurrentQuoteTextField.Text = newQuote.ToString();
         }
@@ -43,17 +43,16 @@ namespace diginote_exchange_system
             Client.State.SignOut();
             Client.Forms.SystemForm.Hide();
             Client.Forms.AuthenticationForm.Show();
+            SellOrdersGridView.DataSource = new Order[] { }; 
+            PurchaseOrdersGridView.DataSource = new Order[] { };
         }
 
         private void SystemForm_Shown(object sender, EventArgs e)
         {
-            DiginotesTextField.Text = Client.State.Server.GetAvailableDiginotes(Client.State.Token).ToString();
-            OnQuoteUpdated(Client.State.Server.GetCurrentQuote());
-        }
-
-        private void SystemForm_Load(object sender, EventArgs e)
-        {
-            SellOrdersGridView.DataSource = Client.State.GetUserSellOrders();
+            Client.State.GetAvailableDiginotes();
+            Client.State.GetUserSellOrders();
+            Client.State.GetUserPurchaseOrders();
+            OnQuoteUpdated(Client.State.GetCurrentQuote());
         }
 
         private void PlaceOrderButton_Click(object sender, EventArgs e)
@@ -74,6 +73,7 @@ namespace diginote_exchange_system
                 form.ShowDialog(this);
             }
 
+            Client.State.GetAvailableDiginotes();
             Client.State.GetUserPurchaseOrders();
             Client.State.GetUserSellOrders();
         }

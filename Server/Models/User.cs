@@ -24,6 +24,7 @@ namespace Server.Models
         [Index(IsUnique = true)]
         public String Nickname { get; set; }
 
+        [Required]
         public String Password { get; set; }
 
         public virtual ICollection<Diginote> Diginotes { get; set; }

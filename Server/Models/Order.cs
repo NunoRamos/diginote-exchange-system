@@ -25,14 +25,12 @@ namespace Server.Models
         [Required]
         public int CreatedById { get; set; }
 
-        [Required]
-        public int DiginoteId { get; set; }
-
         [ForeignKey("CreatedById")]
         public virtual User CreatedBy { get; set; }
-        public virtual Transaction Transaction { get; set; }
-        [ForeignKey("DiginoteId")]
+
         public virtual Diginote Diginote { get; set; }
+
+        public virtual Transaction Transaction { get; set; }
 
         public Common.Serializable.Order Serialize()
         {
@@ -40,7 +38,7 @@ namespace Server.Models
             {
                 CreatedAt = CreatedAt,
                 CreatedById = CreatedById,
-                DiginoteId = DiginoteId,
+                DiginoteId = Diginote.Id,
                 Id = Id,
                 Quote = Quote,
                 Status = Status,

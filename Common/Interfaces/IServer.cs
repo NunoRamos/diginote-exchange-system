@@ -3,7 +3,7 @@
 namespace Common.Interfaces
 {
     [Serializable]
-    public delegate void QuoteUpdated(float? newQuote);
+    public delegate void QuoteUpdated(float newQuote);
 
     public interface IServer
     {
@@ -33,7 +33,7 @@ namespace Common.Interfaces
     {
         public event QuoteUpdated QuoteUpdated;
 
-        public void FireQuoteUpdated(float? newQuote)
+        public void FireQuoteUpdated(float newQuote)
         {
             QuoteUpdated(newQuote);
         }

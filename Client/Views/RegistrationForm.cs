@@ -35,21 +35,18 @@ namespace diginote_exchange_system.Views
                 return;
             }
 
-            // Create account function call
-
-            //TODO: Return error instead of boolean to show the user why something failed
-            Tuple<string, Exception> result = Client.State.Server.Register(name, nickname, password);
-            string token = result.Item1;
-            Exception exception = result.Item2;
+            Exception exception = Client.State.Register(name, nickname, password);
 
             if (exception != null)
             {
                 MessageBox.Show("Sign up failed!\n" + exception.ToString());
                 return;
-            } else
-            {
-                Client.State.Token = token;
             }
+
+            nameTextField.Clear();
+            nicknameTextField.Clear();
+            passwordTextField.Clear();
+            repeatPasswordTextField.Clear();
 
             Client.Forms.SystemForm.Show();
             Hide();

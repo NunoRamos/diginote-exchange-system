@@ -15,12 +15,11 @@ namespace diginote_exchange_system
     {
         public static FormManager Forms { get; private set; }
         public static Client State { get; private set; }
+        public float CurrentQuote { get; set; }
 
-        public float? CurrentQuote { get; set; }
+        private string Token;
 
-        public string Token { get; set; }
-
-        public IServer Server { get; }
+        private IServer Server;
 
         public EventRepeater EvntRepeater = new EventRepeater();
 
@@ -36,14 +35,57 @@ namespace diginote_exchange_system
             OnQuoteUpdated(Server.GetCurrentQuote());
         }
 
+        internal Exception Login(string nickname, string password)
+        {
+            Tuple<string, Exception> result = Server.Login(nickname, password);
+
+            if (result.Item2 == null)
+                Token = result.Item1;
+
+            return result.Item2;
+        }
+
         internal void SignOut()
         {
             Server.Logout(Token);
         }
 
-        private void OnQuoteUpdated(float? newQuote)
+        internal Exception Register(string name, string nickname, string password)
+        {
+            Tuple<string, Exception> result = Server.Register(name, nickname, password);
+
+            if (result.Item2 == null)
+                Token = result.Item1;
+
+            return result.Item2;
+        }
+
+        internal object GetAvailableDiginotes()
+        {
+
+            int diginotes = Server.GetAvailableDiginotes(Token);
+            AvailableDiginotesUpdated.Invoke(this, diginotes);
+            return diginotes;
+        }
+
+        internal float GetCurrentQuote()
+        {
+            return Server.GetCurrentQuote();
+        }
+
+        private void OnQuoteUpdated(float newQuote)
         {
             CurrentQuote = newQuote;
+        }
+
+        internal Exception ConfirmPurchaseOrder(int diginotesLeft, float value)
+        {
+            return Server.ConfirmPurchaseOrder(Token, diginotesLeft, value);
+        }
+
+        internal Exception ConfirmSellOrder(int diginotesLeft, float value)
+        {
+            return Server.ConfirmSellOrder(Token, diginotesLeft, value);
         }
 
         [STAThread]

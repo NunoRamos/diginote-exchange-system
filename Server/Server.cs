@@ -120,14 +120,22 @@ namespace Server
             User user = GetLoggedInUser(token);
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
 
-            var query = from purchaseOrders in diginoteDB.Orders
-                        where purchaseOrders.Status == OrderStatus.Active && purchaseOrders.Type == OrderType.Purchase && purchaseOrders.Quote >= value
-                        orderby purchaseOrders.CreatedAt ascending
-                        select purchaseOrders;
+            var userIncompleteOrders =
+                from purchaseOrders in diginoteDB.Orders
+                where purchaseOrders.Status == OrderStatus.Active && purchaseOrders.Type == OrderType.Purchase && purchaseOrders.Quote >= value && purchaseOrders.CreatedById != user.Id
+                orderby purchaseOrders.CreatedAt ascending
+                select purchaseOrders;
 
+            var availableDiginotes = GetUserAvailableDiginotes(user.Id);
+
+            if (availableDiginotes.Count() < quantity)
+            {
+                dbTransaction.Rollback();
+                return Tuple.Create<Exception, OrderNotSatisfiedException>(new Exception("Insufficient diginotes to place sell order."), null);
+            }
 
             int numSellOrdersCreated = 0;
-            foreach (Order order in query)
+            foreach (Order purchaseOrder in userIncompleteOrders)
             {
                 Order sellOrder = new Order
                 {
@@ -135,19 +143,23 @@ namespace Server
                     CreatedBy = user,
                     Status = OrderStatus.Complete,
                     Type = OrderType.Sell,
-                    Diginote = user.Diginotes.Last(),
+                    Diginote = availableDiginotes.First(),
                     Quote = value
                 };
 
                 numSellOrdersCreated++;
-                user.Diginotes.Remove(user.Diginotes.Last());
+                availableDiginotes.RemoveAt(0);
                 diginoteDB.Orders.Add(sellOrder);
 
+                sellOrder.Diginote.Owner = purchaseOrder.CreatedBy;
+                purchaseOrder.Diginote.Owner = sellOrder.CreatedBy;
+
+                sellOrder.Status = OrderStatus.Complete;
 
                 Transaction transaction = new Transaction
                 {
                     CreatedAt = DateTime.Now,
-                    PurchaseOrder = order,
+                    PurchaseOrder = purchaseOrder,
                     SellOrder = sellOrder,
                     Quote = value
                 };
@@ -166,42 +178,69 @@ namespace Server
             return Tuple.Create<Exception, OrderNotSatisfiedException>(null, null);
         }
 
+        private List<Diginote> GetUserAvailableDiginotes(int userId)
+        {
+            var userIncompleteOrders = from order in diginoteDB.Orders
+                                       where order.Status != OrderStatus.Complete && order.CreatedById == userId
+                                       select order;
+
+            var unavailableDiginotes = from diginote in diginoteDB.Diginotes
+                                       where diginote.OwnerId == userId
+                                       join order in userIncompleteOrders on diginote.Id equals order.Diginote.Id
+                                       select diginote;
+
+            return (from diginote in diginoteDB.Diginotes
+                    where !unavailableDiginotes.Contains(diginote) && diginote.OwnerId == userId
+                    select diginote).ToList();
+        }
+
         public Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(string token, int quantity)
         {
             User user = GetLoggedInUser(token);
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
             float value = GetCurrentQuote();
 
-            var query = from sellOrders in diginoteDB.Orders
-                        where sellOrders.Status == OrderStatus.Active && sellOrders.Type == OrderType.Sell && sellOrders.Quote <= value
-                        orderby sellOrders.CreatedAt ascending
-                        select sellOrders;
+            var unmatchedActiveOrders =
+                from sellOrders in diginoteDB.Orders
+                where sellOrders.Status == OrderStatus.Active && sellOrders.Type == OrderType.Sell && sellOrders.Quote <= value && sellOrders.CreatedById != user.Id
+                orderby sellOrders.CreatedAt ascending
+                select sellOrders;
+
+            var availableDiginotes = GetUserAvailableDiginotes(user.Id);
+
+            if (availableDiginotes.Count() < quantity)
+            {
+                dbTransaction.Rollback();
+                return Tuple.Create<Exception, OrderNotSatisfiedException>(new Exception("Insufficient diginotes to place purchase order."), null);
+            }
 
             int numPurchaseOrdersCreated = 0;
-            foreach (Order order in query)
+            foreach (Order sellOrder in unmatchedActiveOrders)
             {
-                User ownerOfOrder = order.CreatedBy;
-
                 Order purchaseOrder = new Order
                 {
                     CreatedAt = DateTime.Now,
                     CreatedBy = user,
                     Status = OrderStatus.Complete,
                     Type = OrderType.Purchase,
-                    Quote = value
+                    Quote = value,
+                    Diginote = availableDiginotes.First()
                 };
 
+                availableDiginotes.RemoveAt(0);
                 numPurchaseOrdersCreated++;
-                user.Diginotes.Add(ownerOfOrder.Diginotes.Last());
-                ownerOfOrder.Diginotes.Remove(ownerOfOrder.Diginotes.Last());
                 diginoteDB.Orders.Add(purchaseOrder);
 
+                sellOrder.Status = OrderStatus.Complete;
+
+                sellOrder.Diginote.Owner = purchaseOrder.CreatedBy;
+                purchaseOrder.Diginote.Owner = sellOrder.CreatedBy;
 
                 Transaction transaction = new Transaction
                 {
                     CreatedAt = DateTime.Now,
                     PurchaseOrder = purchaseOrder,
-                    SellOrder = order,
+                    SellOrder = sellOrder,
                     Quote = value
                 };
 
@@ -235,7 +274,7 @@ namespace Server
             }
         }
 
-        public void UpdateCurrentQuote(float? newQuote)
+        public void UpdateCurrentQuote(float newQuote)
         {
             QuoteUpdated(newQuote);
         }
@@ -246,14 +285,15 @@ namespace Server
 
             var dbTransactions = diginoteDB.Database.BeginTransaction();
             var usersDiginotes = from diginote in diginoteDB.Diginotes
-                        where diginote.OwnerId == id
-                        select diginote;
+                                 where diginote.OwnerId == id
+                                 select diginote;
 
             var diginotesOnPendingOrders = from order in diginoteDB.Orders
-                         where order.CreatedById == id && order.Status != OrderStatus.Complete
-                         select order;
+                                           where order.CreatedById == id && order.Status != OrderStatus.Complete
+                                           select order;
 
             dbTransactions.Commit();
+            diginoteDB.SaveChanges();
 
             return usersDiginotes.Count() - diginotesOnPendingOrders.Count();
         }
@@ -271,9 +311,13 @@ namespace Server
                 return new Exception("Value must be greater than or equal to the current quote");
             }
 
-            var diginotes = (from d in diginoteDB.Diginotes
-                             where d.OwnerId == OwnerId
-                             select d).Take(diginotesLeft).ToArray();
+            var availableDiginotes = GetUserAvailableDiginotes(OwnerId);
+
+            if (availableDiginotes.Count < diginotesLeft)
+            {
+                dbTransaction.Rollback();
+                return new Exception("Not enough diginotes available to place order.");
+            }
 
             for (int i = 0; i < diginotesLeft; i++)
             {
@@ -281,15 +325,18 @@ namespace Server
                 {
                     CreatedAt = DateTime.Now,
                     CreatedById = loggedInUsers[token],
-                    DiginoteId = diginotes[i].Id,
+                    Diginote = availableDiginotes.First(),
                     Quote = value,
                     Status = OrderStatus.Active,
                     Type = OrderType.Purchase,
                 });
+
+                availableDiginotes.RemoveAt(0);
             }
 
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
+
             return null;
         }
         public Exception ConfirmSellOrder(string token, int diginotesLeft, float value)
@@ -304,22 +351,29 @@ namespace Server
                 return new Exception("Value must be lesser than or equal to the current quote");
             }
 
-            var diginotes = (from d in diginoteDB.Diginotes
-                             where d.OwnerId == OwnerId
-                             select d).Take(diginotesLeft).ToArray();
+            var availableDiginotes = GetUserAvailableDiginotes(OwnerId);
 
+            if (availableDiginotes.Count < diginotesLeft)
+            {
+                dbTransaction.Rollback();
+                return new Exception("Not enough diginotes available to place order.");
+            }
+
+            var usedDiginotes = new List<Diginote>();
             for (int i = 0; i < diginotesLeft; i++)
             {
                 diginoteDB.Orders.Add(new Order
                 {
                     CreatedAt = DateTime.Now,
                     CreatedById = loggedInUsers[token],
-                    //DiginoteId = diginotes[i].Id,
-                    Diginote = diginotes[i],
+                    Diginote = availableDiginotes.First(),
                     Quote = value,
                     Status = OrderStatus.Active,
                     Type = OrderType.Sell,
                 });
+
+                usedDiginotes.Add(availableDiginotes.First());
+                availableDiginotes.RemoveAt(0);
             }
 
             dbTransaction.Commit();
