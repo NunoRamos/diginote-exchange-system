@@ -1,5 +1,4 @@
 ﻿using System;
-using Common.Models;
 
 namespace Common.Interfaces
 {
@@ -22,11 +21,11 @@ namespace Common.Interfaces
 
         float GetCurrentQuote();
 
-        int GetDiginotes(string token);
+        int GetAvailableDiginotes(string token);
         Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value);
 
         Exception ConfirmSellOrder(string token, int diginotesLeft, float value);
-        Order[] GetUserOrders(string token, OrderType type);
+        Serializable.Order[] GetUserOrders(string token, OrderType type);
     }
     
     [Serializable]

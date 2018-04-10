@@ -67,11 +67,11 @@
       <DependentUpon>AuthenticationForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Client.cs" />
-    <Compile Include="Views\PurchaseOrderNotSatisfiedForm.cs">
+    <Compile Include="Views\OrderNotSatisfiedForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\PurchaseOrderNotSatisfiedForm.Designer.cs">
-      <DependentUpon>PurchaseOrderNotSatisfiedForm.cs</DependentUpon>
+    <Compile Include="Views\OrderNotSatisfiedForm.Designer.cs">
+      <DependentUpon>OrderNotSatisfiedForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\RegistrationForm.cs">
       <SubType>Form</SubType>
@@ -98,8 +98,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Views\PurchaseOrderNotSatisfiedForm.resx">
-      <DependentUpon>PurchaseOrderNotSatisfiedForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\OrderNotSatisfiedForm.resx">
+      <DependentUpon>OrderNotSatisfiedForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\RegistrationForm.resx">
       <DependentUpon>RegistrationForm.cs</DependentUpon>

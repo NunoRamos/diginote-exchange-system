@@ -53,10 +53,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IServer.cs" />
-    <Compile Include="Models\Diginote.cs" />
-    <Compile Include="Models\Order.cs" />
-    <Compile Include="Models\Transaction.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="OrderStatus.cs" />
+    <Compile Include="OrderType.cs" />
+    <Compile Include="Serializable\Order.cs" />
     <Compile Include="OrderNotSatisfiedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

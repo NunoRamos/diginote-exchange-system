@@ -1,15 +1,8 @@
 ﻿using Common;
-using Common.Models;
+using Common.Serializable;
 using diginote_exchange_system.Views;
 using MaterialSkin.Controls;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace diginote_exchange_system
@@ -20,7 +13,7 @@ namespace diginote_exchange_system
         {
             InitializeComponent();
             Client.State.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
-            Client.State.DiginotesUpdated += OnDiginotesUpdated;
+            Client.State.AvailableDiginotesUpdated += OnDiginotesUpdated;
             Client.State.PurchaseOrdersUpdated += OnPurchaseOrdersUpdated;
             Client.State.SellOrdersUpdated += OnSellOrdersUpdated;
         }
@@ -54,7 +47,7 @@ namespace diginote_exchange_system
 
         private void SystemForm_Shown(object sender, EventArgs e)
         {
-            DiginotesTextField.Text = Client.State.Server.GetDiginotes(Client.State.Token).ToString();
+            DiginotesTextField.Text = Client.State.Server.GetAvailableDiginotes(Client.State.Token).ToString();
             OnQuoteUpdated(Client.State.Server.GetCurrentQuote());
         }
 

@@ -4,8 +4,7 @@ using Common.Interfaces;
 using System.Collections.Generic;
 using Common;
 using System.Data.Entity;
-using System.Data.Entity.Migrations;
-using Common.Models;
+using Server.Models;
 
 namespace Server
 {
@@ -157,6 +156,7 @@ namespace Server
             }
 
             dbTransaction.Commit();
+            diginoteDB.SaveChanges();
 
             if (numSellOrdersCreated < quantity)
             {
@@ -168,9 +168,9 @@ namespace Server
 
         public Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(string token, int quantity)
         {
-            float value = GetCurrentQuote();
             User user = GetLoggedInUser(token);
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
+            float value = GetCurrentQuote();
 
             var query = from sellOrders in diginoteDB.Orders
                         where sellOrders.Status == OrderStatus.Active && sellOrders.Type == OrderType.Sell && sellOrders.Quote <= value
@@ -209,6 +209,7 @@ namespace Server
             }
 
             dbTransaction.Commit();
+            diginoteDB.SaveChanges();
 
             if (numPurchaseOrdersCreated < quantity)
             {
@@ -239,25 +240,34 @@ namespace Server
             QuoteUpdated(newQuote);
         }
 
-        public int GetDiginotes(string token)
+        public int GetAvailableDiginotes(string token)
         {
             int id = loggedInUsers[token];
 
-            var query = from d in diginoteDB.Diginotes
-                        where d.OwnerId == id
-                        select d;
+            var dbTransactions = diginoteDB.Database.BeginTransaction();
+            var usersDiginotes = from diginote in diginoteDB.Diginotes
+                        where diginote.OwnerId == id
+                        select diginote;
 
-            return query.Count();
+            var diginotesOnPendingOrders = from order in diginoteDB.Orders
+                         where order.CreatedById == id && order.Status != OrderStatus.Complete
+                         select order;
+
+            dbTransactions.Commit();
+
+            return usersDiginotes.Count() - diginotesOnPendingOrders.Count();
         }
 
         public Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value)
         {
-            var dbTransaction = diginoteDB.Database.BeginTransaction();
             var OwnerId = loggedInUsers[token];
-            var currentQuote = GetCurrentQuote();
+
+            var dbTransaction = diginoteDB.Database.BeginTransaction();
+            float currentQuote = GetCurrentQuote();
 
             if (value < currentQuote)
             {
+                dbTransaction.Rollback();
                 return new Exception("Value must be greater than or equal to the current quote");
             }
 
@@ -279,16 +289,18 @@ namespace Server
             }
 
             dbTransaction.Commit();
+            diginoteDB.SaveChanges();
             return null;
         }
         public Exception ConfirmSellOrder(string token, int diginotesLeft, float value)
         {
-            var dbTransaction = diginoteDB.Database.BeginTransaction();
             int OwnerId = loggedInUsers[token];
-            var currentQuote = GetCurrentQuote();
+            var dbTransaction = diginoteDB.Database.BeginTransaction();
+            float currentQuote = GetCurrentQuote();
 
             if (value > currentQuote)
             {
+                dbTransaction.Rollback();
                 return new Exception("Value must be lesser than or equal to the current quote");
             }
 
@@ -302,7 +314,8 @@ namespace Server
                 {
                     CreatedAt = DateTime.Now,
                     CreatedById = loggedInUsers[token],
-                    DiginoteId = diginotes[i].Id,
+                    //DiginoteId = diginotes[i].Id,
+                    Diginote = diginotes[i],
                     Quote = value,
                     Status = OrderStatus.Active,
                     Type = OrderType.Sell,
@@ -310,11 +323,12 @@ namespace Server
             }
 
             dbTransaction.Commit();
+            diginoteDB.SaveChanges();
 
             return null;
         }
 
-        public Order[] GetUserOrders(string token, OrderType type)
+        public Common.Serializable.Order[] GetUserOrders(string token, OrderType type)
         {
             int ownerId = loggedInUsers[token];
 
@@ -322,7 +336,7 @@ namespace Server
                         where o.CreatedById == ownerId && o.Type == type
                         select o;
 
-            return query.ToArray();
+            return query.ToArray().Select(o => o.Serialize()).ToArray();
         }
     }
 }

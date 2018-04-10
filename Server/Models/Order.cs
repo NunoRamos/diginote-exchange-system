@@ -1,20 +1,10 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models
+namespace Server.Models
 {
-    public enum OrderStatus
-    {
-        Active, Suspended, Complete
-    }
-
-    public enum OrderType
-    {
-        Sell, Purchase
-    }
-
-    [Serializable]
     public class Order
     {
         [Key]
@@ -43,5 +33,19 @@ namespace Common.Models
         public virtual Transaction Transaction { get; set; }
         [ForeignKey("DiginoteId")]
         public virtual Diginote Diginote { get; set; }
+
+        public Common.Serializable.Order Serialize()
+        {
+            return new Common.Serializable.Order
+            {
+                CreatedAt = CreatedAt,
+                CreatedById = CreatedById,
+                DiginoteId = DiginoteId,
+                Id = Id,
+                Quote = Quote,
+                Status = Status,
+                Type = Type
+            };
+        }
     }
 }

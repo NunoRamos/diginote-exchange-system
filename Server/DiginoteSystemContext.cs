@@ -1,5 +1,5 @@
-﻿using System.Data.Entity;
-using Common.Models;
+﻿using Server.Models;
+using System.Data.Entity;
 
 namespace Server
 {

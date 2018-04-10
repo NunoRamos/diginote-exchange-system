@@ -1,6 +1,6 @@
 ﻿using Common;
 using Common.Interfaces;
-using Common.Models;
+using Common.Serializable;
 using System;
 using System.Collections;
 using System.Runtime.Remoting;
@@ -26,7 +26,7 @@ namespace diginote_exchange_system
 
         public event EventHandler<Order[]> SellOrdersUpdated;
         public event EventHandler<Order[]> PurchaseOrdersUpdated;
-        public event EventHandler<int> DiginotesUpdated;
+        public event EventHandler<int> AvailableDiginotesUpdated;
 
         public Client()
         {

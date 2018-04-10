@@ -1,6 +1,6 @@
 namespace Server.Migrations
 {
-    using Common.Models;
+    using global::Server.Models;
     using System.Data.Entity.Migrations;
 
     internal sealed class Configuration : DbMigrationsConfiguration<DiginoteSystemContext>
