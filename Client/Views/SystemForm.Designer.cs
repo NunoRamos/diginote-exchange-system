@@ -33,8 +33,18 @@
             this.CurrentQuoteTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.DiginotesTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.CreateSellOrderButton = new MaterialSkin.Controls.MaterialFlatButton();
-            this.CreatePurchaseOrderButton = new MaterialSkin.Controls.MaterialFlatButton();
+            this.SellOrdersGridView = new System.Windows.Forms.DataGridView();
+            this.SellRadioButton = new System.Windows.Forms.RadioButton();
+            this.PurchaseRadioButton = new System.Windows.Forms.RadioButton();
+            this.CreateOrderGroupBox = new System.Windows.Forms.GroupBox();
+            this.DiginoteNumberNumericUpDown = new System.Windows.Forms.NumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
+            this.PlaceOrderButton = new MaterialSkin.Controls.MaterialFlatButton();
+            this.PurchaseOrdersGridView = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.SellOrdersGridView)).BeginInit();
+            this.CreateOrderGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DiginoteNumberNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PurchaseOrdersGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // signOutButton
@@ -113,45 +123,103 @@
             this.materialLabel1.TabIndex = 3;
             this.materialLabel1.Text = "Diginotes:";
             // 
-            // CreateSellOrderButton
+            // SellOrdersGridView
             // 
-            this.CreateSellOrderButton.AutoSize = true;
-            this.CreateSellOrderButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.CreateSellOrderButton.Depth = 0;
-            this.CreateSellOrderButton.Location = new System.Drawing.Point(16, 399);
-            this.CreateSellOrderButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.CreateSellOrderButton.MouseState = MaterialSkin.MouseState.HOVER;
-            this.CreateSellOrderButton.Name = "CreateSellOrderButton";
-            this.CreateSellOrderButton.Primary = false;
-            this.CreateSellOrderButton.Size = new System.Drawing.Size(144, 36);
-            this.CreateSellOrderButton.TabIndex = 5;
-            this.CreateSellOrderButton.Text = "Create Sell Order";
-            this.CreateSellOrderButton.UseVisualStyleBackColor = true;
-            this.CreateSellOrderButton.Click += new System.EventHandler(this.CreateSellOrderButton_Click);
+            this.SellOrdersGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SellOrdersGridView.Location = new System.Drawing.Point(16, 256);
+            this.SellOrdersGridView.Name = "SellOrdersGridView";
+            this.SellOrdersGridView.Size = new System.Drawing.Size(240, 150);
+            this.SellOrdersGridView.TabIndex = 7;
             // 
-            // CreatePurchaseOrderButton
+            // SellRadioButton
             // 
-            this.CreatePurchaseOrderButton.AutoSize = true;
-            this.CreatePurchaseOrderButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.CreatePurchaseOrderButton.Depth = 0;
-            this.CreatePurchaseOrderButton.Location = new System.Drawing.Point(202, 399);
-            this.CreatePurchaseOrderButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.CreatePurchaseOrderButton.MouseState = MaterialSkin.MouseState.HOVER;
-            this.CreatePurchaseOrderButton.Name = "CreatePurchaseOrderButton";
-            this.CreatePurchaseOrderButton.Primary = false;
-            this.CreatePurchaseOrderButton.Size = new System.Drawing.Size(183, 36);
-            this.CreatePurchaseOrderButton.TabIndex = 6;
-            this.CreatePurchaseOrderButton.Text = "Create Purchase Order";
-            this.CreatePurchaseOrderButton.UseVisualStyleBackColor = true;
-            this.CreatePurchaseOrderButton.Click += new System.EventHandler(this.CreatePurchaseOrderButton_Click_1);
+            this.SellRadioButton.AutoSize = true;
+            this.SellRadioButton.Checked = true;
+            this.SellRadioButton.Location = new System.Drawing.Point(6, 19);
+            this.SellRadioButton.Name = "SellRadioButton";
+            this.SellRadioButton.Size = new System.Drawing.Size(42, 17);
+            this.SellRadioButton.TabIndex = 8;
+            this.SellRadioButton.TabStop = true;
+            this.SellRadioButton.Text = "Sell";
+            this.SellRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // PurchaseRadioButton
+            // 
+            this.PurchaseRadioButton.AutoSize = true;
+            this.PurchaseRadioButton.Location = new System.Drawing.Point(6, 42);
+            this.PurchaseRadioButton.Name = "PurchaseRadioButton";
+            this.PurchaseRadioButton.Size = new System.Drawing.Size(70, 17);
+            this.PurchaseRadioButton.TabIndex = 9;
+            this.PurchaseRadioButton.Text = "Purchase";
+            this.PurchaseRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // CreateOrderGroupBox
+            // 
+            this.CreateOrderGroupBox.Controls.Add(this.PlaceOrderButton);
+            this.CreateOrderGroupBox.Controls.Add(this.label1);
+            this.CreateOrderGroupBox.Controls.Add(this.DiginoteNumberNumericUpDown);
+            this.CreateOrderGroupBox.Controls.Add(this.SellRadioButton);
+            this.CreateOrderGroupBox.Controls.Add(this.PurchaseRadioButton);
+            this.CreateOrderGroupBox.Location = new System.Drawing.Point(286, 81);
+            this.CreateOrderGroupBox.Name = "CreateOrderGroupBox";
+            this.CreateOrderGroupBox.Size = new System.Drawing.Size(317, 68);
+            this.CreateOrderGroupBox.TabIndex = 10;
+            this.CreateOrderGroupBox.TabStop = false;
+            this.CreateOrderGroupBox.Text = "Create Order";
+            // 
+            // DiginoteNumberNumericUpDown
+            // 
+            this.DiginoteNumberNumericUpDown.Location = new System.Drawing.Point(179, 29);
+            this.DiginoteNumberNumericUpDown.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.DiginoteNumberNumericUpDown.Name = "DiginoteNumberNumericUpDown";
+            this.DiginoteNumberNumericUpDown.Size = new System.Drawing.Size(57, 20);
+            this.DiginoteNumberNumericUpDown.TabIndex = 10;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(87, 31);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(86, 13);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "No. of Diginotes:";
+            // 
+            // PlaceOrderButton
+            // 
+            this.PlaceOrderButton.AutoSize = true;
+            this.PlaceOrderButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.PlaceOrderButton.Depth = 0;
+            this.PlaceOrderButton.Location = new System.Drawing.Point(256, 19);
+            this.PlaceOrderButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.PlaceOrderButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.PlaceOrderButton.Name = "PlaceOrderButton";
+            this.PlaceOrderButton.Primary = false;
+            this.PlaceOrderButton.Size = new System.Drawing.Size(54, 36);
+            this.PlaceOrderButton.TabIndex = 12;
+            this.PlaceOrderButton.Text = "Place";
+            this.PlaceOrderButton.UseVisualStyleBackColor = true;
+            this.PlaceOrderButton.Click += new System.EventHandler(this.PlaceOrderButton_Click);
+            // 
+            // PurchaseOrdersGridView
+            // 
+            this.PurchaseOrdersGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.PurchaseOrdersGridView.Location = new System.Drawing.Point(292, 256);
+            this.PurchaseOrdersGridView.Name = "PurchaseOrdersGridView";
+            this.PurchaseOrdersGridView.Size = new System.Drawing.Size(240, 150);
+            this.PurchaseOrdersGridView.TabIndex = 11;
             // 
             // SystemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.CreatePurchaseOrderButton);
-            this.Controls.Add(this.CreateSellOrderButton);
+            this.Controls.Add(this.PurchaseOrdersGridView);
+            this.Controls.Add(this.CreateOrderGroupBox);
+            this.Controls.Add(this.SellOrdersGridView);
             this.Controls.Add(this.DiginotesTextField);
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.CurrentQuoteTextField);
@@ -159,7 +227,13 @@
             this.Controls.Add(this.signOutButton);
             this.Name = "SystemForm";
             this.Text = "Diginote Exchange System";
+            this.Load += new System.EventHandler(this.SystemForm_Load);
             this.Shown += new System.EventHandler(this.SystemForm_Shown);
+            ((System.ComponentModel.ISupportInitialize)(this.SellOrdersGridView)).EndInit();
+            this.CreateOrderGroupBox.ResumeLayout(false);
+            this.CreateOrderGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DiginoteNumberNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PurchaseOrdersGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,7 +246,13 @@
         private MaterialSkin.Controls.MaterialSingleLineTextField CurrentQuoteTextField;
         private MaterialSkin.Controls.MaterialSingleLineTextField DiginotesTextField;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private MaterialSkin.Controls.MaterialFlatButton CreateSellOrderButton;
-        private MaterialSkin.Controls.MaterialFlatButton CreatePurchaseOrderButton;
+        private System.Windows.Forms.DataGridView SellOrdersGridView;
+        private System.Windows.Forms.RadioButton SellRadioButton;
+        private System.Windows.Forms.RadioButton PurchaseRadioButton;
+        private System.Windows.Forms.GroupBox CreateOrderGroupBox;
+        private MaterialSkin.Controls.MaterialFlatButton PlaceOrderButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown DiginoteNumberNumericUpDown;
+        private System.Windows.Forms.DataGridView PurchaseOrdersGridView;
     }
 }

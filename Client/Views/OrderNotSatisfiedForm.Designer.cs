@@ -1,6 +1,6 @@
 ﻿namespace diginote_exchange_system.Views
 {
-    partial class PurchaseOrderNotSatisfiedForm
+    partial class OrderNotSatisfiedForm
     {
         /// <summary>
         /// Required designer variable.
@@ -34,6 +34,8 @@
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             this.CurrentQuoteTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
+            this.ValueTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             this.SuspendLayout();
             // 
             // BackButton
@@ -41,7 +43,7 @@
             this.BackButton.AutoSize = true;
             this.BackButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackButton.Depth = 0;
-            this.BackButton.Location = new System.Drawing.Point(159, 177);
+            this.BackButton.Location = new System.Drawing.Point(157, 221);
             this.BackButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.BackButton.MouseState = MaterialSkin.MouseState.HOVER;
             this.BackButton.Name = "BackButton";
@@ -57,7 +59,7 @@
             this.ConfirmButton.AutoSize = true;
             this.ConfirmButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ConfirmButton.Depth = 0;
-            this.ConfirmButton.Location = new System.Drawing.Point(71, 177);
+            this.ConfirmButton.Location = new System.Drawing.Point(69, 221);
             this.ConfirmButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.ConfirmButton.MouseState = MaterialSkin.MouseState.HOVER;
             this.ConfirmButton.Name = "ConfirmButton";
@@ -127,18 +129,48 @@
             this.materialLabel1.TabIndex = 6;
             this.materialLabel1.Text = "Current Quote:";
             // 
-            // PurchaseOrderNotSatisfiedForm
+            // ValueTextField
+            // 
+            this.ValueTextField.Depth = 0;
+            this.ValueTextField.Hint = "";
+            this.ValueTextField.Location = new System.Drawing.Point(159, 179);
+            this.ValueTextField.MouseState = MaterialSkin.MouseState.HOVER;
+            this.ValueTextField.Name = "ValueTextField";
+            this.ValueTextField.PasswordChar = '\0';
+            this.ValueTextField.SelectedText = "";
+            this.ValueTextField.SelectionLength = 0;
+            this.ValueTextField.SelectionStart = 0;
+            this.ValueTextField.Size = new System.Drawing.Size(75, 23);
+            this.ValueTextField.TabIndex = 14;
+            this.ValueTextField.UseSystemPasswordChar = false;
+            // 
+            // materialLabel2
+            // 
+            this.materialLabel2.AutoSize = true;
+            this.materialLabel2.Depth = 0;
+            this.materialLabel2.Font = new System.Drawing.Font("Roboto", 11F);
+            this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel2.Location = new System.Drawing.Point(102, 179);
+            this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel2.Name = "materialLabel2";
+            this.materialLabel2.Size = new System.Drawing.Size(51, 19);
+            this.materialLabel2.TabIndex = 15;
+            this.materialLabel2.Text = "Value:";
+            // 
+            // OrderNotSatisfiedForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(273, 240);
+            this.ClientSize = new System.Drawing.Size(273, 281);
+            this.Controls.Add(this.ValueTextField);
+            this.Controls.Add(this.materialLabel2);
             this.Controls.Add(this.BackButton);
             this.Controls.Add(this.ConfirmButton);
             this.Controls.Add(this.DiginotesLeftTextField);
             this.Controls.Add(this.materialLabel3);
             this.Controls.Add(this.CurrentQuoteTextField);
             this.Controls.Add(this.materialLabel1);
-            this.Name = "PurchaseOrderNotSatisfiedForm";
+            this.Name = "OrderNotSatisfiedForm";
             this.Text = "Purchase Order Not Satisfied";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -153,5 +185,7 @@
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
         private MaterialSkin.Controls.MaterialSingleLineTextField CurrentQuoteTextField;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
+        private MaterialSkin.Controls.MaterialSingleLineTextField ValueTextField;
+        private MaterialSkin.Controls.MaterialLabel materialLabel2;
     }
 }

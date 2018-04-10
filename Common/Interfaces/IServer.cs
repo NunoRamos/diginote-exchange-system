@@ -1,4 +1,5 @@
 ﻿using System;
+using Common.Models;
 
 namespace Common.Interfaces
 {
@@ -15,16 +16,17 @@ namespace Common.Interfaces
 
         Exception Logout(string token);
 
-        Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity, float value);
+        Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(string token, int quantity);
 
-        Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(string token, int quantity, float value);
+        Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(string token, int quantity);
 
         float GetCurrentQuote();
 
         int GetDiginotes(string token);
-        Exception ConfirmPurchaseOrder(string token, int diginotesLeft);
+        Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value);
 
-        Exception ConfirmSellOrder(string token, int diginotesLeft);
+        Exception ConfirmSellOrder(string token, int diginotesLeft, float value);
+        Order[] GetUserOrders(string token, OrderType type);
     }
     
     [Serializable]

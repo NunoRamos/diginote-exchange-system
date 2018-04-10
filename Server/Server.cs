@@ -254,6 +254,12 @@ namespace Server
         {
             var dbTransaction = diginoteDB.Database.BeginTransaction();
             var OwnerId = loggedInUsers[token];
+            var currentQuote = GetCurrentQuote();
+
+            if (value < currentQuote)
+            {
+                return new Exception("Value must be greater than or equal to the current quote");
+            }
 
             var diginotes = (from d in diginoteDB.Diginotes
                              where d.OwnerId == OwnerId
@@ -278,7 +284,13 @@ namespace Server
         public Exception ConfirmSellOrder(string token, int diginotesLeft, float value)
         {
             var dbTransaction = diginoteDB.Database.BeginTransaction();
-            var OwnerId = loggedInUsers[token];
+            int OwnerId = loggedInUsers[token];
+            var currentQuote = GetCurrentQuote();
+
+            if (value > currentQuote)
+            {
+                return new Exception("Value must be lesser than or equal to the current quote");
+            }
 
             var diginotes = (from d in diginoteDB.Diginotes
                              where d.OwnerId == OwnerId
@@ -302,5 +314,15 @@ namespace Server
             return null;
         }
 
+        public Order[] GetUserOrders(string token, OrderType type)
+        {
+            int ownerId = loggedInUsers[token];
+
+            var query = from o in diginoteDB.Orders
+                        where o.CreatedById == ownerId && o.Type == type
+                        select o;
+
+            return query.ToArray();
+        }
     }
 }

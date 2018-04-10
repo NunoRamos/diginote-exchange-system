@@ -1,4 +1,7 @@
-﻿using MaterialSkin.Controls;
+﻿using Common;
+using Common.Models;
+using diginote_exchange_system.Views;
+using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +20,23 @@ namespace diginote_exchange_system
         {
             InitializeComponent();
             Client.State.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
+            Client.State.DiginotesUpdated += OnDiginotesUpdated;
+            Client.State.PurchaseOrdersUpdated += OnPurchaseOrdersUpdated;
+            Client.State.SellOrdersUpdated += OnSellOrdersUpdated;
+        }
+
+        private void OnPurchaseOrdersUpdated(object sender, Order[] updatedPurchaseOrders)
+        {
+            PurchaseOrdersGridView.DataSource = updatedPurchaseOrders;
+        }
+        private void OnSellOrdersUpdated(object sender, Order[] updatedSellOrders)
+        {
+            SellOrdersGridView.DataSource = updatedSellOrders;
+        }
+
+        private void OnDiginotesUpdated(object sender, int diginotes)
+        {
+            DiginotesTextField.Text = diginotes.ToString();
         }
 
 
@@ -32,20 +52,37 @@ namespace diginote_exchange_system
             Client.Forms.AuthenticationForm.Show();
         }
 
-        private void CreateSellOrderButton_Click(object sender, EventArgs e)
-        {
-            Client.Forms.CreateSellOrderForm.ShowDialog(this);
-        }
-
         private void SystemForm_Shown(object sender, EventArgs e)
         {
             DiginotesTextField.Text = Client.State.Server.GetDiginotes(Client.State.Token).ToString();
             OnQuoteUpdated(Client.State.Server.GetCurrentQuote());
         }
 
-        private void CreatePurchaseOrderButton_Click_1(object sender, EventArgs e)
+        private void SystemForm_Load(object sender, EventArgs e)
         {
-            Client.Forms.CreatePurchaseOrderForm.ShowDialog(this);
+            SellOrdersGridView.DataSource = Client.State.GetUserSellOrders();
+        }
+
+        private void PlaceOrderButton_Click(object sender, EventArgs e)
+        {
+            OrderType orderType = PurchaseRadioButton.Checked ? OrderType.Purchase : OrderType.Sell;
+            int quantity = decimal.ToInt32(DiginoteNumberNumericUpDown.Value);
+
+            Tuple<Exception, OrderNotSatisfiedException> result =
+                orderType == OrderType.Purchase
+                ? Client.State.CreatePurchaseOrder(quantity)
+                : Client.State.CreateSellOrder(quantity);
+
+            MessageBox.Show(result.ToString());
+
+            if (result.Item2 != null)
+            {
+                var form = new OrderNotSatisfiedForm(orderType, result.Item2.Quantity);
+                form.ShowDialog(this);
+            }
+
+            Client.State.GetUserPurchaseOrders();
+            Client.State.GetUserSellOrders();
         }
     }
 }

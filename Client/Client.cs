@@ -1,5 +1,6 @@
 ﻿using Common;
 using Common.Interfaces;
+using Common.Models;
 using System;
 using System.Collections;
 using System.Runtime.Remoting;
@@ -22,6 +23,10 @@ namespace diginote_exchange_system
         public IServer Server { get; }
 
         public EventRepeater EvntRepeater = new EventRepeater();
+
+        public event EventHandler<Order[]> SellOrdersUpdated;
+        public event EventHandler<Order[]> PurchaseOrdersUpdated;
+        public event EventHandler<int> DiginotesUpdated;
 
         public Client()
         {
@@ -62,14 +67,27 @@ namespace diginote_exchange_system
             return iServer;
         }
 
-        public Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(int quantity, float value)
+        public Tuple<Exception, OrderNotSatisfiedException> CreateSellOrder(int quantity)
         {
-            return Server.CreateSellOrder(Token, quantity, value);
+            return Server.CreateSellOrder(Token, quantity);
         }
 
-        internal Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(int quantity, float value)
+        internal Tuple<Exception, OrderNotSatisfiedException> CreatePurchaseOrder(int quantity)
         {
-            return Server.CreatePurchaseOrder(Token, quantity, value);
+            return Server.CreatePurchaseOrder(Token, quantity);
+        }
+
+        public Order[] GetUserSellOrders()
+        {
+            Order[] updatedSellOrders = Server.GetUserOrders(Token, OrderType.Sell);
+            SellOrdersUpdated.Invoke(this, updatedSellOrders);
+            return updatedSellOrders;
+        }
+        public Order[] GetUserPurchaseOrders()
+        {
+            Order[] updatedPurchaseOrders = Server.GetUserOrders(Token, OrderType.Purchase);
+            PurchaseOrdersUpdated.Invoke(this, updatedPurchaseOrders);
+            return updatedPurchaseOrders;
         }
     }
 }

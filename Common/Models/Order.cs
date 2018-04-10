@@ -14,6 +14,7 @@ namespace Common.Models
         Sell, Purchase
     }
 
+    [Serializable]
     public class Order
     {
         [Key]
