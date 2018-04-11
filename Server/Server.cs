@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Common;
 using System.Data.Entity;
 using Server.Models;
+using Common.Serializable;
 
 namespace Server
 {
@@ -13,7 +14,8 @@ namespace Server
         private readonly int REGISTER_DIGINOTE_BONUS = 100;
 
         static private DiginoteSystemContext diginoteDB;
-        static private Dictionary<string, int> loggedInUsers = new Dictionary<string, int>();
+
+        private Dictionary<string, Session> loggedInUsers = new Dictionary<string, Session>();
 
         public event QuoteUpdated QuoteUpdated;
 
@@ -29,7 +31,7 @@ namespace Server
 
         private User GetLoggedInUser(string token)
         {
-            int userId = loggedInUsers[token];
+            int userId = loggedInUsers[token].Id;
             return (from u in diginoteDB.Users
                     where u.Id == userId
                     select u).First();
@@ -54,7 +56,7 @@ namespace Server
             User userObj = query.ToArray()[0];
             string token = Utils.generateToken();
 
-            loggedInUsers.Add(token, userObj.Id);
+            loggedInUsers.Add(token, new Session(userObj.Id));
 
             return Tuple.Create<string, Exception>(token, null);
         }
@@ -83,7 +85,7 @@ namespace Server
                 Nickname = nickname,
                 Password = password,
                 Diginotes = new List<Diginote>(),
-                Orders = new List<Order>()
+                Orders = new List<Models.Order>()
             };
 
             user = diginoteDB.Users.Add(user);
@@ -107,7 +109,7 @@ namespace Server
             }
 
             string token = Utils.generateToken();
-            loggedInUsers.Add(token, user.Id);
+            loggedInUsers.Add(token, new Session(user.Id));
 
             return Tuple.Create<string, Exception>(token, null);
         }
@@ -135,9 +137,9 @@ namespace Server
             }
 
             int numSellOrdersCreated = 0;
-            foreach (Order purchaseOrder in userIncompleteOrders)
+            foreach (Models.Order purchaseOrder in userIncompleteOrders)
             {
-                Order sellOrder = new Order
+                Models.Order sellOrder = new Models.Order
                 {
                     CreatedAt = DateTime.Now,
                     CreatedBy = user,
@@ -156,7 +158,7 @@ namespace Server
 
                 sellOrder.Status = OrderStatus.Complete;
 
-                Transaction transaction = new Transaction
+                Models.Transaction transaction = new Models.Transaction
                 {
                     CreatedAt = DateTime.Now,
                     PurchaseOrder = purchaseOrder,
@@ -169,6 +171,9 @@ namespace Server
 
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
+
+            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdateSellOrders(GetUserIncompleteOrders(token, OrderType.Sell));
 
             if (numSellOrdersCreated < quantity)
             {
@@ -215,9 +220,9 @@ namespace Server
             }
 
             int numPurchaseOrdersCreated = 0;
-            foreach (Order sellOrder in unmatchedActiveOrders)
+            foreach (Models.Order sellOrder in unmatchedActiveOrders)
             {
-                Order purchaseOrder = new Order
+                Models.Order purchaseOrder = new Models.Order
                 {
                     CreatedAt = DateTime.Now,
                     CreatedBy = user,
@@ -236,7 +241,7 @@ namespace Server
                 sellOrder.Diginote.Owner = purchaseOrder.CreatedBy;
                 purchaseOrder.Diginote.Owner = sellOrder.CreatedBy;
 
-                Transaction transaction = new Transaction
+                Models.Transaction transaction = new Models.Transaction
                 {
                     CreatedAt = DateTime.Now,
                     PurchaseOrder = purchaseOrder,
@@ -249,6 +254,9 @@ namespace Server
 
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
+
+            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdatePurchaseOrders(GetUserIncompleteOrders(token, OrderType.Purchase));
 
             if (numPurchaseOrdersCreated < quantity)
             {
@@ -281,7 +289,7 @@ namespace Server
 
         public int GetAvailableDiginotes(string token)
         {
-            int id = loggedInUsers[token];
+            int id = loggedInUsers[token].Id;
 
             var dbTransactions = diginoteDB.Database.BeginTransaction();
             var usersDiginotes = from diginote in diginoteDB.Diginotes
@@ -300,7 +308,7 @@ namespace Server
 
         public Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value)
         {
-            var OwnerId = loggedInUsers[token];
+            int ownerId = loggedInUsers[token].Id;
 
             var dbTransaction = diginoteDB.Database.BeginTransaction();
             float currentQuote = GetCurrentQuote();
@@ -311,7 +319,7 @@ namespace Server
                 return new Exception("Value must be greater than or equal to the current quote");
             }
 
-            var availableDiginotes = GetUserAvailableDiginotes(OwnerId);
+            var availableDiginotes = GetUserAvailableDiginotes(ownerId);
 
             if (availableDiginotes.Count < diginotesLeft)
             {
@@ -321,10 +329,10 @@ namespace Server
 
             for (int i = 0; i < diginotesLeft; i++)
             {
-                diginoteDB.Orders.Add(new Order
+                diginoteDB.Orders.Add(new Models.Order
                 {
                     CreatedAt = DateTime.Now,
-                    CreatedById = loggedInUsers[token],
+                    CreatedById = loggedInUsers[token].Id,
                     Diginote = availableDiginotes.First(),
                     Quote = value,
                     Status = OrderStatus.Active,
@@ -337,11 +345,14 @@ namespace Server
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
 
+            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdatePurchaseOrders(GetUserIncompleteOrders(token, OrderType.Purchase));
+
             return null;
         }
         public Exception ConfirmSellOrder(string token, int diginotesLeft, float value)
         {
-            int OwnerId = loggedInUsers[token];
+            int OwnerId = loggedInUsers[token].Id;
             var dbTransaction = diginoteDB.Database.BeginTransaction();
             float currentQuote = GetCurrentQuote();
 
@@ -362,10 +373,10 @@ namespace Server
             var usedDiginotes = new List<Diginote>();
             for (int i = 0; i < diginotesLeft; i++)
             {
-                diginoteDB.Orders.Add(new Order
+                diginoteDB.Orders.Add(new Models.Order
                 {
                     CreatedAt = DateTime.Now,
-                    CreatedById = loggedInUsers[token],
+                    CreatedById = loggedInUsers[token].Id,
                     Diginote = availableDiginotes.First(),
                     Quote = value,
                     Status = OrderStatus.Active,
@@ -379,12 +390,15 @@ namespace Server
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
 
+            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdateSellOrders(GetUserIncompleteOrders(token, OrderType.Sell));
+
             return null;
         }
 
         public Common.Serializable.Order[] GetUserIncompleteOrders(string token, OrderType type)
         {
-            int ownerId = loggedInUsers[token];
+            int ownerId = loggedInUsers[token].Id;
 
             var query = from o in diginoteDB.Orders
                         where o.CreatedById == ownerId && o.Type == type && o.Status != OrderStatus.Complete
@@ -395,7 +409,7 @@ namespace Server
 
         public Common.Serializable.Transaction[] GetUserTransactions(string token)
         {
-            int userId = loggedInUsers[token];
+            int userId = loggedInUsers[token].Id;
 
             var query = from t in diginoteDB.Transactions
                         where t.PurchaseOrder.CreatedById == userId || t.SellOrder.CreatedById == userId
@@ -403,5 +417,46 @@ namespace Server
 
             return query.ToArray().Select(t => t.Serialize()).ToArray();
         }
+
+
+        #region Subscriptions
+
+        public bool SubscribeUserPurchaseOrdersUpdated(string token, UserPurchaseOrdersUpdated userPurchaseOrdersUpdated)
+        {
+            if (!loggedInUsers.ContainsKey(token))
+                return false;
+
+            loggedInUsers[token].UserPurchaseOrdersUpdated += userPurchaseOrdersUpdated;
+            return true;
+        }
+
+        public bool SubscribeUserDiginotesUpdated(string token, UserDiginotesUpdated userDiginotesUpdated)
+        {
+            if (!loggedInUsers.ContainsKey(token))
+                return false;
+
+            loggedInUsers[token].UserDiginotesUpdated += userDiginotesUpdated;
+            return true;
+        }
+
+        public bool SubscribeUserTransactionsUpdated(string token, UserTransactionsUpdated userTransactionsUpdated)
+        {
+            if (!loggedInUsers.ContainsKey(token))
+                return false;
+
+            loggedInUsers[token].UserTransactionsUpdated += userTransactionsUpdated;
+            return true;
+        }
+
+        public bool SubscribeUserSellOrdersUpdated(string token, UserSellOrdersUpdated userSellOrdersUpdated)
+        {
+            if (!loggedInUsers.ContainsKey(token))
+                return false;
+
+            loggedInUsers[token].UserSellOrdersUpdated += userSellOrdersUpdated;
+            return true;
+        }
+
+        #endregion
     }
 }

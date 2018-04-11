@@ -12,7 +12,7 @@ namespace diginote_exchange_system
         public SystemForm()
         {
             InitializeComponent();
-            Client.State.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
+            Client.State.EventRepeater.QuoteUpdated += OnQuoteUpdated;
             Client.State.AvailableDiginotesUpdated += OnDiginotesUpdated;
             Client.State.PurchaseOrdersUpdated += OnPurchaseOrdersUpdated;
             Client.State.SellOrdersUpdated += OnSellOrdersUpdated;

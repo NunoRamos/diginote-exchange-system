@@ -21,18 +21,39 @@ namespace diginote_exchange_system
 
         private IServer Server;
 
-        public EventRepeater EvntRepeater = new EventRepeater();
+        public EventRepeater EventRepeater = new EventRepeater();
 
         public event EventHandler<Order[]> SellOrdersUpdated;
         public event EventHandler<Order[]> PurchaseOrdersUpdated;
+        public event EventHandler<Transaction[]> TransactionsUpdated;
         public event EventHandler<int> AvailableDiginotesUpdated;
 
         public Client()
         {
             Server = ConnectToServer();
-            Server.QuoteUpdated += EvntRepeater.FireQuoteUpdated;
-            EvntRepeater.QuoteUpdated += OnQuoteUpdated;
+            SetupEventRepeater();
             OnQuoteUpdated(Server.GetCurrentQuote());
+        }
+
+        private void SetupEventRepeater()
+        {
+            Server.QuoteUpdated += EventRepeater.FireQuoteUpdated;
+            EventRepeater.QuoteUpdated += OnQuoteUpdated;
+        }
+
+        private void SetupLoggedInEvents()
+        {
+            EventRepeater.SubscribeDiginotesUpdated(Server, Token);
+            EventRepeater.DiginotesUpdated += (d => { AvailableDiginotesUpdated.Invoke(this, d); });
+
+            EventRepeater.SubscribePurchaseOrdersUpdated(Server, Token);
+            EventRepeater.PurchaseOrdersUpdated += (o => { PurchaseOrdersUpdated.Invoke(this, o); });
+
+            EventRepeater.SubscribeSellOrdersUpdated(Server, Token);
+            EventRepeater.SellOrdersUpdated += (o => { PurchaseOrdersUpdated.Invoke(this, o); });
+
+            EventRepeater.SubscribeTransactionsUpdated(Server, Token);
+            EventRepeater.TransactionsUpdated += (t => { TransactionsUpdated.Invoke(this, t); });
         }
 
         internal Exception Login(string nickname, string password)
@@ -41,6 +62,8 @@ namespace diginote_exchange_system
 
             if (result.Item2 == null)
                 Token = result.Item1;
+
+            SetupLoggedInEvents();
 
             return result.Item2;
         }
