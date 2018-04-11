@@ -3,8 +3,8 @@ using System.Linq;
 using Common.Interfaces;
 using System.Collections.Generic;
 using Common;
-using System.Data.Entity;
 using Server.Models;
+using System.Data.Entity;
 
 namespace Server
 {
