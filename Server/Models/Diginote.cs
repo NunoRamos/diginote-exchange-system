@@ -9,7 +9,7 @@ namespace Server.Models
     {
         public Diginote()
         {
-            Orders = new HashSet<Order>();
+            SellOrders = new HashSet<SellOrder>();
         }
 
         [Key]
@@ -23,6 +23,6 @@ namespace Server.Models
         [ForeignKey("OwnerId")]
         public virtual User Owner { get; set; }
 
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<SellOrder> SellOrders { get; set; }
     }
 }

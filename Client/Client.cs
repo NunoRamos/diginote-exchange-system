@@ -23,8 +23,8 @@ namespace diginote_exchange_system
 
         public EventRepeater EvntRepeater = new EventRepeater();
 
-        public event EventHandler<Order[]> SellOrdersUpdated;
-        public event EventHandler<Order[]> PurchaseOrdersUpdated;
+        public event EventHandler<SellOrder[]> SellOrdersUpdated;
+        public event EventHandler<PurchaseOrder[]> PurchaseOrdersUpdated;
         public event EventHandler<int> AvailableDiginotesUpdated;
 
         public Client()
@@ -119,15 +119,15 @@ namespace diginote_exchange_system
             return Server.CreatePurchaseOrder(Token, quantity);
         }
 
-        public Order[] GetUserIncompleteSellOrders()
+        public SellOrder[] GetUserIncompleteSellOrders()
         {
-            Order[] updatedSellOrders = Server.GetUserIncompleteOrders(Token, OrderType.Sell);
+            SellOrder[] updatedSellOrders = Server.GetUserIncompleteSellOrders(Token);
             SellOrdersUpdated.Invoke(this, updatedSellOrders);
             return updatedSellOrders;
         }
-        public Order[] GetUserIncompletePurchaseOrders()
+        public PurchaseOrder[] GetUserIncompletePurchaseOrders()
         {
-            Order[] updatedPurchaseOrders = Server.GetUserIncompleteOrders(Token, OrderType.Purchase);
+            PurchaseOrder[] updatedPurchaseOrders = Server.GetUserIncompletePurchaseOrders(Token);
             PurchaseOrdersUpdated.Invoke(this, updatedPurchaseOrders);
             return updatedPurchaseOrders;
         }

@@ -13,10 +13,6 @@ namespace Common.Serializable
 
         public OrderStatus Status { get; set; }
 
-        public OrderType Type { get; set; }
-
         public int CreatedById { get; set; }
-
-        public int DiginoteId { get; set; }
     }
 }

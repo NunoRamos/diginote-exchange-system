@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Linq;
 using Common.Interfaces;
 using System.Collections.Generic;
@@ -121,8 +121,8 @@ namespace Server
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
 
             var userIncompleteOrders =
-                from purchaseOrders in diginoteDB.Orders
-                where purchaseOrders.Status == OrderStatus.Active && purchaseOrders.Type == OrderType.Purchase && purchaseOrders.Quote >= value && purchaseOrders.CreatedById != user.Id
+                from purchaseOrders in diginoteDB.PurchaseOrders
+                where purchaseOrders.Status == OrderStatus.Active && purchaseOrders.Quote >= value && purchaseOrders.CreatedById != user.Id
                 orderby purchaseOrders.CreatedAt ascending
                 select purchaseOrders;
 
@@ -135,24 +135,22 @@ namespace Server
             }
 
             int numSellOrdersCreated = 0;
-            foreach (Order purchaseOrder in userIncompleteOrders)
+            foreach (PurchaseOrder purchaseOrder in userIncompleteOrders)
             {
-                Order sellOrder = new Order
+                SellOrder sellOrder = new SellOrder
                 {
                     CreatedAt = DateTime.Now,
                     CreatedBy = user,
                     Status = OrderStatus.Complete,
-                    Type = OrderType.Sell,
                     Diginote = availableDiginotes.First(),
                     Quote = value
                 };
 
                 numSellOrdersCreated++;
                 availableDiginotes.RemoveAt(0);
-                diginoteDB.Orders.Add(sellOrder);
+                diginoteDB.SellOrders.Add(sellOrder);
 
                 sellOrder.Diginote.Owner = purchaseOrder.CreatedBy;
-                purchaseOrder.Diginote.Owner = sellOrder.CreatedBy;
 
                 sellOrder.Status = OrderStatus.Complete;
 
@@ -180,17 +178,19 @@ namespace Server
 
         private List<Diginote> GetUserAvailableDiginotes(int userId)
         {
-            var userIncompleteOrders = from order in diginoteDB.Orders
+            // TODO
+            /*var userIncompleteOrders = from order in diginoteDB.Orders
                                        where order.Status != OrderStatus.Complete && order.CreatedById == userId
                                        select order;
 
             var unavailableDiginotes = from diginote in diginoteDB.Diginotes
                                        where diginote.OwnerId == userId
                                        join order in userIncompleteOrders on diginote.Id equals order.Diginote.Id
-                                       select diginote;
+                                       select diginote;*/
 
             return (from diginote in diginoteDB.Diginotes
-                    where !unavailableDiginotes.Contains(diginote) && diginote.OwnerId == userId
+                        // where !unavailableDiginotes.Contains(diginote) && diginote.OwnerId == userId
+                    where diginote.OwnerId == userId
                     select diginote).ToList();
         }
 
@@ -201,8 +201,8 @@ namespace Server
             float value = GetCurrentQuote();
 
             var unmatchedActiveOrders =
-                from sellOrders in diginoteDB.Orders
-                where sellOrders.Status == OrderStatus.Active && sellOrders.Type == OrderType.Sell && sellOrders.Quote <= value && sellOrders.CreatedById != user.Id
+                from sellOrders in diginoteDB.SellOrders
+                where sellOrders.Status == OrderStatus.Active && sellOrders.Quote <= value && sellOrders.CreatedById != user.Id
                 orderby sellOrders.CreatedAt ascending
                 select sellOrders;
 
@@ -215,26 +215,23 @@ namespace Server
             }
 
             int numPurchaseOrdersCreated = 0;
-            foreach (Order sellOrder in unmatchedActiveOrders)
+            foreach (SellOrder sellOrder in unmatchedActiveOrders)
             {
-                Order purchaseOrder = new Order
+                PurchaseOrder purchaseOrder = new PurchaseOrder
                 {
                     CreatedAt = DateTime.Now,
                     CreatedBy = user,
                     Status = OrderStatus.Complete,
-                    Type = OrderType.Purchase,
-                    Quote = value,
-                    Diginote = availableDiginotes.First()
+                    Quote = value
                 };
 
                 availableDiginotes.RemoveAt(0);
                 numPurchaseOrdersCreated++;
-                diginoteDB.Orders.Add(purchaseOrder);
+                diginoteDB.PurchaseOrders.Add(purchaseOrder);
 
                 sellOrder.Status = OrderStatus.Complete;
 
                 sellOrder.Diginote.Owner = purchaseOrder.CreatedBy;
-                purchaseOrder.Diginote.Owner = sellOrder.CreatedBy;
 
                 Transaction transaction = new Transaction
                 {
@@ -260,7 +257,7 @@ namespace Server
 
         public float GetCurrentQuote()
         {
-            var query = from lastOrder in diginoteDB.Orders
+            var query = from lastOrder in diginoteDB.SellOrders
                         orderby lastOrder.CreatedAt descending
                         select lastOrder;
 
@@ -288,14 +285,14 @@ namespace Server
                                  where diginote.OwnerId == id
                                  select diginote;
 
-            var diginotesOnPendingOrders = from order in diginoteDB.Orders
+            var diginotesOnPendingSellOrders = from order in diginoteDB.SellOrders
                                            where order.CreatedById == id && order.Status != OrderStatus.Complete
                                            select order;
 
             dbTransactions.Commit();
             diginoteDB.SaveChanges();
 
-            return usersDiginotes.Count() - diginotesOnPendingOrders.Count();
+            return usersDiginotes.Count() - diginotesOnPendingSellOrders.Count();
         }
 
         public Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value)
@@ -321,14 +318,12 @@ namespace Server
 
             for (int i = 0; i < diginotesLeft; i++)
             {
-                diginoteDB.Orders.Add(new Order
+                diginoteDB.PurchaseOrders.Add(new PurchaseOrder
                 {
                     CreatedAt = DateTime.Now,
                     CreatedById = loggedInUsers[token],
-                    Diginote = availableDiginotes.First(),
                     Quote = value,
                     Status = OrderStatus.Active,
-                    Type = OrderType.Purchase,
                 });
 
                 availableDiginotes.RemoveAt(0);
@@ -362,14 +357,13 @@ namespace Server
             var usedDiginotes = new List<Diginote>();
             for (int i = 0; i < diginotesLeft; i++)
             {
-                diginoteDB.Orders.Add(new Order
+                diginoteDB.SellOrders.Add(new SellOrder
                 {
                     CreatedAt = DateTime.Now,
                     CreatedById = loggedInUsers[token],
-                    Diginote = availableDiginotes.First(),
                     Quote = value,
                     Status = OrderStatus.Active,
-                    Type = OrderType.Sell,
+                    Diginote = availableDiginotes.First()
                 });
 
                 usedDiginotes.Add(availableDiginotes.First());
@@ -382,12 +376,23 @@ namespace Server
             return null;
         }
 
-        public Common.Serializable.Order[] GetUserIncompleteOrders(string token, OrderType type)
+        public Common.Serializable.SellOrder[] GetUserIncompleteSellOrders(string token)
         {
             int ownerId = loggedInUsers[token];
 
-            var query = from o in diginoteDB.Orders
-                        where o.CreatedById == ownerId && o.Type == type && o.Status != OrderStatus.Complete
+            var query = from o in diginoteDB.SellOrders
+                        where o.CreatedById == ownerId && o.Status != OrderStatus.Complete
+                        select o;
+
+            return query.ToArray().Select(o => o.Serialize()).ToArray();
+        }
+
+        public Common.Serializable.PurchaseOrder[] GetUserIncompletePurchaseOrders(string token)
+        {
+            int ownerId = loggedInUsers[token];
+            
+            var query = from o in diginoteDB.PurchaseOrders
+                        where o.CreatedById == ownerId && o.Status != OrderStatus.Complete
                         select o;
 
             return query.ToArray().Select(o => o.Serialize()).ToArray();

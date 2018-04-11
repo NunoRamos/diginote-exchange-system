@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Common.Serializable
 {
     [Serializable]
-    public class Transaction
+    public class SellOrder
     {
         public int Id { get; set; }
 
@@ -15,8 +15,10 @@ namespace Common.Serializable
 
         public float Quote { get; set; }
 
-        public SellOrder SellOrder { get; set; }
+        public OrderStatus Status { get; set; }
 
-        public PurchaseOrder PurchaseOrder { get; set; }
+        public int CreatedById { get; set; }
+
+        public int DiginoteId { get; set; }
     }
 }

@@ -18,11 +18,11 @@ namespace diginote_exchange_system
             Client.State.SellOrdersUpdated += OnSellOrdersUpdated;
         }
 
-        private void OnPurchaseOrdersUpdated(object sender, Order[] updatedPurchaseOrders)
+        private void OnPurchaseOrdersUpdated(object sender, PurchaseOrder[] updatedPurchaseOrders)
         {
             PurchaseOrdersGridView.DataSource = updatedPurchaseOrders;
         }
-        private void OnSellOrdersUpdated(object sender, Order[] updatedSellOrders)
+        private void OnSellOrdersUpdated(object sender, SellOrder[] updatedSellOrders)
         {
             SellOrdersGridView.DataSource = updatedSellOrders;
         }

@@ -126,6 +126,8 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Diginote.cs" />
     <Compile Include="Models\Order.cs" />
+    <Compile Include="Models\PurchaseOrder.cs" />
+    <Compile Include="Models\SellOrder.cs" />
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

@@ -22,9 +22,9 @@ namespace Server.Models
         public int PurchaseOrderId { get; set; }
 
         [ForeignKey("SellOrderId")]
-        public virtual Order SellOrder { get; set; }
+        public virtual SellOrder SellOrder { get; set; }
         [ForeignKey("PurchaseOrderId")]
-        public virtual Order PurchaseOrder { get; set; }
+        public virtual PurchaseOrder PurchaseOrder { get; set; }
 
         public Common.Serializable.Transaction Serialize()
         {

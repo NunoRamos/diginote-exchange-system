@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Server.Models
 {
-    public class Order
+    public abstract class Order
     {
         [Key]
         public int Id { get; set; }
@@ -20,30 +20,13 @@ namespace Server.Models
         public OrderStatus Status { get; set; }
 
         [Required]
-        public OrderType Type { get; set; }
-
-        [Required]
         public int CreatedById { get; set; }
 
         [ForeignKey("CreatedById")]
         public virtual User CreatedBy { get; set; }
 
-        public virtual Diginote Diginote { get; set; }
+        // public virtual Transaction Transaction { get; set; }
 
-        public virtual Transaction Transaction { get; set; }
-
-        public Common.Serializable.Order Serialize()
-        {
-            return new Common.Serializable.Order
-            {
-                CreatedAt = CreatedAt,
-                CreatedById = CreatedById,
-                DiginoteId = Diginote.Id,
-                Id = Id,
-                Quote = Quote,
-                Status = Status,
-                Type = Type
-            };
-        }
+        //public abstract Common.Serializable.Order Serialize();
     }
 }

@@ -58,6 +58,8 @@
     <Compile Include="Serializable\Order.cs" />
     <Compile Include="OrderNotSatisfiedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serializable\PurchaseOrder.cs" />
+    <Compile Include="Serializable\SellOrder.cs" />
     <Compile Include="Serializable\Transaction.cs" />
   </ItemGroup>
   <ItemGroup>

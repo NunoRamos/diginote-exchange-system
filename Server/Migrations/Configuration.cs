@@ -27,7 +27,7 @@ namespace Server.Migrations
                 {
                     FacialValue = 1.0f,
                     Owner = user,
-                    Orders = null
+                    SellOrders = null
                 });
             }
         }
