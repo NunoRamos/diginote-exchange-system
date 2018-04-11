@@ -50,8 +50,8 @@ namespace diginote_exchange_system
         private void SystemForm_Shown(object sender, EventArgs e)
         {
             Client.State.GetAvailableDiginotes();
-            Client.State.GetUserSellOrders();
-            Client.State.GetUserPurchaseOrders();
+            Client.State.GetUserIncompleteSellOrders();
+            Client.State.GetUserIncompletePurchaseOrders();
             OnQuoteUpdated(Client.State.GetCurrentQuote());
         }
 
@@ -74,8 +74,13 @@ namespace diginote_exchange_system
             }
 
             Client.State.GetAvailableDiginotes();
-            Client.State.GetUserPurchaseOrders();
-            Client.State.GetUserSellOrders();
+            Client.State.GetUserIncompletePurchaseOrders();
+            Client.State.GetUserIncompleteSellOrders();
+        }
+
+        private void HistoryButton_Click(object sender, EventArgs e)
+        {
+            new HistoryForm().ShowDialog(this);
         }
     }
 }

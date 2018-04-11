@@ -382,15 +382,26 @@ namespace Server
             return null;
         }
 
-        public Common.Serializable.Order[] GetUserOrders(string token, OrderType type)
+        public Common.Serializable.Order[] GetUserIncompleteOrders(string token, OrderType type)
         {
             int ownerId = loggedInUsers[token];
 
             var query = from o in diginoteDB.Orders
-                        where o.CreatedById == ownerId && o.Type == type
+                        where o.CreatedById == ownerId && o.Type == type && o.Status != OrderStatus.Complete
                         select o;
 
             return query.ToArray().Select(o => o.Serialize()).ToArray();
+        }
+
+        public Common.Serializable.Transaction[] GetUserTransactions(string token)
+        {
+            int userId = loggedInUsers[token];
+
+            var query = from t in diginoteDB.Transactions
+                        where t.PurchaseOrder.CreatedById == userId || t.SellOrder.CreatedById == userId
+                        select t;
+
+            return query.ToArray().Select(t => t.Serialize()).ToArray();
         }
     }
 }

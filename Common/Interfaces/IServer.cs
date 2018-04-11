@@ -25,7 +25,8 @@ namespace Common.Interfaces
         Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value);
 
         Exception ConfirmSellOrder(string token, int diginotesLeft, float value);
-        Serializable.Order[] GetUserOrders(string token, OrderType type);
+        Serializable.Order[] GetUserIncompleteOrders(string token, OrderType type);
+        Serializable.Transaction[] GetUserTransactions(string token);
     }
     
     [Serializable]

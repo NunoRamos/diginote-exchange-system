@@ -52,8 +52,8 @@ namespace diginote_exchange_system.Views
             if (exception != null)
             {
                 MessageBox.Show(exception.ToString());
-                Client.State.GetUserPurchaseOrders();
-                Client.State.GetUserSellOrders();
+                Client.State.GetUserIncompletePurchaseOrders();
+                Client.State.GetUserIncompleteSellOrders();
             }
             else
             {

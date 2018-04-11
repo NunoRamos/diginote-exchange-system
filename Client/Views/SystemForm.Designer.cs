@@ -43,6 +43,7 @@
             this.PurchaseOrdersGridView = new System.Windows.Forms.DataGridView();
             this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
+            this.HistoryButton = new MaterialSkin.Controls.MaterialFlatButton();
             ((System.ComponentModel.ISupportInitialize)(this.SellOrdersGridView)).BeginInit();
             this.CreateOrderGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DiginoteNumberNumericUpDown)).BeginInit();
@@ -230,12 +231,12 @@
             this.materialLabel2.Depth = 0;
             this.materialLabel2.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel2.Location = new System.Drawing.Point(132, 195);
+            this.materialLabel2.Location = new System.Drawing.Point(110, 195);
             this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel2.Name = "materialLabel2";
-            this.materialLabel2.Size = new System.Drawing.Size(117, 19);
+            this.materialLabel2.Size = new System.Drawing.Size(161, 19);
             this.materialLabel2.TabIndex = 12;
-            this.materialLabel2.Text = "Your Sell Orders";
+            this.materialLabel2.Text = "Incomplete Sell Orders";
             // 
             // materialLabel3
             // 
@@ -243,18 +244,35 @@
             this.materialLabel3.Depth = 0;
             this.materialLabel3.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel3.Location = new System.Drawing.Point(525, 195);
+            this.materialLabel3.Location = new System.Drawing.Point(510, 195);
             this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel3.Name = "materialLabel3";
-            this.materialLabel3.Size = new System.Drawing.Size(154, 19);
+            this.materialLabel3.Size = new System.Drawing.Size(198, 19);
             this.materialLabel3.TabIndex = 13;
-            this.materialLabel3.Text = "Your Purchase Orders";
+            this.materialLabel3.Text = "Incomplete Purchase Orders";
+            // 
+            // HistoryButton
+            // 
+            this.HistoryButton.AutoSize = true;
+            this.HistoryButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.HistoryButton.Depth = 0;
+            this.HistoryButton.Location = new System.Drawing.Point(718, 113);
+            this.HistoryButton.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.HistoryButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.HistoryButton.Name = "HistoryButton";
+            this.HistoryButton.Primary = false;
+            this.HistoryButton.Size = new System.Drawing.Size(69, 36);
+            this.HistoryButton.TabIndex = 14;
+            this.HistoryButton.Text = "History";
+            this.HistoryButton.UseVisualStyleBackColor = true;
+            this.HistoryButton.Click += new System.EventHandler(this.HistoryButton_Click);
             // 
             // SystemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 527);
+            this.Controls.Add(this.HistoryButton);
             this.Controls.Add(this.materialLabel3);
             this.Controls.Add(this.materialLabel2);
             this.Controls.Add(this.PurchaseOrdersGridView);
@@ -295,5 +313,6 @@
         private System.Windows.Forms.DataGridView PurchaseOrdersGridView;
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
+        private MaterialSkin.Controls.MaterialFlatButton HistoryButton;
     }
 }

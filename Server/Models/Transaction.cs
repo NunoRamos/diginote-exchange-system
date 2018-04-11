@@ -25,5 +25,17 @@ namespace Server.Models
         public virtual Order SellOrder { get; set; }
         [ForeignKey("PurchaseOrderId")]
         public virtual Order PurchaseOrder { get; set; }
+
+        public Common.Serializable.Transaction Serialize()
+        {
+            return new Common.Serializable.Transaction
+            {
+                CreatedAt = CreatedAt,
+                Id = Id,
+                PurchaseOrder = PurchaseOrder.Serialize(),
+                Quote = Quote,
+                SellOrder = SellOrder.Serialize()
+            };
+        }
     }
 }

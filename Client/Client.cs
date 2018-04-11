@@ -119,17 +119,22 @@ namespace diginote_exchange_system
             return Server.CreatePurchaseOrder(Token, quantity);
         }
 
-        public Order[] GetUserSellOrders()
+        public Order[] GetUserIncompleteSellOrders()
         {
-            Order[] updatedSellOrders = Server.GetUserOrders(Token, OrderType.Sell);
+            Order[] updatedSellOrders = Server.GetUserIncompleteOrders(Token, OrderType.Sell);
             SellOrdersUpdated.Invoke(this, updatedSellOrders);
             return updatedSellOrders;
         }
-        public Order[] GetUserPurchaseOrders()
+        public Order[] GetUserIncompletePurchaseOrders()
         {
-            Order[] updatedPurchaseOrders = Server.GetUserOrders(Token, OrderType.Purchase);
+            Order[] updatedPurchaseOrders = Server.GetUserIncompleteOrders(Token, OrderType.Purchase);
             PurchaseOrdersUpdated.Invoke(this, updatedPurchaseOrders);
             return updatedPurchaseOrders;
+        }
+
+        internal Transaction[] GetTransactions()
+        {
+            return Server.GetUserTransactions(Token);
         }
     }
 }
