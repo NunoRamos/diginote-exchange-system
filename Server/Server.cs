@@ -3,13 +3,9 @@ using System.Linq;
 using Common.Interfaces;
 using System.Collections.Generic;
 using Common;
-using System.Data.Entity;
 using Server.Models;
-using Common.Serializable;
 using RabbitMQ.Client;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
+using System.Data.Entity;
 
 namespace Server
 {
