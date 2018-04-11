@@ -27,23 +27,6 @@ namespace Server
                 .HasRequired(c => c.SellOrder)
                 .WithMany()
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<SellOrder>().Map(m =>
-            {
-                m.MapInheritedProperties();
-                m.ToTable("SellOrders");
-            });
-
-            modelBuilder.Entity<PurchaseOrder>().Map(m =>
-            {
-                m.MapInheritedProperties();
-                m.ToTable("PurchaseOrders");
-            });
-
-            modelBuilder.Entity<SellOrder>()
-                .HasRequired(o => o.Diginote)
-                .WithRequiredDependent()
-                .WillCascadeOnDelete(false);
         }
     }
 }
