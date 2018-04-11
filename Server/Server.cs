@@ -6,6 +6,10 @@ using Common;
 using System.Data.Entity;
 using Server.Models;
 using Common.Serializable;
+using RabbitMQ.Client;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace Server
 {
@@ -17,11 +21,15 @@ namespace Server
 
         private Dictionary<string, Session> loggedInUsers = new Dictionary<string, Session>();
 
+        private IModel channel;
+
         public event QuoteUpdated QuoteUpdated;
 
         public Server()
         {
-
+            ConnectionFactory factory = new ConnectionFactory();
+            IConnection connection = factory.CreateConnection();
+            channel = connection.CreateModel();
         }
 
         public Server(DiginoteSystemContext db)
@@ -56,7 +64,7 @@ namespace Server
             User userObj = query.ToArray()[0];
             string token = Utils.generateToken();
 
-            loggedInUsers.Add(token, new Session(userObj.Id));
+            loggedInUsers.Add(token, new Session(channel, token, userObj.Id));
 
             return Tuple.Create<string, Exception>(token, null);
         }
@@ -109,7 +117,7 @@ namespace Server
             }
 
             string token = Utils.generateToken();
-            loggedInUsers.Add(token, new Session(user.Id));
+            loggedInUsers.Add(token, new Session(channel, token, user.Id));
 
             return Tuple.Create<string, Exception>(token, null);
         }
@@ -417,46 +425,5 @@ namespace Server
 
             return query.ToArray().Select(t => t.Serialize()).ToArray();
         }
-
-
-        #region Subscriptions
-
-        public bool SubscribeUserPurchaseOrdersUpdated(string token, UserPurchaseOrdersUpdated userPurchaseOrdersUpdated)
-        {
-            if (!loggedInUsers.ContainsKey(token))
-                return false;
-
-            loggedInUsers[token].UserPurchaseOrdersUpdated += userPurchaseOrdersUpdated;
-            return true;
-        }
-
-        public bool SubscribeUserDiginotesUpdated(string token, UserDiginotesUpdated userDiginotesUpdated)
-        {
-            if (!loggedInUsers.ContainsKey(token))
-                return false;
-
-            loggedInUsers[token].UserDiginotesUpdated += userDiginotesUpdated;
-            return true;
-        }
-
-        public bool SubscribeUserTransactionsUpdated(string token, UserTransactionsUpdated userTransactionsUpdated)
-        {
-            if (!loggedInUsers.ContainsKey(token))
-                return false;
-
-            loggedInUsers[token].UserTransactionsUpdated += userTransactionsUpdated;
-            return true;
-        }
-
-        public bool SubscribeUserSellOrdersUpdated(string token, UserSellOrdersUpdated userSellOrdersUpdated)
-        {
-            if (!loggedInUsers.ContainsKey(token))
-                return false;
-
-            loggedInUsers[token].UserSellOrdersUpdated += userSellOrdersUpdated;
-            return true;
-        }
-
-        #endregion
     }
 }

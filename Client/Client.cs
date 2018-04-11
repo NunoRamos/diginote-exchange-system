@@ -1,12 +1,18 @@
 ﻿using Common;
 using Common.Interfaces;
 using Common.Serializable;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using System;
 using System.Collections;
+using System.IO;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Windows.Forms;
 
 namespace diginote_exchange_system
@@ -22,6 +28,7 @@ namespace diginote_exchange_system
         private IServer Server;
 
         public EventRepeater EventRepeater = new EventRepeater();
+        private readonly IModel channel;
 
         public event EventHandler<Order[]> SellOrdersUpdated;
         public event EventHandler<Order[]> PurchaseOrdersUpdated;
@@ -31,6 +38,10 @@ namespace diginote_exchange_system
         public Client()
         {
             Server = ConnectToServer();
+            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var connection = factory.CreateConnection();
+            channel = connection.CreateModel();
+
             SetupEventRepeater();
             OnQuoteUpdated(Server.GetCurrentQuote());
         }
@@ -41,19 +52,51 @@ namespace diginote_exchange_system
             EventRepeater.QuoteUpdated += OnQuoteUpdated;
         }
 
+        private void CreateQueue(string name, EventHandler<BasicDeliverEventArgs> onReceive)
+        {
+            channel.QueueDeclare(queue: name,
+                                 durable: false,
+                                 exclusive: false,
+                                 autoDelete: false,
+                                 arguments: null);
+
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += onReceive;
+
+            channel.BasicConsume(queue: name,
+                                 autoAck: true,
+                                 consumer: consumer);
+        }
+
+        private object Deserialize(BasicDeliverEventArgs args)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream(args.Body);
+            return formatter.Deserialize(memoryStream);
+        }
+
         private void SetupLoggedInEvents()
         {
-            EventRepeater.SubscribeDiginotesUpdated(Server, Token);
-            EventRepeater.DiginotesUpdated += (d => { AvailableDiginotesUpdated.Invoke(this, d); });
+            string diginotesChannelName = "Diginotes" + Token;
+            string purchaseOrdersChannelName = "PurchaseOrders" + Token;
+            string sellOrdersChannelName = "SellOrders" + Token;
+            string transactionsChannelName = "Transactions" + Token;
 
-            EventRepeater.SubscribePurchaseOrdersUpdated(Server, Token);
-            EventRepeater.PurchaseOrdersUpdated += (o => { PurchaseOrdersUpdated.Invoke(this, o); });
+            CreateQueue(diginotesChannelName, (model, args) =>
+                AvailableDiginotesUpdated.Invoke(this, (int)Deserialize(args))
+           );
 
-            EventRepeater.SubscribeSellOrdersUpdated(Server, Token);
-            EventRepeater.SellOrdersUpdated += (o => { PurchaseOrdersUpdated.Invoke(this, o); });
+            CreateQueue(purchaseOrdersChannelName, (model, args) =>
+                PurchaseOrdersUpdated.Invoke(this, (Order[])Deserialize(args))
+           );
 
-            EventRepeater.SubscribeTransactionsUpdated(Server, Token);
-            EventRepeater.TransactionsUpdated += (t => { TransactionsUpdated.Invoke(this, t); });
+            CreateQueue(sellOrdersChannelName, (model, args) =>
+                SellOrdersUpdated.Invoke(this, (Order[])Deserialize(args))
+           );
+
+            CreateQueue(transactionsChannelName, (model, args) =>
+                TransactionsUpdated.Invoke(this, (Transaction[])Deserialize(args))
+           );
         }
 
         internal Exception Login(string nickname, string password)

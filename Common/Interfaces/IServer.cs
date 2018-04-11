@@ -41,11 +41,6 @@ namespace Common.Interfaces
         Exception ConfirmSellOrder(string token, int diginotesLeft, float value);
         Order[] GetUserIncompleteOrders(string token, OrderType type);
         Transaction[] GetUserTransactions(string token);
-
-        bool SubscribeUserDiginotesUpdated(string token, UserDiginotesUpdated userDiginotesUpdated);
-        bool SubscribeUserPurchaseOrdersUpdated(string token, UserPurchaseOrdersUpdated userPurchaseOrdersUpdated);
-        bool SubscribeUserSellOrdersUpdated(string token, UserSellOrdersUpdated userSellOrdersUpdated);
-        bool SubscribeUserTransactionsUpdated(string token, UserTransactionsUpdated userTransactionsUpdated);
     }
 
     [Serializable]
@@ -53,58 +48,9 @@ namespace Common.Interfaces
     {
         public event QuoteUpdated QuoteUpdated;
 
-        public event UserDiginotesUpdated DiginotesUpdated;
-        public event UserPurchaseOrdersUpdated PurchaseOrdersUpdated;
-        public event UserSellOrdersUpdated SellOrdersUpdated;
-        public event UserTransactionsUpdated TransactionsUpdated;
-
         public void FireQuoteUpdated(float newQuote)
         {
             QuoteUpdated(newQuote);
-        }
-
-        public void FireDiginotesUpdated(int diginotes)
-        {
-            DiginotesUpdated(diginotes);
-        }
-
-        public void FirePurchaseOrdersUpdated(Order[] orders)
-        {
-            PurchaseOrdersUpdated(orders);
-        }
-
-        public void FireSellOrdersUpdated(Order[] orders)
-        {
-            SellOrdersUpdated(orders);
-        }
-
-        public void FireTransactionsUpdated(Transaction[] transactions)
-        {
-            TransactionsUpdated(transactions);
-        }
-
-        public void SubscribeDiginotesUpdated(IServer server, string token)
-        {
-            //server.SubscribeUserDiginotesUpdated(token, FireDiginotesUpdated);
-            server.SubscribeUserDiginotesUpdated(token, (e => { Console.WriteLine("Goods"); }));
-        }
-
-        public void SubscribePurchaseOrdersUpdated(IServer server, string token)
-        {
-            //server.SubscribeUserPurchaseOrdersUpdated(token, FirePurchaseOrdersUpdated);
-            server.SubscribeUserPurchaseOrdersUpdated(token, (e => { Console.WriteLine("Goods"); }));
-        }
-
-        public void SubscribeSellOrdersUpdated(IServer server, string token)
-        {
-            //server.SubscribeUserSellOrdersUpdated(token, FireSellOrdersUpdated);
-            server.SubscribeUserSellOrdersUpdated(token, (e => { Console.WriteLine("Goods"); }));
-        }
-
-        public void SubscribeTransactionsUpdated(IServer server, string token)
-        {
-            //server.SubscribeUserTransactionsUpdated(token, FireTransactionsUpdated);
-            server.SubscribeUserTransactionsUpdated(token, (e => { Console.WriteLine("Goods"); }));
         }
     }
 }
