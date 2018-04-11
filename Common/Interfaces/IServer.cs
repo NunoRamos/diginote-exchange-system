@@ -1,9 +1,23 @@
-﻿using System;
+﻿using Common.Serializable;
+using System;
+using System.Collections.Generic;
 
 namespace Common.Interfaces
 {
     [Serializable]
     public delegate void QuoteUpdated(float newQuote);
+
+    [Serializable]
+    public delegate void UserDiginotesUpdated(int diginotes);
+
+    [Serializable]
+    public delegate void UserPurchaseOrdersUpdated(Order[] orders);
+
+    [Serializable]
+    public delegate void UserSellOrdersUpdated(Order[] orders);
+
+    [Serializable]
+    public delegate void UserTransactionsUpdated(Transaction[] transactions);
 
     public interface IServer
     {
@@ -26,15 +40,15 @@ namespace Common.Interfaces
 
         Exception ConfirmSellOrder(string token, int diginotesLeft, float value);
 
-        Serializable.SellOrder[] GetUserIncompleteSellOrders(string token);
-    
-        Serializable.PurchaseOrder[] GetUserIncompletePurchaseOrders(string token);
+        SellOrder[] GetUserIncompleteSellOrders(string token);
 
-        Serializable.Transaction[] GetUserTransactions(string token);
+        PurchaseOrder[] GetUserIncompletePurchaseOrders(string token);
+
+        Transaction[] GetUserTransactions(string token);
     }
-    
+
     [Serializable]
-    public class EventRepeater: MarshalByRefObject
+    public class EventRepeater : MarshalByRefObject
     {
         public event QuoteUpdated QuoteUpdated;
 

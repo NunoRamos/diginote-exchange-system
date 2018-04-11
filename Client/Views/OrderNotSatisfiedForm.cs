@@ -25,7 +25,7 @@ namespace diginote_exchange_system.Views
             ValueTextField.Text = Client.State.CurrentQuote.ToString();
             Text = orderType == OrderType.Purchase ? "Purchase" : "Sell";
             Text += " Order Not Satisfied";
-            Client.State.EvntRepeater.QuoteUpdated += OnQuoteUpdated;
+            Client.State.EventRepeater.QuoteUpdated += OnQuoteUpdated;
             DiginotesLeftTextField.Text = diginotesLeft.ToString();
         }
 

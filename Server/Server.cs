@@ -1,9 +1,10 @@
-﻿    using System;
+﻿using System;
 using System.Linq;
 using Common.Interfaces;
 using System.Collections.Generic;
 using Common;
 using Server.Models;
+using RabbitMQ.Client;
 using System.Data.Entity;
 
 namespace Server
@@ -13,13 +14,18 @@ namespace Server
         private readonly int REGISTER_DIGINOTE_BONUS = 100;
 
         static private DiginoteSystemContext diginoteDB;
-        static private Dictionary<string, int> loggedInUsers = new Dictionary<string, int>();
+
+        private Dictionary<string, Session> loggedInUsers = new Dictionary<string, Session>();
+
+        private IModel channel;
 
         public event QuoteUpdated QuoteUpdated;
 
         public Server()
         {
-
+            ConnectionFactory factory = new ConnectionFactory();
+            IConnection connection = factory.CreateConnection();
+            channel = connection.CreateModel();
         }
 
         public Server(DiginoteSystemContext db)
@@ -29,7 +35,7 @@ namespace Server
 
         private User GetLoggedInUser(string token)
         {
-            int userId = loggedInUsers[token];
+            int userId = loggedInUsers[token].Id;
             return (from u in diginoteDB.Users
                     where u.Id == userId
                     select u).First();
@@ -54,7 +60,7 @@ namespace Server
             User userObj = query.ToArray()[0];
             string token = Utils.generateToken();
 
-            loggedInUsers.Add(token, userObj.Id);
+            loggedInUsers.Add(token, new Session(channel, token, userObj.Id));
 
             return Tuple.Create<string, Exception>(token, null);
         }
@@ -83,7 +89,7 @@ namespace Server
                 Nickname = nickname,
                 Password = password,
                 Diginotes = new List<Diginote>(),
-                Orders = new List<Order>()
+                Orders = new List<Models.Order>()
             };
 
             user = diginoteDB.Users.Add(user);
@@ -107,7 +113,7 @@ namespace Server
             }
 
             string token = Utils.generateToken();
-            loggedInUsers.Add(token, user.Id);
+            loggedInUsers.Add(token, new Session(channel, token, user.Id));
 
             return Tuple.Create<string, Exception>(token, null);
         }
@@ -154,7 +160,7 @@ namespace Server
 
                 sellOrder.Status = OrderStatus.Complete;
 
-                Transaction transaction = new Transaction
+                Models.Transaction transaction = new Models.Transaction
                 {
                     CreatedAt = DateTime.Now,
                     PurchaseOrder = purchaseOrder,
@@ -167,6 +173,9 @@ namespace Server
 
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
+
+            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdateSellOrders(GetUserIncompleteSellOrders(token));
 
             if (numSellOrdersCreated < quantity)
             {
@@ -233,7 +242,7 @@ namespace Server
 
                 sellOrder.Diginote.Owner = purchaseOrder.CreatedBy;
 
-                Transaction transaction = new Transaction
+                Models.Transaction transaction = new Models.Transaction
                 {
                     CreatedAt = DateTime.Now,
                     PurchaseOrder = purchaseOrder,
@@ -246,6 +255,9 @@ namespace Server
 
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
+
+            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(token));
 
             if (numPurchaseOrdersCreated < quantity)
             {
@@ -278,7 +290,7 @@ namespace Server
 
         public int GetAvailableDiginotes(string token)
         {
-            int id = loggedInUsers[token];
+            int id = loggedInUsers[token].Id;
 
             var dbTransactions = diginoteDB.Database.BeginTransaction();
             var usersDiginotes = from diginote in diginoteDB.Diginotes
@@ -286,8 +298,8 @@ namespace Server
                                  select diginote;
 
             var diginotesOnPendingSellOrders = from order in diginoteDB.SellOrders
-                                           where order.CreatedById == id && order.Status != OrderStatus.Complete
-                                           select order;
+                                               where order.CreatedById == id && order.Status != OrderStatus.Complete
+                                               select order;
 
             dbTransactions.Commit();
             diginoteDB.SaveChanges();
@@ -297,7 +309,7 @@ namespace Server
 
         public Exception ConfirmPurchaseOrder(string token, int diginotesLeft, float value)
         {
-            var OwnerId = loggedInUsers[token];
+            int ownerId = loggedInUsers[token].Id;
 
             var dbTransaction = diginoteDB.Database.BeginTransaction();
             float currentQuote = GetCurrentQuote();
@@ -308,7 +320,7 @@ namespace Server
                 return new Exception("Value must be greater than or equal to the current quote");
             }
 
-            var availableDiginotes = GetUserAvailableDiginotes(OwnerId);
+            var availableDiginotes = GetUserAvailableDiginotes(ownerId);
 
             if (availableDiginotes.Count < diginotesLeft)
             {
@@ -321,7 +333,7 @@ namespace Server
                 diginoteDB.PurchaseOrders.Add(new PurchaseOrder
                 {
                     CreatedAt = DateTime.Now,
-                    CreatedById = loggedInUsers[token],
+                    CreatedById = loggedInUsers[token].Id,
                     Quote = value,
                     Status = OrderStatus.Active,
                 });
@@ -332,11 +344,14 @@ namespace Server
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
 
+            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(token));
+
             return null;
         }
         public Exception ConfirmSellOrder(string token, int diginotesLeft, float value)
         {
-            int OwnerId = loggedInUsers[token];
+            int OwnerId = loggedInUsers[token].Id;
             var dbTransaction = diginoteDB.Database.BeginTransaction();
             float currentQuote = GetCurrentQuote();
 
@@ -360,7 +375,7 @@ namespace Server
                 diginoteDB.SellOrders.Add(new SellOrder
                 {
                     CreatedAt = DateTime.Now,
-                    CreatedById = loggedInUsers[token],
+                    CreatedById = loggedInUsers[token].Id,
                     Quote = value,
                     Status = OrderStatus.Active,
                     Diginote = availableDiginotes.First()
@@ -373,12 +388,15 @@ namespace Server
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
 
+            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdateSellOrders(GetUserIncompleteSellOrders(token));
+
             return null;
         }
 
         public Common.Serializable.SellOrder[] GetUserIncompleteSellOrders(string token)
         {
-            int ownerId = loggedInUsers[token];
+            int ownerId = loggedInUsers[token].Id;
 
             var query = from o in diginoteDB.SellOrders
                         where o.CreatedById == ownerId && o.Status != OrderStatus.Complete
@@ -389,8 +407,8 @@ namespace Server
 
         public Common.Serializable.PurchaseOrder[] GetUserIncompletePurchaseOrders(string token)
         {
-            int ownerId = loggedInUsers[token];
-            
+            int ownerId = loggedInUsers[token].Id;
+
             var query = from o in diginoteDB.PurchaseOrders
                         where o.CreatedById == ownerId && o.Status != OrderStatus.Complete
                         select o;
@@ -400,7 +418,7 @@ namespace Server
 
         public Common.Serializable.Transaction[] GetUserTransactions(string token)
         {
-            int userId = loggedInUsers[token];
+            int userId = loggedInUsers[token].Id;
 
             var query = from t in diginoteDB.Transactions
                         where t.PurchaseOrder.CreatedById == userId || t.SellOrder.CreatedById == userId
