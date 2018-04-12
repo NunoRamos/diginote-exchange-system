@@ -295,7 +295,7 @@ namespace Server
 
             foreach (var session in affectedUsers)
             {
-                session.UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(session.Token));
+                session.UpdateSellOrders(GetUserIncompleteSellOrders(session.Token));
             }
 
             loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
@@ -537,7 +537,7 @@ namespace Server
                         status = "Purchase Order Quote needs to be higher or equal to the atual!";
                     }
                 }
-                
+
             }
 
             return status;
@@ -555,7 +555,7 @@ namespace Server
 
                 if (order != null)
                 {
-                    if(order.Quote >= sellOrder.Quote)
+                    if (order.Quote >= sellOrder.Quote)
                     {
                         order.Quote = sellOrder.Quote;
                         diginoteDB.SaveChanges();
