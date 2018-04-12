@@ -39,7 +39,8 @@ namespace diginote_exchange_system.Views
 
             if (exception != null)
             {
-                MessageBox.Show("Sign up failed!\n" + exception.ToString());
+                Console.WriteLine(exception.ToString());
+                MessageBox.Show("Sign up failed!");
                 return;
             }
 

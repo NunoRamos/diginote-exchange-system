@@ -25,11 +25,11 @@ namespace diginote_exchange_system.Views
             ValueTextField.Text = Client.State.CurrentQuote.ToString();
             Text = orderType == OrderType.Purchase ? "Purchase" : "Sell";
             Text += " Order Not Satisfied";
-            Client.State.EventRepeater.QuoteUpdated += OnQuoteUpdated;
+            Client.State.QuoteUpdated += OnQuoteUpdated;
             DiginotesLeftTextField.Text = diginotesLeft.ToString();
         }
 
-        private void OnQuoteUpdated(float newQuote)
+        private void OnQuoteUpdated(object sender, float newQuote)
         {
             CurrentQuoteTextField.Text = newQuote.ToString();
         }
@@ -51,7 +51,8 @@ namespace diginote_exchange_system.Views
 
             if (exception != null)
             {
-                MessageBox.Show(exception.ToString());
+                MessageBox.Show("Could not confirm order.");
+                Console.WriteLine(exception.ToString());
                 Client.State.GetUserIncompletePurchaseOrders();
                 Client.State.GetUserIncompleteSellOrders();
             }

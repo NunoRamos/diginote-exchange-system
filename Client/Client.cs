@@ -27,9 +27,9 @@ namespace diginote_exchange_system
 
         private IServer Server;
 
-        public EventRepeater EventRepeater = new EventRepeater();
         private readonly IModel channel;
 
+        public event EventHandler<float> QuoteUpdated;
         public event EventHandler<SellOrder[]> SellOrdersUpdated;
         public event EventHandler<PurchaseOrder[]> PurchaseOrdersUpdated;
         public event EventHandler<Transaction[]> TransactionsUpdated;
@@ -43,22 +43,23 @@ namespace diginote_exchange_system
             channel = connection.CreateModel();
 
             SetupEventRepeater();
-            OnQuoteUpdated(Server.GetCurrentQuote());
         }
 
         private void SetupEventRepeater()
         {
-            Server.QuoteUpdated += EventRepeater.FireQuoteUpdated;
-            EventRepeater.QuoteUpdated += OnQuoteUpdated;
+            CreateQueue("CurrentQuote", (model, args) =>
+                {
+                    QuoteUpdated.Invoke(this, (float)Deserialize(args));
+                    CurrentQuote = (float)Deserialize(args);
+                }
+            );
         }
 
         private void CreateQueue(string name, EventHandler<BasicDeliverEventArgs> onReceive)
         {
-            channel.QueueDeclare(queue: name,
-                                 durable: false,
-                                 exclusive: false,
-                                 autoDelete: false,
-                                 arguments: null);
+            channel.QueueBind(queue: name,
+                                exchange: "diginotes",
+                                routingKey: name);
 
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += onReceive;
@@ -128,7 +129,6 @@ namespace diginote_exchange_system
 
         internal object GetAvailableDiginotes()
         {
-
             int diginotes = Server.GetAvailableDiginotes(Token);
             AvailableDiginotesUpdated.Invoke(this, diginotes);
             return diginotes;
@@ -137,11 +137,6 @@ namespace diginote_exchange_system
         internal float GetCurrentQuote()
         {
             return Server.GetCurrentQuote();
-        }
-
-        private void OnQuoteUpdated(float newQuote)
-        {
-            CurrentQuote = newQuote;
         }
 
         internal Exception ConfirmPurchaseOrder(int diginotesLeft, float value)
