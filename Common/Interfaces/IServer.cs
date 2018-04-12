@@ -4,25 +4,8 @@ using System.Collections.Generic;
 
 namespace Common.Interfaces
 {
-    [Serializable]
-    public delegate void QuoteUpdated(float newQuote);
-
-    [Serializable]
-    public delegate void UserDiginotesUpdated(int diginotes);
-
-    [Serializable]
-    public delegate void UserPurchaseOrdersUpdated(Order[] orders);
-
-    [Serializable]
-    public delegate void UserSellOrdersUpdated(Order[] orders);
-
-    [Serializable]
-    public delegate void UserTransactionsUpdated(Transaction[] transactions);
-
     public interface IServer
     {
-        event QuoteUpdated QuoteUpdated;
-
         Tuple<string, Exception> Login(string nickname, string password);
 
         Tuple<string, Exception> Register(string name, string nickname, string password);
@@ -53,16 +36,5 @@ namespace Common.Interfaces
         String UpdatePurchaseOrders(PurchaseOrder[] UpdatePurchaseOrders);
 
         String UpdateSellOrders(SellOrder[] UpdateSellOrders);
-    }
-
-    [Serializable]
-    public class EventRepeater : MarshalByRefObject
-    {
-        public event QuoteUpdated QuoteUpdated;
-
-        public void FireQuoteUpdated(float newQuote)
-        {
-            QuoteUpdated(newQuote);
-        }
     }
 }

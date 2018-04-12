@@ -14,7 +14,7 @@ namespace diginote_exchange_system
         public SystemForm()
         {
             InitializeComponent();
-            Client.State.EventRepeater.QuoteUpdated += OnQuoteUpdated;
+            Client.State.QuoteUpdated += OnQuoteUpdated;
             Client.State.AvailableDiginotesUpdated += OnDiginotesUpdated;
             Client.State.PurchaseOrdersUpdated += OnPurchaseOrdersUpdated;
             Client.State.SellOrdersUpdated += OnSellOrdersUpdated;
@@ -29,6 +29,7 @@ namespace diginote_exchange_system
             }
             PurchaseOrdersGridView.Invoke(new Action(() => PurchaseOrdersGridView.DataSource = dataSource));
         }
+
         private void OnSellOrdersUpdated(object sender, SellOrder[] updatedSellOrders)
         {
             BindingList<SellOrder> dataSource = new BindingList<SellOrder>();
@@ -44,8 +45,7 @@ namespace diginote_exchange_system
             DiginotesTextField.Invoke(new Action(() => DiginotesTextField.Text = diginotes.ToString()));
         }
 
-
-        private void OnQuoteUpdated(float newQuote)
+        private void OnQuoteUpdated(object sender, float newQuote)
         {
             CurrentQuoteTextField.Invoke(new Action(() => CurrentQuoteTextField.Text = newQuote.ToString()));
         }
@@ -55,7 +55,7 @@ namespace diginote_exchange_system
             Client.State.SignOut();
             Client.Forms.SystemForm.Hide();
             Client.Forms.AuthenticationForm.Show();
-            SellOrdersGridView.DataSource = new BindingList<SellOrder>(); 
+            SellOrdersGridView.DataSource = new BindingList<SellOrder>();
             PurchaseOrdersGridView.DataSource = new BindingList<PurchaseOrder>();
         }
 
@@ -64,7 +64,7 @@ namespace diginote_exchange_system
             Client.State.GetAvailableDiginotes();
             Client.State.GetUserIncompleteSellOrders();
             Client.State.GetUserIncompletePurchaseOrders();
-            OnQuoteUpdated(Client.State.GetCurrentQuote());
+            OnQuoteUpdated(this, Client.State.GetCurrentQuote());
         }
 
         private void PlaceOrderButton_Click(object sender, EventArgs e)
@@ -77,12 +77,20 @@ namespace diginote_exchange_system
                 ? Client.State.CreatePurchaseOrder(quantity)
                 : Client.State.CreateSellOrder(quantity);
 
-            MessageBox.Show(result.ToString());
-
-            if (result.Item2 != null)
+            if (result.Item1 == null && result.Item2 == null)
             {
+                MessageBox.Show("Order placed successfully.");
+            }
+            else if (result.Item1 == null && result.Item2 != null)
+            {
+                MessageBox.Show(result.Item2.Quantity + " orders were not matched. Please select a new quote.");
                 var form = new OrderNotSatisfiedForm(orderType, result.Item2.Quantity);
                 form.ShowDialog(this);
+            }
+            else
+            {
+                MessageBox.Show("Error placing order.");
+                Console.WriteLine(result);
             }
 
             Client.State.GetAvailableDiginotes();

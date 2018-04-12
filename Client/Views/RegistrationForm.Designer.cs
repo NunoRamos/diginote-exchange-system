@@ -212,7 +212,7 @@
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.errorBoxLabel);
             this.Name = "RegistrationForm";
-            this.Text = "RegistrationForm";
+            this.Text = "Sign Up";
             this.ResumeLayout(false);
             this.PerformLayout();
 

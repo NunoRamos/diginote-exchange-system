@@ -6,6 +6,9 @@ using Common;
 using Server.Models;
 using RabbitMQ.Client;
 using System.Data.Entity;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using System.IO;
 
 namespace Server
 {
@@ -19,18 +22,35 @@ namespace Server
 
         private IModel channel;
 
-        public event QuoteUpdated QuoteUpdated;
-
         public Server()
         {
             ConnectionFactory factory = new ConnectionFactory();
             IConnection connection = factory.CreateConnection();
             channel = connection.CreateModel();
+
+            channel.QueueDeclare(
+                queue: "CurrentQuote",
+                durable: false,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null);
         }
 
         public Server(DiginoteSystemContext db)
         {
             diginoteDB = db;
+        }
+
+        private void QuoteUpdated(float newQuote)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream memoryStream = new MemoryStream();
+            formatter.Serialize(memoryStream, newQuote);
+
+            channel.BasicPublish(exchange: "diginotes",
+                routingKey: "CurrentQuote",
+                basicProperties: null,
+                body: memoryStream.ToArray());
         }
 
         private User GetLoggedInUser(string token)
@@ -140,6 +160,8 @@ namespace Server
                 return Tuple.Create<Exception, OrderNotSatisfiedException>(new Exception("Insufficient diginotes to place sell order."), null);
             }
 
+            HashSet<Session> affectedUsers = new HashSet<Session>();
+
             int numSellOrdersCreated = 0;
             foreach (PurchaseOrder purchaseOrder in userIncompleteOrders)
             {
@@ -158,7 +180,7 @@ namespace Server
 
                 sellOrder.Diginote.Owner = purchaseOrder.CreatedBy;
 
-                sellOrder.Status = OrderStatus.Complete;
+                purchaseOrder.Status = OrderStatus.Complete;
 
                 Models.Transaction transaction = new Models.Transaction
                 {
@@ -169,10 +191,22 @@ namespace Server
                 };
 
                 diginoteDB.Transactions.Add(transaction);
+
+                foreach (var affectedUser in loggedInUsers.Where(pair => pair.Value.Id == purchaseOrder.CreatedBy.Id))
+                {
+                    affectedUsers.Add(affectedUser.Value);
+                }
             }
 
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
+
+            QuoteUpdated(value);
+
+            foreach (var session in affectedUsers)
+            {
+                session.UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(session.Token));
+            }
 
             loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
             loggedInUsers[token].UpdateSellOrders(GetUserIncompleteSellOrders(token));
@@ -187,19 +221,18 @@ namespace Server
 
         private List<Diginote> GetUserAvailableDiginotes(int userId)
         {
-            // TODO
-            /*var userIncompleteOrders = from order in diginoteDB.Orders
-                                       where order.Status != OrderStatus.Complete && order.CreatedById == userId
-                                       select order;
+            var userIncompleteSellOrders = from order in diginoteDB.SellOrders
+                                           where order.Status != OrderStatus.Complete && order.CreatedById == userId
+                                           select order;
+
 
             var unavailableDiginotes = from diginote in diginoteDB.Diginotes
                                        where diginote.OwnerId == userId
-                                       join order in userIncompleteOrders on diginote.Id equals order.Diginote.Id
-                                       select diginote;*/
+                                       join order in userIncompleteSellOrders on diginote.Id equals order.Diginote.Id
+                                       select diginote;
 
             return (from diginote in diginoteDB.Diginotes
-                        // where !unavailableDiginotes.Contains(diginote) && diginote.OwnerId == userId
-                    where diginote.OwnerId == userId
+                    where !unavailableDiginotes.Contains(diginote) && diginote.OwnerId == userId
                     select diginote).ToList();
         }
 
@@ -222,6 +255,8 @@ namespace Server
                 dbTransaction.Rollback();
                 return Tuple.Create<Exception, OrderNotSatisfiedException>(new Exception("Insufficient diginotes to place purchase order."), null);
             }
+
+            HashSet<Session> affectedUsers = new HashSet<Session>();
 
             int numPurchaseOrdersCreated = 0;
             foreach (SellOrder sellOrder in unmatchedActiveOrders)
@@ -251,10 +286,19 @@ namespace Server
                 };
 
                 diginoteDB.Transactions.Add(transaction);
+
+                loggedInUsers.Where(pair => pair.Value.Id == sellOrder.CreatedBy.Id).Select(e => affectedUsers.Add(e.Value));
             }
 
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
+
+            QuoteUpdated(value);
+
+            foreach (var session in affectedUsers)
+            {
+                session.UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(session.Token));
+            }
 
             loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
             loggedInUsers[token].UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(token));
@@ -269,9 +313,9 @@ namespace Server
 
         public float GetCurrentQuote()
         {
-            var query = from lastOrder in diginoteDB.SellOrders
-                        orderby lastOrder.CreatedAt descending
-                        select lastOrder;
+            var query = (from lastOrder in diginoteDB.SellOrders
+                         orderby lastOrder.CreatedAt descending
+                         select lastOrder).ToList();
 
             try
             {
@@ -344,6 +388,7 @@ namespace Server
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
 
+            QuoteUpdated(value);
             loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
             loggedInUsers[token].UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(token));
 
@@ -393,6 +438,7 @@ namespace Server
             dbTransaction.Commit();
             diginoteDB.SaveChanges();
 
+            QuoteUpdated(value);
             loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
             loggedInUsers[token].UpdateSellOrders(GetUserIncompleteSellOrders(token));
 

@@ -11,7 +11,7 @@ namespace Common
     public class Session
     {
         private IModel channel;
-        private string token;
+        public string Token { get; }
         public int Id { get; }
 
         private string diginotesChannelName;
@@ -22,7 +22,7 @@ namespace Common
         public Session(IModel channel, string token, int id)
         {
             this.channel = channel;
-            this.token = token;
+            Token = token;
             Id = id;
 
             diginotesChannelName = "Diginotes" + token;
@@ -55,7 +55,7 @@ namespace Common
             var body = memoryStream.ToArray();
 
             channel.BasicPublish(
-                exchange: "",
+                exchange: "diginotes",
                 routingKey: diginotesChannelName,
                 basicProperties: null,
                 body: body
@@ -71,7 +71,7 @@ namespace Common
             var body = memoryStream.ToArray();
 
             channel.BasicPublish(
-                exchange: "",
+                exchange: "diginotes",
                 routingKey: purchaseOrdersChannelName,
                 basicProperties: null,
                 body: body
@@ -87,7 +87,7 @@ namespace Common
             var body = memoryStream.ToArray();
 
             channel.BasicPublish(
-                exchange: "",
+                exchange: "diginotes",
                 routingKey: sellOrdersChannelName,
                 basicProperties: null,
                 body: body
@@ -103,7 +103,7 @@ namespace Common
             var body = memoryStream.ToArray();
 
             channel.BasicPublish(
-                exchange: "",
+                exchange: "diginotes",
                 routingKey: transactionsChannelName,
                 basicProperties: null,
                 body: body
