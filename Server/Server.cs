@@ -446,7 +446,7 @@ namespace Server
                 diginoteDB.SaveChanges();
             }
 
-            status = "Sell Orders Deleted!";
+            status = "Sell Order Deleted!";
 
             return status;
         }
@@ -465,7 +465,65 @@ namespace Server
                 diginoteDB.SaveChanges();
             }
 
-            status = "Purchase Orders Deleted!";
+            status = "Purchase Order Deleted!";
+
+            return status;
+        }
+
+        public String UpdatePurchaseOrders(Common.Serializable.PurchaseOrder[] UpdatePurchaseOrders)
+        {
+            String status = "";
+
+            foreach (Common.Serializable.PurchaseOrder purchaseOrder in UpdatePurchaseOrders)
+            {
+                var order = (from o in diginoteDB.PurchaseOrders
+                             where o.Id == purchaseOrder.Id
+                             select o).Single();
+
+                if (order != null)
+                {
+                    if (order.Quote <= purchaseOrder.Quote)
+                    {
+                        order.Quote = purchaseOrder.Quote;
+                        diginoteDB.SaveChanges();
+                        status = "Purchase Order Updated!";
+                    }
+                    else
+                    {
+                        status = "Purchase Order Quote needs to be higher or equal to the atual!";
+                    }
+                }
+                
+            }
+
+            return status;
+        }
+
+        public String UpdateSellOrders(Common.Serializable.SellOrder[] UpdateSellOrders)
+        {
+            String status = "";
+
+            foreach (Common.Serializable.SellOrder sellOrder in UpdateSellOrders)
+            {
+                var order = (from o in diginoteDB.SellOrders
+                             where o.Id == sellOrder.Id
+                             select o).Single();
+
+                if (order != null)
+                {
+                    if(order.Quote >= sellOrder.Quote)
+                    {
+                        order.Quote = sellOrder.Quote;
+                        diginoteDB.SaveChanges();
+                        status = "Sell Order Updated!";
+                    }
+                    else
+                    {
+                        status = "Sell Order Quote needs to be less or equal to the atual!";
+                    }
+                }
+
+            }
 
             return status;
         }

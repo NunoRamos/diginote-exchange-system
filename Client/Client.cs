@@ -212,5 +212,15 @@ namespace diginote_exchange_system
         {
             return Server.DeletePurchaseOrders(ordersId);
         }
+
+        internal string UpdatePurchaseOrders(PurchaseOrder[] purchaseOrders)
+        {
+            return Server.UpdatePurchaseOrders(purchaseOrders);
+        }
+
+        internal string UpdateSellOrders(SellOrder[] sellOrders)
+        {
+            return Server.UpdateSellOrders(sellOrders);
+        }
     }
 }

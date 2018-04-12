@@ -45,8 +45,9 @@
             this.HistoryButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.SellOrdersGridView = new System.Windows.Forms.DataGridView();
             this.btnDeleteSellOrders = new MaterialSkin.Controls.MaterialFlatButton();
-            this.btnUpdateOrders = new MaterialSkin.Controls.MaterialFlatButton();
+            this.btnUpdatePurchaseOrders = new MaterialSkin.Controls.MaterialFlatButton();
             this.btnDeletePurchaseOrders = new MaterialSkin.Controls.MaterialFlatButton();
+            this.btnUpdateSellOrderstton1 = new MaterialSkin.Controls.MaterialFlatButton();
             this.CreateOrderGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DiginoteNumberNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PurchaseOrdersGridView)).BeginInit();
@@ -275,56 +276,73 @@
             this.btnDeleteSellOrders.AutoSize = true;
             this.btnDeleteSellOrders.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnDeleteSellOrders.Depth = 0;
-            this.btnDeleteSellOrders.Location = new System.Drawing.Point(286, 488);
+            this.btnDeleteSellOrders.Location = new System.Drawing.Point(12, 488);
             this.btnDeleteSellOrders.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnDeleteSellOrders.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnDeleteSellOrders.Name = "btnDeleteSellOrders";
             this.btnDeleteSellOrders.Primary = false;
-            this.btnDeleteSellOrders.Size = new System.Drawing.Size(94, 36);
+            this.btnDeleteSellOrders.Size = new System.Drawing.Size(60, 36);
             this.btnDeleteSellOrders.TabIndex = 15;
-            this.btnDeleteSellOrders.Text = "Delete Sell";
+            this.btnDeleteSellOrders.Text = "Delete";
             this.btnDeleteSellOrders.UseVisualStyleBackColor = true;
             this.btnDeleteSellOrders.Click += new System.EventHandler(this.btnDeleteOrders_Click);
             // 
-            // btnUpdateOrders
+            // btnUpdatePurchaseOrders
             // 
-            this.btnUpdateOrders.AutoSize = true;
-            this.btnUpdateOrders.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnUpdateOrders.Depth = 0;
-            this.btnUpdateOrders.Location = new System.Drawing.Point(556, 488);
-            this.btnUpdateOrders.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnUpdateOrders.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnUpdateOrders.Name = "btnUpdateOrders";
-            this.btnUpdateOrders.Primary = false;
-            this.btnUpdateOrders.Size = new System.Drawing.Size(64, 36);
-            this.btnUpdateOrders.TabIndex = 17;
-            this.btnUpdateOrders.Text = "UPDATE";
-            this.btnUpdateOrders.UseVisualStyleBackColor = true;
-            this.btnUpdateOrders.Click += new System.EventHandler(this.btnUpdateOrders_Click);
+            this.btnUpdatePurchaseOrders.AutoSize = true;
+            this.btnUpdatePurchaseOrders.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnUpdatePurchaseOrders.Depth = 0;
+            this.btnUpdatePurchaseOrders.Location = new System.Drawing.Point(644, 488);
+            this.btnUpdatePurchaseOrders.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnUpdatePurchaseOrders.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnUpdatePurchaseOrders.Name = "btnUpdatePurchaseOrders";
+            this.btnUpdatePurchaseOrders.Primary = false;
+            this.btnUpdatePurchaseOrders.Size = new System.Drawing.Size(64, 36);
+            this.btnUpdatePurchaseOrders.TabIndex = 17;
+            this.btnUpdatePurchaseOrders.Text = "UPDATE";
+            this.btnUpdatePurchaseOrders.UseVisualStyleBackColor = true;
+            this.btnUpdatePurchaseOrders.Click += new System.EventHandler(this.btnUpdatePurchaseOrders_Click);
             // 
             // btnDeletePurchaseOrders
             // 
             this.btnDeletePurchaseOrders.AutoSize = true;
             this.btnDeletePurchaseOrders.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnDeletePurchaseOrders.Depth = 0;
-            this.btnDeletePurchaseOrders.Location = new System.Drawing.Point(414, 488);
+            this.btnDeletePurchaseOrders.Location = new System.Drawing.Point(727, 488);
             this.btnDeletePurchaseOrders.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnDeletePurchaseOrders.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnDeletePurchaseOrders.Name = "btnDeletePurchaseOrders";
             this.btnDeletePurchaseOrders.Primary = false;
-            this.btnDeletePurchaseOrders.Size = new System.Drawing.Size(134, 36);
+            this.btnDeletePurchaseOrders.Size = new System.Drawing.Size(60, 36);
             this.btnDeletePurchaseOrders.TabIndex = 18;
-            this.btnDeletePurchaseOrders.Text = "Delete Purchase";
+            this.btnDeletePurchaseOrders.Text = "Delete ";
             this.btnDeletePurchaseOrders.UseVisualStyleBackColor = true;
             this.btnDeletePurchaseOrders.Click += new System.EventHandler(this.btnDeletePurchaseOrders_Click);
+            // 
+            // btnUpdateSellOrderstton1
+            // 
+            this.btnUpdateSellOrderstton1.AutoSize = true;
+            this.btnUpdateSellOrderstton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnUpdateSellOrderstton1.Depth = 0;
+            this.btnUpdateSellOrderstton1.Location = new System.Drawing.Point(91, 488);
+            this.btnUpdateSellOrderstton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnUpdateSellOrderstton1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnUpdateSellOrderstton1.Name = "btnUpdateSellOrderstton1";
+            this.btnUpdateSellOrderstton1.Primary = false;
+            this.btnUpdateSellOrderstton1.Size = new System.Drawing.Size(64, 36);
+            this.btnUpdateSellOrderstton1.TabIndex = 19;
+            this.btnUpdateSellOrderstton1.Text = "UPDATE";
+            this.btnUpdateSellOrderstton1.UseVisualStyleBackColor = true;
+            this.btnUpdateSellOrderstton1.Click += new System.EventHandler(this.btnUpdateSellOrderstton1_Click);
             // 
             // SystemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 527);
+            this.Controls.Add(this.btnUpdateSellOrderstton1);
             this.Controls.Add(this.btnDeletePurchaseOrders);
-            this.Controls.Add(this.btnUpdateOrders);
+            this.Controls.Add(this.btnUpdatePurchaseOrders);
             this.Controls.Add(this.btnDeleteSellOrders);
             this.Controls.Add(this.HistoryButton);
             this.Controls.Add(this.materialLabel3);
@@ -369,7 +387,8 @@
         private MaterialSkin.Controls.MaterialFlatButton HistoryButton;
         private System.Windows.Forms.DataGridView SellOrdersGridView;
         private MaterialSkin.Controls.MaterialFlatButton btnDeleteSellOrders;
-        private MaterialSkin.Controls.MaterialFlatButton btnUpdateOrders;
+        private MaterialSkin.Controls.MaterialFlatButton btnUpdatePurchaseOrders;
         private MaterialSkin.Controls.MaterialFlatButton btnDeletePurchaseOrders;
+        private MaterialSkin.Controls.MaterialFlatButton btnUpdateSellOrderstton1;
     }
 }
