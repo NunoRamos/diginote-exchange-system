@@ -27,6 +27,16 @@ namespace Server.Models
 
         // public virtual Transaction Transaction { get; set; }
 
-        //public abstract Common.Serializable.Order Serialize();
+        public Common.Serializable.Order Serialize()
+        {
+            return new Common.Serializable.Order
+            {
+                CreatedAt = CreatedAt,
+                CreatedById = CreatedById,
+                Id = Id,
+                Quote = Quote,
+                Status = Status
+            };
+        }
     }
 }

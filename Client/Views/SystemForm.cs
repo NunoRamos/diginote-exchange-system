@@ -3,6 +3,8 @@ using Common.Serializable;
 using diginote_exchange_system.Views;
 using MaterialSkin.Controls;
 using System;
+using System.ComponentModel;
+using System.Data;
 using System.Windows.Forms;
 
 namespace diginote_exchange_system
@@ -20,21 +22,32 @@ namespace diginote_exchange_system
 
         private void OnPurchaseOrdersUpdated(object sender, PurchaseOrder[] updatedPurchaseOrders)
         {
-            PurchaseOrdersGridView.DataSource = updatedPurchaseOrders ?? (new PurchaseOrder[] { });
+            BindingList<PurchaseOrder> dataSource = new BindingList<PurchaseOrder>();
+            foreach (PurchaseOrder el in updatedPurchaseOrders)
+            {
+                dataSource.Add(el);
+            }
+            PurchaseOrdersGridView.Invoke(new Action(() => PurchaseOrdersGridView.DataSource = dataSource));
         }
+
         private void OnSellOrdersUpdated(object sender, SellOrder[] updatedSellOrders)
         {
-            SellOrdersGridView.DataSource = updatedSellOrders ?? (new SellOrder[] { });
+            BindingList<SellOrder> dataSource = new BindingList<SellOrder>();
+            foreach (SellOrder el in updatedSellOrders)
+            {
+                dataSource.Add(el);
+            }
+            SellOrdersGridView.Invoke(new Action(() => SellOrdersGridView.DataSource = dataSource));
         }
 
         private void OnDiginotesUpdated(object sender, int diginotes)
         {
-            DiginotesTextField.Text = diginotes.ToString();
+            DiginotesTextField.Invoke(new Action(() => DiginotesTextField.Text = diginotes.ToString()));
         }
 
         private void OnQuoteUpdated(object sender, float newQuote)
         {
-            CurrentQuoteTextField.Text = newQuote.ToString();
+            CurrentQuoteTextField.Invoke(new Action(() => CurrentQuoteTextField.Text = newQuote.ToString()));
         }
 
         private void signOutButton_Click(object sender, EventArgs e)
@@ -42,8 +55,8 @@ namespace diginote_exchange_system
             Client.State.SignOut();
             Client.Forms.SystemForm.Hide();
             Client.Forms.AuthenticationForm.Show();
-            SellOrdersGridView.DataSource = new Order[] { };
-            PurchaseOrdersGridView.DataSource = new Order[] { };
+            SellOrdersGridView.DataSource = new BindingList<SellOrder>();
+            PurchaseOrdersGridView.DataSource = new BindingList<PurchaseOrder>();
         }
 
         private void SystemForm_Shown(object sender, EventArgs e)
@@ -88,6 +101,37 @@ namespace diginote_exchange_system
         private void HistoryButton_Click(object sender, EventArgs e)
         {
             new HistoryForm().ShowDialog(this);
+        }
+
+        private void btnDeleteOrders_Click(object sender, EventArgs e)
+        {
+            int[] ordersId = new int[this.SellOrdersGridView.SelectedRows.Count];
+            int i = 0;
+            foreach (DataGridViewRow item in this.SellOrdersGridView.SelectedRows)
+            {
+                ordersId[i] = (int)item.Cells[0].Value;
+                SellOrdersGridView.Rows.RemoveAt(item.Index);
+            }
+
+            MessageBox.Show(Client.State.DeleteSellOrders(ordersId));
+        }
+
+        private void btnDeletePurchaseOrders_Click(object sender, EventArgs e)
+        {
+            int[] ordersId = new int[this.PurchaseOrdersGridView.SelectedRows.Count];
+            int i = 0;
+            foreach (DataGridViewRow item in this.PurchaseOrdersGridView.SelectedRows)
+            {
+                ordersId[i] = (int)item.Cells[0].Value;
+                PurchaseOrdersGridView.Rows.RemoveAt(item.Index);
+            }
+
+            MessageBox.Show(Client.State.DeletePurchaseOrders(ordersId));
+        }
+
+        private void btnUpdateOrders_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

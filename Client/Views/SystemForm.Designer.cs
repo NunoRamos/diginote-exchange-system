@@ -33,7 +33,6 @@
             this.CurrentQuoteTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.DiginotesTextField = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.SellOrdersGridView = new System.Windows.Forms.DataGridView();
             this.SellRadioButton = new System.Windows.Forms.RadioButton();
             this.PurchaseRadioButton = new System.Windows.Forms.RadioButton();
             this.CreateOrderGroupBox = new System.Windows.Forms.GroupBox();
@@ -44,10 +43,14 @@
             this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
             this.HistoryButton = new MaterialSkin.Controls.MaterialFlatButton();
-            ((System.ComponentModel.ISupportInitialize)(this.SellOrdersGridView)).BeginInit();
+            this.SellOrdersGridView = new System.Windows.Forms.DataGridView();
+            this.btnDeleteSellOrders = new MaterialSkin.Controls.MaterialFlatButton();
+            this.btnUpdateOrders = new MaterialSkin.Controls.MaterialFlatButton();
+            this.btnDeletePurchaseOrders = new MaterialSkin.Controls.MaterialFlatButton();
             this.CreateOrderGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DiginoteNumberNumericUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.PurchaseOrdersGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SellOrdersGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // signOutButton
@@ -125,14 +128,6 @@
             this.materialLabel1.Size = new System.Drawing.Size(77, 19);
             this.materialLabel1.TabIndex = 3;
             this.materialLabel1.Text = "Diginotes:";
-            // 
-            // SellOrdersGridView
-            // 
-            this.SellOrdersGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.SellOrdersGridView.Location = new System.Drawing.Point(12, 217);
-            this.SellOrdersGridView.Name = "SellOrdersGridView";
-            this.SellOrdersGridView.Size = new System.Drawing.Size(384, 298);
-            this.SellOrdersGridView.TabIndex = 7;
             // 
             // SellRadioButton
             // 
@@ -222,7 +217,7 @@
             this.PurchaseOrdersGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PurchaseOrdersGridView.Location = new System.Drawing.Point(414, 217);
             this.PurchaseOrdersGridView.Name = "PurchaseOrdersGridView";
-            this.PurchaseOrdersGridView.Size = new System.Drawing.Size(374, 298);
+            this.PurchaseOrdersGridView.Size = new System.Drawing.Size(374, 262);
             this.PurchaseOrdersGridView.TabIndex = 11;
             // 
             // materialLabel2
@@ -267,11 +262,70 @@
             this.HistoryButton.UseVisualStyleBackColor = true;
             this.HistoryButton.Click += new System.EventHandler(this.HistoryButton_Click);
             // 
+            // SellOrdersGridView
+            // 
+            this.SellOrdersGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.SellOrdersGridView.Location = new System.Drawing.Point(12, 217);
+            this.SellOrdersGridView.Name = "SellOrdersGridView";
+            this.SellOrdersGridView.Size = new System.Drawing.Size(384, 262);
+            this.SellOrdersGridView.TabIndex = 7;
+            // 
+            // btnDeleteSellOrders
+            // 
+            this.btnDeleteSellOrders.AutoSize = true;
+            this.btnDeleteSellOrders.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnDeleteSellOrders.Depth = 0;
+            this.btnDeleteSellOrders.Location = new System.Drawing.Point(286, 488);
+            this.btnDeleteSellOrders.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnDeleteSellOrders.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnDeleteSellOrders.Name = "btnDeleteSellOrders";
+            this.btnDeleteSellOrders.Primary = false;
+            this.btnDeleteSellOrders.Size = new System.Drawing.Size(94, 36);
+            this.btnDeleteSellOrders.TabIndex = 15;
+            this.btnDeleteSellOrders.Text = "Delete Sell";
+            this.btnDeleteSellOrders.UseVisualStyleBackColor = true;
+            this.btnDeleteSellOrders.Click += new System.EventHandler(this.btnDeleteOrders_Click);
+            // 
+            // btnUpdateOrders
+            // 
+            this.btnUpdateOrders.AutoSize = true;
+            this.btnUpdateOrders.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnUpdateOrders.Depth = 0;
+            this.btnUpdateOrders.Location = new System.Drawing.Point(556, 488);
+            this.btnUpdateOrders.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnUpdateOrders.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnUpdateOrders.Name = "btnUpdateOrders";
+            this.btnUpdateOrders.Primary = false;
+            this.btnUpdateOrders.Size = new System.Drawing.Size(64, 36);
+            this.btnUpdateOrders.TabIndex = 17;
+            this.btnUpdateOrders.Text = "UPDATE";
+            this.btnUpdateOrders.UseVisualStyleBackColor = true;
+            this.btnUpdateOrders.Click += new System.EventHandler(this.btnUpdateOrders_Click);
+            // 
+            // btnDeletePurchaseOrders
+            // 
+            this.btnDeletePurchaseOrders.AutoSize = true;
+            this.btnDeletePurchaseOrders.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnDeletePurchaseOrders.Depth = 0;
+            this.btnDeletePurchaseOrders.Location = new System.Drawing.Point(414, 488);
+            this.btnDeletePurchaseOrders.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnDeletePurchaseOrders.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnDeletePurchaseOrders.Name = "btnDeletePurchaseOrders";
+            this.btnDeletePurchaseOrders.Primary = false;
+            this.btnDeletePurchaseOrders.Size = new System.Drawing.Size(134, 36);
+            this.btnDeletePurchaseOrders.TabIndex = 18;
+            this.btnDeletePurchaseOrders.Text = "Delete Purchase";
+            this.btnDeletePurchaseOrders.UseVisualStyleBackColor = true;
+            this.btnDeletePurchaseOrders.Click += new System.EventHandler(this.btnDeletePurchaseOrders_Click);
+            // 
             // SystemForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 527);
+            this.Controls.Add(this.btnDeletePurchaseOrders);
+            this.Controls.Add(this.btnUpdateOrders);
+            this.Controls.Add(this.btnDeleteSellOrders);
             this.Controls.Add(this.HistoryButton);
             this.Controls.Add(this.materialLabel3);
             this.Controls.Add(this.materialLabel2);
@@ -286,11 +340,11 @@
             this.Name = "SystemForm";
             this.Text = "Diginote Exchange System";
             this.Shown += new System.EventHandler(this.SystemForm_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.SellOrdersGridView)).EndInit();
             this.CreateOrderGroupBox.ResumeLayout(false);
             this.CreateOrderGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DiginoteNumberNumericUpDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PurchaseOrdersGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.SellOrdersGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -303,7 +357,6 @@
         private MaterialSkin.Controls.MaterialSingleLineTextField CurrentQuoteTextField;
         private MaterialSkin.Controls.MaterialSingleLineTextField DiginotesTextField;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private System.Windows.Forms.DataGridView SellOrdersGridView;
         private System.Windows.Forms.RadioButton SellRadioButton;
         private System.Windows.Forms.RadioButton PurchaseRadioButton;
         private System.Windows.Forms.GroupBox CreateOrderGroupBox;
@@ -314,5 +367,9 @@
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
         private MaterialSkin.Controls.MaterialFlatButton HistoryButton;
+        private System.Windows.Forms.DataGridView SellOrdersGridView;
+        private MaterialSkin.Controls.MaterialFlatButton btnDeleteSellOrders;
+        private MaterialSkin.Controls.MaterialFlatButton btnUpdateOrders;
+        private MaterialSkin.Controls.MaterialFlatButton btnDeletePurchaseOrders;
     }
 }
