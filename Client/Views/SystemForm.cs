@@ -14,6 +14,7 @@ namespace diginote_exchange_system
         public SystemForm()
         {
             InitializeComponent();
+            Client.State.GetCurrentQuote();
             Client.State.QuoteUpdated += OnQuoteUpdated;
             Client.State.AvailableDiginotesUpdated += OnDiginotesUpdated;
             Client.State.PurchaseOrdersUpdated += OnPurchaseOrdersUpdated;

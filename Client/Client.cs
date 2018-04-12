@@ -47,12 +47,22 @@ namespace diginote_exchange_system
 
         private void SetupEventRepeater()
         {
-            CreateQueue("CurrentQuote", (model, args) =>
+            channel.ExchangeDeclare(exchange: "current.quote", type: "topic");
+            var queueName = channel.QueueDeclare().QueueName;
+            channel.QueueBind(queue: queueName,
+                                exchange: "current.quote",
+                                routingKey: "current.quote");
+
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += (model, args) =>
                 {
                     QuoteUpdated.Invoke(this, (float)Deserialize(args));
                     CurrentQuote = (float)Deserialize(args);
-                }
-            );
+                };
+
+            channel.BasicConsume(queue: queueName,
+                                 autoAck: true,
+                                 consumer: consumer);
         }
 
         private void CreateQueue(string name, EventHandler<BasicDeliverEventArgs> onReceive)

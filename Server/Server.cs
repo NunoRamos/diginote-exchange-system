@@ -28,12 +28,7 @@ namespace Server
             IConnection connection = factory.CreateConnection();
             channel = connection.CreateModel();
 
-            channel.QueueDeclare(
-                queue: "CurrentQuote",
-                durable: false,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
+            channel.ExchangeDeclare(exchange: "current.quote", type: "topic");
         }
 
         public Server(DiginoteSystemContext db)
@@ -47,8 +42,8 @@ namespace Server
             MemoryStream memoryStream = new MemoryStream();
             formatter.Serialize(memoryStream, newQuote);
 
-            channel.BasicPublish(exchange: "diginotes",
-                routingKey: "CurrentQuote",
+            channel.BasicPublish(exchange: "current.quote",
+                routingKey: "current.quote",
                 basicProperties: null,
                 body: memoryStream.ToArray());
         }
@@ -287,7 +282,10 @@ namespace Server
 
                 diginoteDB.Transactions.Add(transaction);
 
-                loggedInUsers.Where(pair => pair.Value.Id == sellOrder.CreatedBy.Id).Select(e => affectedUsers.Add(e.Value));
+                foreach (var affectedUser in loggedInUsers.Where(pair => pair.Value.Id == sellOrder.CreatedBy.Id))
+                {
+                    affectedUsers.Add(affectedUser.Value);
+                }
             }
 
             dbTransaction.Commit();
@@ -485,8 +483,8 @@ namespace Server
             foreach (int id in ordersId)
             {
                 var order = (from o in diginoteDB.SellOrders
-                            where o.Id == id
-                            select o).Single();
+                             where o.Id == id
+                             select o).Single();
 
                 diginoteDB.SellOrders.Remove(order);
                 diginoteDB.SaveChanges();
