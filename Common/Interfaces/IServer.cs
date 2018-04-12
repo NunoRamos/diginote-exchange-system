@@ -45,6 +45,10 @@ namespace Common.Interfaces
         PurchaseOrder[] GetUserIncompletePurchaseOrders(string token);
 
         Transaction[] GetUserTransactions(string token);
+
+        String DeleteSellOrders(int[] ordersId);
+
+        String DeletePurchaseOrders(int[] ordersId);
     }
 
     [Serializable]

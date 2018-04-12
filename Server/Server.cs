@@ -361,6 +361,11 @@ namespace Server
                 return new Exception("Value must be lesser than or equal to the current quote");
             }
 
+            if (value < currentQuote)
+            {
+
+            }
+
             var availableDiginotes = GetUserAvailableDiginotes(OwnerId);
 
             if (availableDiginotes.Count < diginotesLeft)
@@ -425,6 +430,44 @@ namespace Server
                         select t;
 
             return query.ToArray().Select(t => t.Serialize()).ToArray();
+        }
+
+        public String DeleteSellOrders(int[] ordersId)
+        {
+            String status = "";
+
+            foreach (int id in ordersId)
+            {
+                var order = (from o in diginoteDB.SellOrders
+                            where o.Id == id
+                            select o).Single();
+
+                diginoteDB.SellOrders.Remove(order);
+                diginoteDB.SaveChanges();
+            }
+
+            status = "Sell Orders Deleted!";
+
+            return status;
+        }
+
+        public String DeletePurchaseOrders(int[] ordersId)
+        {
+            String status = "";
+
+            foreach (int id in ordersId)
+            {
+                var order = (from o in diginoteDB.PurchaseOrders
+                             where o.Id == id
+                             select o).Single();
+
+                diginoteDB.PurchaseOrders.Remove(order);
+                diginoteDB.SaveChanges();
+            }
+
+            status = "Purchase Orders Deleted!";
+
+            return status;
         }
     }
 }

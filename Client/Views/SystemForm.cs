@@ -27,7 +27,7 @@ namespace diginote_exchange_system
             {
                 dataSource.Add(el);
             }
-            PurchaseOrdersGridView.DataSource = new BindingList<PurchaseOrder>(updatedPurchaseOrders);
+            PurchaseOrdersGridView.Invoke(new Action(() => PurchaseOrdersGridView.DataSource = dataSource));
         }
         private void OnSellOrdersUpdated(object sender, SellOrder[] updatedSellOrders)
         {
@@ -36,18 +36,18 @@ namespace diginote_exchange_system
             {
                 dataSource.Add(el);
             }
-            SellOrdersGridView.DataSource = dataSource;
+            SellOrdersGridView.Invoke(new Action(() => SellOrdersGridView.DataSource = dataSource));
         }
 
         private void OnDiginotesUpdated(object sender, int diginotes)
         {
-            DiginotesTextField.Text = diginotes.ToString();
+            DiginotesTextField.Invoke(new Action(() => DiginotesTextField.Text = diginotes.ToString()));
         }
 
 
         private void OnQuoteUpdated(float newQuote)
         {
-            CurrentQuoteTextField.Text = newQuote.ToString();
+            CurrentQuoteTextField.Invoke(new Action(() => CurrentQuoteTextField.Text = newQuote.ToString()));
         }
 
         private void signOutButton_Click(object sender, EventArgs e)
@@ -95,20 +95,35 @@ namespace diginote_exchange_system
             new HistoryForm().ShowDialog(this);
         }
 
-       /* private void btnDelete_Click(object sender, EventArgs e)
-        {
-            foreach (DataGridViewRow item in this.SellOrdersGridView.SelectedRows)
-            {
-                SellOrdersGridView.Rows.RemoveAt(item.Index);
-            }
-        }*/
-
         private void btnDeleteOrders_Click(object sender, EventArgs e)
         {
+            int[] ordersId = new int[this.SellOrdersGridView.SelectedRows.Count];
+            int i = 0;
             foreach (DataGridViewRow item in this.SellOrdersGridView.SelectedRows)
             {
+                ordersId[i] = (int)item.Cells[0].Value;
                 SellOrdersGridView.Rows.RemoveAt(item.Index);
             }
+
+            MessageBox.Show(Client.State.DeleteSellOrders(ordersId));
+        }
+
+        private void btnDeletePurchaseOrders_Click(object sender, EventArgs e)
+        {
+            int[] ordersId = new int[this.PurchaseOrdersGridView.SelectedRows.Count];
+            int i = 0;
+            foreach (DataGridViewRow item in this.PurchaseOrdersGridView.SelectedRows)
+            {
+                ordersId[i] = (int)item.Cells[0].Value;
+                PurchaseOrdersGridView.Rows.RemoveAt(item.Index);
+            }
+
+            MessageBox.Show(Client.State.DeletePurchaseOrders(ordersId));
+        }
+
+        private void btnUpdateOrders_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

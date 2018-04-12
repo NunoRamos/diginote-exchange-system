@@ -202,5 +202,15 @@ namespace diginote_exchange_system
         {
             return Server.GetUserTransactions(Token);
         }
+
+        internal string DeleteSellOrders(int[] ordersId)
+        {
+            return Server.DeleteSellOrders(ordersId);
+        }
+
+        internal string DeletePurchaseOrders(int[] ordersId)
+        {
+            return Server.DeletePurchaseOrders(ordersId);
+        }
     }
 }
