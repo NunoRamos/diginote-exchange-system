@@ -3,6 +3,8 @@ using Common.Serializable;
 using diginote_exchange_system.Views;
 using MaterialSkin.Controls;
 using System;
+using System.ComponentModel;
+using System.Data;
 using System.Windows.Forms;
 
 namespace diginote_exchange_system
@@ -20,11 +22,21 @@ namespace diginote_exchange_system
 
         private void OnPurchaseOrdersUpdated(object sender, PurchaseOrder[] updatedPurchaseOrders)
         {
-            PurchaseOrdersGridView.DataSource = updatedPurchaseOrders;
+            BindingList<PurchaseOrder> dataSource = new BindingList<PurchaseOrder>();
+            foreach (PurchaseOrder el in updatedPurchaseOrders)
+            {
+                dataSource.Add(el);
+            }
+            PurchaseOrdersGridView.DataSource = new BindingList<PurchaseOrder>(updatedPurchaseOrders);
         }
         private void OnSellOrdersUpdated(object sender, SellOrder[] updatedSellOrders)
         {
-            SellOrdersGridView.DataSource = updatedSellOrders;
+            BindingList<SellOrder> dataSource = new BindingList<SellOrder>();
+            foreach (SellOrder el in updatedSellOrders)
+            {
+                dataSource.Add(el);
+            }
+            SellOrdersGridView.DataSource = dataSource;
         }
 
         private void OnDiginotesUpdated(object sender, int diginotes)
@@ -43,8 +55,8 @@ namespace diginote_exchange_system
             Client.State.SignOut();
             Client.Forms.SystemForm.Hide();
             Client.Forms.AuthenticationForm.Show();
-            SellOrdersGridView.DataSource = new Order[] { }; 
-            PurchaseOrdersGridView.DataSource = new Order[] { };
+            SellOrdersGridView.DataSource = new BindingList<SellOrder>(); 
+            PurchaseOrdersGridView.DataSource = new BindingList<PurchaseOrder>();
         }
 
         private void SystemForm_Shown(object sender, EventArgs e)
@@ -81,6 +93,22 @@ namespace diginote_exchange_system
         private void HistoryButton_Click(object sender, EventArgs e)
         {
             new HistoryForm().ShowDialog(this);
+        }
+
+       /* private void btnDelete_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in this.SellOrdersGridView.SelectedRows)
+            {
+                SellOrdersGridView.Rows.RemoveAt(item.Index);
+            }
+        }*/
+
+        private void btnDeleteOrders_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow item in this.SellOrdersGridView.SelectedRows)
+            {
+                SellOrdersGridView.Rows.RemoveAt(item.Index);
+            }
         }
     }
 }
