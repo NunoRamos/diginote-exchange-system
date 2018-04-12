@@ -32,5 +32,9 @@ namespace Common.Interfaces
         String DeleteSellOrders(int[] ordersId);
 
         String DeletePurchaseOrders(int[] ordersId);
+
+        String UpdatePurchaseOrders(PurchaseOrder[] UpdatePurchaseOrders);
+
+        String UpdateSellOrders(SellOrder[] UpdateSellOrders);
     }
 }

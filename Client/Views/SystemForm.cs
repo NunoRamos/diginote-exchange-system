@@ -130,9 +130,43 @@ namespace diginote_exchange_system
             MessageBox.Show(Client.State.DeletePurchaseOrders(ordersId));
         }
 
-        private void btnUpdateOrders_Click(object sender, EventArgs e)
+        private void btnUpdatePurchaseOrders_Click(object sender, EventArgs e)
         {
+            PurchaseOrder[] purchaseOrders = new PurchaseOrder[this.PurchaseOrdersGridView.SelectedRows.Count];
+            int i = 0;
+            foreach (DataGridViewRow item in this.PurchaseOrdersGridView.SelectedRows)
+            {
+                purchaseOrders[i] = new PurchaseOrder
+                {
+                    Id = (int)item.Cells[0].Value,
+                    CreatedAt = (DateTime)item.Cells[1].Value,
+                    Quote = (float)item.Cells[2].Value,
+                    Status = (OrderStatus)item.Cells[3].Value,
+                    CreatedById = (int)item.Cells[4].Value
+                };
+            }
 
+            MessageBox.Show(Client.State.UpdatePurchaseOrders(purchaseOrders));
+        }
+
+        private void btnUpdateSellOrderstton1_Click(object sender, EventArgs e)
+        {
+            SellOrder[] sellOrders = new SellOrder[this.SellOrdersGridView.SelectedRows.Count];
+            int i = 0;
+            foreach (DataGridViewRow item in this.SellOrdersGridView.SelectedRows)
+            {
+                sellOrders[i] = new SellOrder
+                {
+                    Id = (int)item.Cells[0].Value,
+                    CreatedAt = (DateTime)item.Cells[1].Value,
+                    Quote = (float)item.Cells[2].Value,
+                    Status = (OrderStatus)item.Cells[3].Value,
+                    CreatedById = (int)item.Cells[4].Value,
+                    DiginoteId = (int)item.Cells[5].Value
+                };
+            }
+
+            MessageBox.Show(Client.State.UpdateSellOrders(sellOrders));
         }
     }
 }
