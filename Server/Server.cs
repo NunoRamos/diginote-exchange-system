@@ -29,6 +29,8 @@ namespace Server
             channel = connection.CreateModel();
 
             channel.ExchangeDeclare(exchange: "current.quote", type: "topic");
+            channel.ExchangeDeclare(exchange: "diginotes", type: "direct");
+
         }
 
         public Server(DiginoteSystemContext db)
