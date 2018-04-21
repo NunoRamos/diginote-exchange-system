@@ -60,12 +60,15 @@ namespace diginote_exchange_system
             PurchaseOrdersGridView.DataSource = new BindingList<PurchaseOrder>();
         }
 
-        private void SystemForm_Shown(object sender, EventArgs e)
+        private void VisibilityChanged(object sender, EventArgs e)
         {
-            Client.State.GetAvailableDiginotes();
-            Client.State.GetUserIncompleteSellOrders();
-            Client.State.GetUserIncompletePurchaseOrders();
-            OnQuoteUpdated(this, Client.State.GetCurrentQuote());
+            if (Visible)
+            {
+                Client.State.GetAvailableDiginotes();
+                Client.State.GetUserIncompleteSellOrders();
+                Client.State.GetUserIncompletePurchaseOrders();
+                OnQuoteUpdated(this, Client.State.GetCurrentQuote());
+            }
         }
 
         private void PlaceOrderButton_Click(object sender, EventArgs e)
