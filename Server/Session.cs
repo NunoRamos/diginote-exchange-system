@@ -1,7 +1,5 @@
-﻿using Common.Interfaces;
-using Common.Serializable;
+﻿using Common.Serializable;
 using RabbitMQ.Client;
-using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -10,14 +8,13 @@ namespace Common
 {
     public class Session
     {
+        private const string DiginotesExchangeName = "Diginotes";
+        private const string PurchaseOrdersExchangeName = "PurchaseOrders";
+        private const string SellOrdersExchangeName = "SellOrders";
+        private const string TransactionsExchangeName = "Transactions";
         private IModel channel;
         public string Token { get; }
         public int Id { get; }
-
-        private string diginotesChannelName;
-        private string purchaseOrdersChannelName;
-        private string sellOrdersChannelName;
-        private string transactionsChannelName;
 
         public Session(IModel channel, string token, int id)
         {
@@ -25,25 +22,20 @@ namespace Common
             Token = token;
             Id = id;
 
-            diginotesChannelName = "Diginotes" + token;
-            purchaseOrdersChannelName = "PurchaseOrders" + token;
-            sellOrdersChannelName = "SellOrders" + token;
-            transactionsChannelName = "Transactions" + token;
-
-            /*CreateChannel(diginotesChannelName);
-            CreateChannel(purchaseOrdersChannelName);
-            CreateChannel(sellOrdersChannelName);
-            CreateChannel(transactionsChannelName);*/
+            CreateExchange(DiginotesExchangeName);
+            CreateExchange(PurchaseOrdersExchangeName);
+            CreateExchange(SellOrdersExchangeName);
+            CreateExchange(TransactionsExchangeName);
         }
 
-        private void CreateChannel(string channelName)
+        private void CreateExchange(string exchangeName)
         {
-            channel.QueueDeclare(
-                queue: channelName,
+            channel.ExchangeDeclare(
+                exchange: exchangeName,
+                type: "direct",
                 durable: false,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
+                autoDelete: true
+                );
         }
 
         public void UpdateDiginotes(int diginotes)
@@ -55,8 +47,8 @@ namespace Common
             var body = memoryStream.ToArray();
 
             channel.BasicPublish(
-                exchange: "diginotes",
-                routingKey: diginotesChannelName,
+                exchange: DiginotesExchangeName,
+                routingKey: Token,
                 basicProperties: null,
                 body: body
                 );
@@ -71,8 +63,8 @@ namespace Common
             var body = memoryStream.ToArray();
 
             channel.BasicPublish(
-                exchange: "diginotes",
-                routingKey: purchaseOrdersChannelName,
+                exchange: PurchaseOrdersExchangeName,
+                routingKey: Token,
                 basicProperties: null,
                 body: body
                 );
@@ -87,8 +79,8 @@ namespace Common
             var body = memoryStream.ToArray();
 
             channel.BasicPublish(
-                exchange: "diginotes",
-                routingKey: sellOrdersChannelName,
+                exchange: SellOrdersExchangeName,
+                routingKey: Token,
                 basicProperties: null,
                 body: body
                 );
@@ -103,8 +95,8 @@ namespace Common
             var body = memoryStream.ToArray();
 
             channel.BasicPublish(
-                exchange: "diginotes",
-                routingKey: transactionsChannelName,
+                exchange: TransactionsExchangeName,
+                routingKey: Token,
                 basicProperties: null,
                 body: body
                 );

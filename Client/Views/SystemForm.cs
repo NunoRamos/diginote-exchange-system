@@ -97,9 +97,9 @@ namespace diginote_exchange_system
                 Console.WriteLine(result);
             }
 
-            Client.State.GetAvailableDiginotes();
-            Client.State.GetUserIncompletePurchaseOrders();
-            Client.State.GetUserIncompleteSellOrders();
+            // Client.State.GetAvailableDiginotes();
+            //Client.State.GetUserIncompletePurchaseOrders();
+            //Client.State.GetUserIncompleteSellOrders();
         }
 
         private void HistoryButton_Click(object sender, EventArgs e)

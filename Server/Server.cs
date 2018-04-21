@@ -14,6 +14,7 @@ namespace Server
 {
     class Server : MarshalByRefObject, IServer
     {
+        private const string CurrentQuoteExchangeName = "CurrentQuote";
         private readonly int REGISTER_DIGINOTE_BONUS = 100;
 
         static private DiginoteSystemContext diginoteDB;
@@ -28,9 +29,7 @@ namespace Server
             IConnection connection = factory.CreateConnection();
             channel = connection.CreateModel();
 
-            channel.ExchangeDeclare(exchange: "current.quote", type: "topic");
-            channel.ExchangeDeclare(exchange: "diginotes", type: "direct");
-
+            channel.ExchangeDeclare(exchange: CurrentQuoteExchangeName, type: "fanout", durable: false, autoDelete: true);
         }
 
         public Server(DiginoteSystemContext db)
@@ -44,8 +43,8 @@ namespace Server
             MemoryStream memoryStream = new MemoryStream();
             formatter.Serialize(memoryStream, newQuote);
 
-            channel.BasicPublish(exchange: "current.quote",
-                routingKey: "current.quote",
+            channel.BasicPublish(exchange: CurrentQuoteExchangeName,
+                routingKey: "",
                 basicProperties: null,
                 body: memoryStream.ToArray());
         }
