@@ -30,10 +30,10 @@ namespace Common
             sellOrdersChannelName = "SellOrders" + token;
             transactionsChannelName = "Transactions" + token;
 
-            CreateChannel(diginotesChannelName);
+            /*CreateChannel(diginotesChannelName);
             CreateChannel(purchaseOrdersChannelName);
             CreateChannel(sellOrdersChannelName);
-            CreateChannel(transactionsChannelName);
+            CreateChannel(transactionsChannelName);*/
         }
 
         private void CreateChannel(string channelName)

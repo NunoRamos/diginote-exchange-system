@@ -191,6 +191,11 @@ namespace Server
                 {
                     affectedUsers.Add(affectedUser.Value);
                 }
+
+                if (numSellOrdersCreated >= quantity)
+                {
+                    break;
+                }
             }
 
             dbTransaction.Commit();
@@ -285,6 +290,11 @@ namespace Server
                 foreach (var affectedUser in loggedInUsers.Where(pair => pair.Value.Id == sellOrder.CreatedBy.Id))
                 {
                     affectedUsers.Add(affectedUser.Value);
+                }
+
+                if (numPurchaseOrdersCreated >= quantity)
+                {
+                    break;
                 }
             }
 

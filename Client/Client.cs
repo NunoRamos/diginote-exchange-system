@@ -67,6 +67,13 @@ namespace diginote_exchange_system
 
         private void CreateQueue(string name, EventHandler<BasicDeliverEventArgs> onReceive)
         {
+            channel.QueueDeclare(
+                queue: name,
+                durable: false,
+                exclusive: false,
+                autoDelete: false,
+                arguments: null);
+
             channel.QueueBind(queue: name,
                                 exchange: "diginotes",
                                 routingKey: name);
