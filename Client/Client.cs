@@ -115,9 +115,10 @@ namespace diginote_exchange_system
             Tuple<string, Exception> result = Server.Login(nickname, password);
 
             if (result.Item2 == null)
+            {
                 Token = result.Item1;
-
-            SetupLoggedInEvents();
+                SetupLoggedInEvents();
+            }
 
             return result.Item2;
         }
