@@ -47,11 +47,11 @@ namespace diginote_exchange_system
 
         private void SetupEventRepeater()
         {
-            channel.ExchangeDeclare(exchange: "current.quote", type: "topic");
+            channel.ExchangeDeclare(exchange: "CurrentQuote", type: "fanout", durable: false, autoDelete: true);
             var queueName = channel.QueueDeclare().QueueName;
             channel.QueueBind(queue: queueName,
-                                exchange: "current.quote",
-                                routingKey: "current.quote");
+                                exchange: "CurrentQuote",
+                                routingKey: "");
 
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, args) =>
@@ -65,23 +65,20 @@ namespace diginote_exchange_system
                                  consumer: consumer);
         }
 
-        private void CreateQueue(string name, EventHandler<BasicDeliverEventArgs> onReceive)
+        private void CreateQueue(string name, string token, EventHandler<BasicDeliverEventArgs> onReceive)
         {
-            channel.QueueDeclare(
-                queue: name,
-                durable: false,
-                exclusive: false,
-                autoDelete: false,
-                arguments: null);
-
-            channel.QueueBind(queue: name,
-                                exchange: "diginotes",
-                                routingKey: name);
+            channel.ExchangeDeclare(exchange: name, type: "direct", durable: false, autoDelete: true);
+            var queueName = channel.QueueDeclare().QueueName;
+            channel.QueueBind(
+                queue: queueName,
+                exchange: name,
+                routingKey: token
+                );
 
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += onReceive;
 
-            channel.BasicConsume(queue: name,
+            channel.BasicConsume(queue: queueName,
                                  autoAck: true,
                                  consumer: consumer);
         }
@@ -95,25 +92,21 @@ namespace diginote_exchange_system
 
         private void SetupLoggedInEvents()
         {
-            string diginotesChannelName = "Diginotes" + Token;
-            string purchaseOrdersChannelName = "PurchaseOrders" + Token;
-            string sellOrdersChannelName = "SellOrders" + Token;
-            string transactionsChannelName = "Transactions" + Token;
 
-            CreateQueue(diginotesChannelName, (model, args) =>
+            CreateQueue("Diginotes", Token, (model, args) =>
                 AvailableDiginotesUpdated.Invoke(this, (int)Deserialize(args))
            );
 
-            CreateQueue(purchaseOrdersChannelName, (model, args) =>
-                PurchaseOrdersUpdated.Invoke(this, (PurchaseOrder[])Deserialize(args))
+            CreateQueue("PurchaseOrders", Token, (model, args) =>
+                 PurchaseOrdersUpdated.Invoke(this, (PurchaseOrder[])Deserialize(args))
            );
 
-            CreateQueue(sellOrdersChannelName, (model, args) =>
-                SellOrdersUpdated.Invoke(this, (SellOrder[])Deserialize(args))
+            CreateQueue("SellOrders", Token, (model, args) =>
+                 SellOrdersUpdated.Invoke(this, (SellOrder[])Deserialize(args))
            );
 
-            CreateQueue(transactionsChannelName, (model, args) =>
-                TransactionsUpdated.Invoke(this, (Transaction[])Deserialize(args))
+            CreateQueue("Transactions", Token, (model, args) =>
+                 TransactionsUpdated.Invoke(this, (Transaction[])Deserialize(args))
            );
         }
 
