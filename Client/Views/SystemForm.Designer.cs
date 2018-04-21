@@ -357,7 +357,7 @@
             this.Controls.Add(this.signOutButton);
             this.Name = "SystemForm";
             this.Text = "Diginote Exchange System";
-            this.Shown += new System.EventHandler(this.SystemForm_Shown);
+            this.VisibleChanged += new System.EventHandler(this.VisibilityChanged);
             this.CreateOrderGroupBox.ResumeLayout(false);
             this.CreateOrderGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DiginoteNumberNumericUpDown)).EndInit();

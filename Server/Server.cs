@@ -210,7 +210,7 @@ namespace Server
                 session.UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(session.Token));
             }
 
-            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdateDiginotes(GetAvailableDiginotes(token));
             loggedInUsers[token].UpdateSellOrders(GetUserIncompleteSellOrders(token));
 
             if (numSellOrdersCreated < quantity)
@@ -310,7 +310,7 @@ namespace Server
                 session.UpdateSellOrders(GetUserIncompleteSellOrders(session.Token));
             }
 
-            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdateDiginotes(GetAvailableDiginotes(token));
             loggedInUsers[token].UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(token));
 
             if (numPurchaseOrdersCreated < quantity)
@@ -399,7 +399,7 @@ namespace Server
             diginoteDB.SaveChanges();
 
             QuoteUpdated(value);
-            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdateDiginotes(GetAvailableDiginotes(token));
             loggedInUsers[token].UpdatePurchaseOrders(GetUserIncompletePurchaseOrders(token));
 
             return null;
@@ -449,7 +449,7 @@ namespace Server
             diginoteDB.SaveChanges();
 
             QuoteUpdated(value);
-            loggedInUsers[token].UpdateDiginotes(availableDiginotes.Count);
+            loggedInUsers[token].UpdateDiginotes(GetAvailableDiginotes(token));
             loggedInUsers[token].UpdateSellOrders(GetUserIncompleteSellOrders(token));
 
             return null;

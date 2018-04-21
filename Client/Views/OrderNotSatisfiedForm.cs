@@ -51,8 +51,7 @@ namespace diginote_exchange_system.Views
 
             if (exception != null)
             {
-                MessageBox.Show("Could not confirm order.");
-                Console.WriteLine(exception.ToString());
+                MessageBox.Show("Could not confirm order.\n" + exception.ToString());
                 Client.State.GetUserIncompletePurchaseOrders();
                 Client.State.GetUserIncompleteSellOrders();
             }
