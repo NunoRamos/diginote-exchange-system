@@ -94,13 +94,9 @@ namespace diginote_exchange_system
             }
             else
             {
-                MessageBox.Show("Error placing order.");
+                MessageBox.Show("Error placing order.\n" + result.Item1.Message);
                 Console.WriteLine(result);
             }
-
-            // Client.State.GetAvailableDiginotes();
-            //Client.State.GetUserIncompletePurchaseOrders();
-            //Client.State.GetUserIncompleteSellOrders();
         }
 
         private void HistoryButton_Click(object sender, EventArgs e)

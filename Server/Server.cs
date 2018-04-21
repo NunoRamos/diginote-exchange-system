@@ -142,11 +142,11 @@ namespace Server
             User user = GetLoggedInUser(token);
             DbContextTransaction dbTransaction = diginoteDB.Database.BeginTransaction();
 
-            var userIncompleteOrders =
-                from purchaseOrders in diginoteDB.PurchaseOrders
-                where purchaseOrders.Status == OrderStatus.Active && purchaseOrders.Quote >= value && purchaseOrders.CreatedById != user.Id
-                orderby purchaseOrders.CreatedAt ascending
-                select purchaseOrders;
+            var incompletePurchaseOrders =
+                (from purchaseOrders in diginoteDB.PurchaseOrders
+                 where purchaseOrders.Status == OrderStatus.Active && purchaseOrders.CreatedById != user.Id
+                 orderby purchaseOrders.CreatedAt ascending
+                 select purchaseOrders).ToList();
 
             var availableDiginotes = GetUserAvailableDiginotes(user.Id);
 
@@ -159,7 +159,7 @@ namespace Server
             HashSet<Session> affectedUsers = new HashSet<Session>();
 
             int numSellOrdersCreated = 0;
-            foreach (PurchaseOrder purchaseOrder in userIncompleteOrders)
+            foreach (PurchaseOrder purchaseOrder in incompletePurchaseOrders)
             {
                 SellOrder sellOrder = new SellOrder
                 {
@@ -244,18 +244,10 @@ namespace Server
             float value = GetCurrentQuote();
 
             var unmatchedActiveOrders =
-                from sellOrders in diginoteDB.SellOrders
-                where sellOrders.Status == OrderStatus.Active && sellOrders.Quote <= value && sellOrders.CreatedById != user.Id
-                orderby sellOrders.CreatedAt ascending
-                select sellOrders;
-
-            var availableDiginotes = GetUserAvailableDiginotes(user.Id);
-
-            if (availableDiginotes.Count() < quantity)
-            {
-                dbTransaction.Rollback();
-                return Tuple.Create<Exception, OrderNotSatisfiedException>(new Exception("Insufficient diginotes to place purchase order."), null);
-            }
+                (from sellOrders in diginoteDB.SellOrders
+                 where sellOrders.Status == OrderStatus.Active && sellOrders.CreatedById != user.Id
+                 orderby sellOrders.CreatedAt ascending
+                 select sellOrders).ToList();
 
             HashSet<Session> affectedUsers = new HashSet<Session>();
 
@@ -270,7 +262,6 @@ namespace Server
                     Quote = value
                 };
 
-                availableDiginotes.RemoveAt(0);
                 numPurchaseOrdersCreated++;
                 diginoteDB.PurchaseOrders.Add(purchaseOrder);
 
@@ -278,7 +269,7 @@ namespace Server
 
                 sellOrder.Diginote.Owner = purchaseOrder.CreatedBy;
 
-                Models.Transaction transaction = new Models.Transaction
+                Transaction transaction = new Transaction
                 {
                     CreatedAt = DateTime.Now,
                     PurchaseOrder = purchaseOrder,
@@ -322,17 +313,56 @@ namespace Server
 
         public float GetCurrentQuote()
         {
-            var query = (from lastOrder in diginoteDB.SellOrders
-                         orderby lastOrder.CreatedAt descending
-                         select lastOrder).ToList();
+            SellOrder sellOrder;
+            PurchaseOrder purchaseOrder;
 
             try
             {
-                return query.First().Quote;
+                sellOrder = (from lastOrder in diginoteDB.SellOrders
+                             orderby lastOrder.CreatedAt descending
+                             select lastOrder).ToList().First();
             }
             catch (InvalidOperationException)
             {
-                return 1;
+                sellOrder = null;
+            }
+
+            try
+            {
+                purchaseOrder = (from lastOrder in diginoteDB.PurchaseOrders
+                                 orderby lastOrder.CreatedAt descending
+                                 select lastOrder).ToList().First();
+            }
+            catch (InvalidOperationException)
+            {
+                purchaseOrder = null;
+            }
+
+            if (purchaseOrder == null)
+            {
+                if (sellOrder == null)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return sellOrder.Quote;
+                }
+            }
+            else
+            {
+                if (sellOrder == null)
+                {
+                    return purchaseOrder.Quote;
+                }
+                else if (purchaseOrder.CreatedAt > sellOrder.CreatedAt)
+                {
+                    return purchaseOrder.Quote;
+                }
+                else
+                {
+                    return sellOrder.Quote;
+                }
             }
         }
 
