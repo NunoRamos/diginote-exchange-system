@@ -55,6 +55,7 @@ namespace diginote_exchange_system
         {
             Client.State.SignOut();
             Client.Forms.SystemForm.Hide();
+            Client.Forms.AuthenticationForm = new AuthenticationForm();
             Client.Forms.AuthenticationForm.Show();
             SellOrdersGridView.DataSource = new BindingList<SellOrder>();
             PurchaseOrdersGridView.DataSource = new BindingList<PurchaseOrder>();

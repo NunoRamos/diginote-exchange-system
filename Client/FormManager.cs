@@ -5,11 +5,11 @@ namespace diginote_exchange_system
 {
     public class FormManager
     {
-        public AuthenticationForm AuthenticationForm { get; }
+        public AuthenticationForm AuthenticationForm { get; set; }
 
-        public RegistrationForm RegistrationForm { get; }
+        public RegistrationForm RegistrationForm { get; set; }
 
-        public SystemForm SystemForm { get; }
+        public SystemForm SystemForm { get; set; }
 
         public FormManager()
         {
