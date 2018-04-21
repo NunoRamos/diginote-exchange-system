@@ -32,7 +32,6 @@ namespace diginote_exchange_system
             }
             else
             {
-                Client.Forms.SystemForm = new SystemForm();
                 Client.Forms.SystemForm.Show();
                 Hide();
             }
@@ -40,7 +39,6 @@ namespace diginote_exchange_system
 
         private void signUpButton_Click(object sender, EventArgs e)
         {
-            Client.Forms.RegistrationForm = new RegistrationForm();
             Client.Forms.RegistrationForm.Show();
             Hide();
         }
