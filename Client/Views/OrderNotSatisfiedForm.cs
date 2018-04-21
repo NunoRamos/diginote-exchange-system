@@ -31,7 +31,7 @@ namespace diginote_exchange_system.Views
 
         private void OnQuoteUpdated(object sender, float newQuote)
         {
-            CurrentQuoteTextField.Text = newQuote.ToString();
+            CurrentQuoteTextField.Invoke(new Action(() => CurrentQuoteTextField.Text = newQuote.ToString()));
         }
 
         private void BackButton_Click(object sender, EventArgs e)
